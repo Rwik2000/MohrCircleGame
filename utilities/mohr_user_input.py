@@ -1,0 +1,70 @@
+import pygame
+import numpy as np
+from utilities.mohr_fonts import game_font
+class button():
+    def __init__(self, color, x,y,width,height, text=''):
+        self.color = color
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.text = text
+
+    def draw(self,win,  outline=None):
+        #Call this method to draw the button on the screen
+        if outline:
+            pygame.draw.rect(win, outline, (self.x-2,self.y-2,self.width+4,self.height+4),0)
+            
+        pygame.draw.rect(win, self.color, (self.x,self.y,self.width,self.height),0)
+        
+        if self.text != '':
+            font = game_font(15)
+            text = font.render(self.text, 1, (0,0,0))
+            win.blit(text, (self.x + 15 , self.y + int(self.height/5)))
+
+    def isOver(self, pos):
+        #Pos is the mouse position or a tuple of (x,y) coordinates
+        if pos[0] > self.x and pos[0] < self.x + self.width:
+            if pos[1] > self.y and pos[1] < self.y + self.height:
+                return True
+            
+        return False
+
+    
+enterButton = button((180,0,0), 680, 480, 80, 30, 'ENTER')
+backButton = button((180,0,0), 30, 10, 80, 30, 'BACK')
+generalButton = button((180,0,0), 360, 170, 80, 30, 'GENERAL')
+tutorialButton = button((180,0,0), 360, 300, 80, 30, 'TUTORIAL')
+quizButton = button((180,0,0), 360, 430, 80, 30, 'QUIZ')
+twodButton = button((180,0,0), 360, 170, 80, 30, '2-D')
+threedButton = button((180,0,0), 360, 300, 80, 30, '3-D')
+startButton = button((180,0,0), 360, 400, 80, 30, 'START')
+nextButton = button((180,0,0), 680, 550, 80, 30, 'NEXT')
+submitButton = button((180,0,0), 680, 550, 80, 30, 'SUBMIT')
+
+class inputtextbox():
+    def __init__(self, color_inactive, color_active, x,y,width,height):
+        self.color_active = color_active
+        self.color_inactive = color_inactive
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.text = ''
+        self.active = True
+        self.color = self.color_active if self.active else self.color_inactive
+
+    def render(self):
+        return pygame.Rect(self.x, self.y, self.width, self.height)
+
+
+
+sigma_xx_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 200, 100, 25)
+sigma_yy_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 250, 100, 25)
+sigma_zz_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 300, 100, 25)
+sigma_xy_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 350, 100, 25)
+sigma_yz_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 400, 100, 25)
+sigma_zx_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 450, 100, 25)
+C1_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 400, 200, 100, 25)
+C2_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 400, 250, 100, 25)
+C3_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 400, 300, 100, 25)
