@@ -111,18 +111,18 @@ def execute(n_dim, input):
     
     input_to_tensor(σxx = input[0],σyy = input[1],σzz = input[3],σxy = input[2],σyz = input[4],σzx = input[5], n_dim=n_dim)
 
-########### User input ##########
-'''For two dimensional mohr circle, input only σxx,σyy,σxy, leave σzz,σyz,σzx as None'''
-σxx=1
-σyy=2
-σxy=1
+# ########### User input ##########
+# '''For two dimensional mohr circle, input only σxx,σyy,σxy, leave σzz,σyz,σzx as None'''
+# σxx=1
+# σyy=2
+# σxy=1
 
-'''For three dimensional mohr circle, input the following '''
-σzz=3
-σyz=0
-σzx=0
-input = [σxx, σyy, σxy, σzz, σyz, σzx]
-##################################
+# '''For three dimensional mohr circle, input the following '''
+# σzz=3
+# σyz=0
+# σzx=0
+# input = [σxx, σyy, σxy, σzz, σyz, σzx]
+# ##################################
 
-execute(n_dim=2,  input=input)
+# execute(n_dim=2,  input=input)
 

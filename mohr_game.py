@@ -1,6 +1,6 @@
 import pygame
-import MohrCircle
-from MohrCircle import mohrCircle_execute
+# import MohrCircle_new
+from MohrCircle_new import execute
 import window_types.mohr_quiz as mohr_quiz
 import window_types.mohr_general as mohr_general
 import time

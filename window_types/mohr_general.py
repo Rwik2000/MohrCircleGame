@@ -5,6 +5,7 @@ from utilities.mohr_fonts import game_font
 from utilities.mohr_user_input import *
 import random
 from utilities.mohr_screen import *
+from MohrCircle_new import execute
 
 def generalwindow(screen):
     Small_font = game_font(20)
@@ -89,7 +90,7 @@ def general2D_input_window(screen):
                 if len(mohrCircle_input) == 3:
                     for i in range(3):
                         mohrCircle_input.append(0)
-                    mohrCircle_execute(2, mohrCircle_input)
+                    execute(2, mohrCircle_input)
                     time.sleep(10)
                     
                 else:
@@ -168,7 +169,7 @@ def general3D_input_window(screen):
                     mohrCircle_input.append(float(box.text))
 
                 if len(mohrCircle_input) == 6:
-                    mohrCircle_execute(3, mohrCircle_input)
+                    execute(3, mohrCircle_input)
                     time.sleep(10)
                     
                 else:
