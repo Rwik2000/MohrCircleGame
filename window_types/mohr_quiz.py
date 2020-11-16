@@ -5,6 +5,7 @@ from utilities.mohr_fonts import game_font
 from utilities.mohr_user_input import *
 import random
 from utilities.mohr_screen import *
+import time
 
 quiz_question_type = ['2-D', '2-D', '3-D', '3-D', 'Concept']
 # def game_font(size):
@@ -64,7 +65,7 @@ def quizwindow(screen):
             else:
                 backButton.color = (180, 0, 0)
 
-def quiz_button_loop(event, x_button, current_window_check):
+def quiz_button_loop(event, x_button, current_window_check, ans_box):
     Small_font = game_font(20)
     global quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
     pos = pygame.mouse.get_pos()
@@ -73,6 +74,13 @@ def quiz_button_loop(event, x_button, current_window_check):
         global running              
         running = False
     if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for box in ans_box.keys():
+                if box.render().collidepoint(event.pos):
+                    print("click")
+                    box.active = True
+                else:
+                    box.active = False
         if x_button.isOver(pos):
             if len(quiz_question_type) > 0:
                 if quiz_question_type[0] == '2-D':
@@ -100,14 +108,34 @@ def quiz_button_loop(event, x_button, current_window_check):
                 current_window_check.endCurrent()
                 quiz_end_window_check.makeCurrent()
 
-        
+    if event.type == pygame.KEYDOWN:
+        for box in ans_box.keys():
+            if box.active:
+                if event.key == pygame.K_RETURN:
+                    print(box.text)
+                    box.text = ''
+                elif event.key == pygame.K_BACKSPACE:
+                    box.text = box.text[:-1]
+                else:
+                    try:
+                        _=float(event.unicode)
+                        box.text += event.unicode    
+                    except:
+                        if event.unicode == ".":
+                            temp_text = box.text
+                            temp_text +=event.unicode
+                            try:
+                                float(temp_text)
+                                box.text +=event.unicode   
+                            except:
+                                pass           
 
     if event.type == pygame.MOUSEMOTION:
         if x_button.isOver(pos):
             x_button.color = (255, 0, 0)
         else:
             x_button.color = (180, 0, 0)
-
+    return ans_box 
 
 def quizwindow_2d(screen):
     clock = pygame.time.Clock()
@@ -146,35 +174,8 @@ def quizwindow_2d(screen):
     x_button.draw(screen, (0,0,0))
 
     for event in pygame.event.get():
-        quiz_button_loop(event, x_button, quizwindow_2d_check)
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            for box in ans_boxes_2d.keys():
-                if box.render().collidepoint(event.pos):
-                    print("click")
-                    box.active = not box.active
-                else:
-                    box.active = False
-        if event.type == pygame.KEYDOWN:
-            for box in ans_boxes_2d.keys():
-                if box.active:
-                    if event.key == pygame.K_RETURN:
-                        print(box.text)
-                        box.text = ''
-                    elif event.key == pygame.K_BACKSPACE:
-                        box.text = box.text[:-1]
-                    else:
-                        try:
-                            _=float(event.unicode)
-                            box.text += event.unicode    
-                        except:
-                            if event.unicode == ".":
-                                temp_text = box.text
-                                temp_text +=event.unicode
-                                try:
-                                    float(temp_text)
-                                    box.text +=event.unicode   
-                                except:
-                                    pass   
+        ans_boxes_2d=quiz_button_loop(event, x_button, quizwindow_2d_check, ans_boxes_2d)
+          
 
     for box in ans_boxes_2d.keys():
         txt_surface = Small_font.render(box.text, True, box.color)
@@ -234,36 +235,8 @@ def quizwindow_3d(screen):
     x_button.draw(screen, (0,0,0))
 
     for event in pygame.event.get():
-        quiz_button_loop(event, x_button, quizwindow_3d_check)
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            for box in ans_boxes_3d.keys():
-                if box.render().collidepoint(event.pos):
-                    print("click")
-                    box.active = not box.active
-                else:
-                    box.active = False
-        if event.type == pygame.KEYDOWN:
-            for box in ans_boxes_3d.keys():
-                if box.active:
-                    if event.key == pygame.K_RETURN:
-                        print(box.text)
-                        box.text = ''
-                    elif event.key == pygame.K_BACKSPACE:
-                        box.text = box.text[:-1]
-                    else:
-                        try:
-                            _=float(event.unicode)
-                            box.text += event.unicode    
-                        except:
-                            if event.unicode == ".":
-                                temp_text = box.text
-                                temp_text +=event.unicode
-                                try:
-                                    float(temp_text)
-                                    box.text +=event.unicode   
-                                except:
-                                    pass   
-
+        ans_boxes_3d = quiz_button_loop(event, x_button, quizwindow_3d_check, ans_boxes_3d)
+        
     for box in ans_boxes_3d.keys():
         txt_surface = Small_font.render(box.text, True, box.color)
         width = max(200, txt_surface.get_width()+10)
@@ -283,7 +256,7 @@ def quizwindow_concept(screen):
     x_button.draw(screen, (0,0,0))
 
     for event in pygame.event.get():
-        quiz_button_loop(event, x_button, quizwindow_concept_check)
+        quiz_button_loop(event, x_button, quizwindow_concept_check, {})
 
 def quiz_end_window(screen):
     Big_font = game_font(80)
@@ -299,11 +272,7 @@ def quiz_end_window(screen):
         if event.type == pygame.QUIT:
             global running
             running = False
-        # if event.type == pygame.MOUSEBUTTONDOWN:
-        #     if enterButton.isOver(pos):
-        #         enterWindow_check.makeCurrent()
-        #         startwindow_check.endCurrent()
-        #         print("User entered the Application")
+
         if event.type == pygame.MOUSEMOTION:
             if enterButton.isOver(pos):
                 enterButton.color = (255, 0, 0)
