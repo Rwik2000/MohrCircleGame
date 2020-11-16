@@ -98,7 +98,7 @@ def general2D_input_window(screen):
             for box in input_boxes.keys():
                 if box.render().collidepoint(event.pos):
                     print("click")
-                    box.active = not box.active
+                    box.active = True
                 else:
                     box.active = False
         if event.type == pygame.KEYDOWN:
@@ -115,14 +115,16 @@ def general2D_input_window(screen):
                             _=float(event.unicode)
                             box.text += event.unicode    
                         except:
-                            if event.unicode == ".":
+                            if event.unicode == "." or event.unicode == "-":
                                 temp_text = box.text
                                 temp_text +=event.unicode
                                 try:
                                     float(temp_text)
                                     box.text +=event.unicode   
                                 except:
-                                    pass   
+                                    if len(box.text) == 0:
+                                        if event.unicode == "-" or event.unicode=='.':
+                                            box.text +=event.unicode 
 
         if event.type == pygame.MOUSEMOTION:
             if backButton.isOver(pos):
@@ -178,7 +180,7 @@ def general3D_input_window(screen):
             for box in input_boxes.keys():
                 if box.render().collidepoint(event.pos):
                     print("click")
-                    box.active = not box.active
+                    box.active = True
                 else:
                     box.active = False
         if event.type == pygame.KEYDOWN:
@@ -195,14 +197,16 @@ def general3D_input_window(screen):
                             _=float(event.unicode)
                             box.text += event.unicode    
                         except:
-                            if event.unicode == ".":
+                            if event.unicode == "." or event.unicode == "-":
                                 temp_text = box.text
                                 temp_text +=event.unicode
                                 try:
                                     float(temp_text)
                                     box.text +=event.unicode   
                                 except:
-                                    pass   
+                                    if len(box.text) == 0:
+                                        if event.unicode == "-" or event.unicode=='.':
+                                            box.text +=event.unicode
 
         if event.type == pygame.MOUSEMOTION:
             if backButton.isOver(pos):

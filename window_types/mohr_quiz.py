@@ -3,11 +3,12 @@ import pygame
 import numpy as np
 from utilities.mohr_fonts import game_font
 from utilities.mohr_user_input import *
+from MohrCircle_new import execute
 import random
 from utilities.mohr_screen import *
 import time
 
-quiz_question_type = ['2-D', '2-D', '3-D', '3-D', 'Concept']
+quiz_question_type = ['2-D', '2-D', '3-D', '3-D','concept']
 # def game_font(size):
 #     return(pygame.font.Font('Fonts/pt mono regular.ttf', size))
 def quizwindow(screen):
@@ -65,7 +66,7 @@ def quizwindow(screen):
             else:
                 backButton.color = (180, 0, 0)
 
-def quiz_button_loop(event, x_button, current_window_check, ans_box):
+def quiz_button_loop(event, x_button, current_window_check, ans_box, curr_question_type):
     Small_font = game_font(20)
     global quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
     pos = pygame.mouse.get_pos()
@@ -74,14 +75,18 @@ def quiz_button_loop(event, x_button, current_window_check, ans_box):
         global running              
         running = False
     if event.type == pygame.MOUSEBUTTONDOWN:
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            for box in ans_box.keys():
-                if box.render().collidepoint(event.pos):
-                    print("click")
-                    box.active = True
-                else:
-                    box.active = False
+        
         if x_button.isOver(pos):
+            if curr_question_type!='concept':
+                if curr_question_type=='2-D':
+                    mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy, 0,0,0]
+
+                    execute(2,mohrCircle_input)
+                elif curr_question_type=='3-D':
+                    mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx]
+
+                execute(3,mohrCircle_input)
+            sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx = None,None,None,None,None,None
             if len(quiz_question_type) > 0:
                 if quiz_question_type[0] == '2-D':
                     sigma_xx = round(random.uniform(1,30), 2)
@@ -107,12 +112,16 @@ def quiz_button_loop(event, x_button, current_window_check, ans_box):
             else:
                 current_window_check.endCurrent()
                 quiz_end_window_check.makeCurrent()
-
+        for box in ans_box.keys():
+            if box.render().collidepoint(event.pos):
+                # print("click")
+                box.active = True
+            else:
+                box.active = False
     if event.type == pygame.KEYDOWN:
         for box in ans_box.keys():
             if box.active:
                 if event.key == pygame.K_RETURN:
-                    print(box.text)
                     box.text = ''
                 elif event.key == pygame.K_BACKSPACE:
                     box.text = box.text[:-1]
@@ -121,15 +130,16 @@ def quiz_button_loop(event, x_button, current_window_check, ans_box):
                         _=float(event.unicode)
                         box.text += event.unicode    
                     except:
-                        if event.unicode == ".":
+                        if event.unicode == "." or event.unicode == "-":
                             temp_text = box.text
                             temp_text +=event.unicode
                             try:
                                 float(temp_text)
                                 box.text +=event.unicode   
                             except:
-                                pass           
-
+                                if len(box.text) == 0:
+                                    if event.unicode == "-" or event.unicode=='.':
+                                        box.text +=event.unicode
     if event.type == pygame.MOUSEMOTION:
         if x_button.isOver(pos):
             x_button.color = (255, 0, 0)
@@ -151,6 +161,7 @@ def quizwindow_2d(screen):
         box_text = Small_font.render(ans_boxes_2d[box]+":",1,(0,0,0))
         screen.blit(box_text,(box.x - 80, box.y))
 
+    curr_question_type = '2-D'
     global quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
     # print(len(quiz_question_type))
 
@@ -174,7 +185,7 @@ def quizwindow_2d(screen):
     x_button.draw(screen, (0,0,0))
 
     for event in pygame.event.get():
-        ans_boxes_2d=quiz_button_loop(event, x_button, quizwindow_2d_check, ans_boxes_2d)
+        ans_boxes_2d=quiz_button_loop(event, x_button, quizwindow_2d_check, ans_boxes_2d, curr_question_type)
           
 
     for box in ans_boxes_2d.keys():
@@ -200,6 +211,7 @@ def quizwindow_3d(screen):
         box_text = Small_font.render(ans_boxes_3d[box]+":",1,(0,0,0))
         screen.blit(box_text,(box.x - 80, box.y))
 
+    curr_question_type = '3-D'
     global quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
     # print(len(quiz_question_type))
 
@@ -235,7 +247,7 @@ def quizwindow_3d(screen):
     x_button.draw(screen, (0,0,0))
 
     for event in pygame.event.get():
-        ans_boxes_3d = quiz_button_loop(event, x_button, quizwindow_3d_check, ans_boxes_3d)
+        ans_boxes_3d = quiz_button_loop(event, x_button, quizwindow_3d_check, ans_boxes_3d,curr_question_type)
         
     for box in ans_boxes_3d.keys():
         txt_surface = Small_font.render(box.text, True, box.color)
@@ -255,8 +267,9 @@ def quizwindow_concept(screen):
         x_button = submitButton
     x_button.draw(screen, (0,0,0))
 
+    curr_question_type = 'concept'
     for event in pygame.event.get():
-        quiz_button_loop(event, x_button, quizwindow_concept_check, {})
+        quiz_button_loop(event, x_button, quizwindow_concept_check, {},curr_question_type)
 
 def quiz_end_window(screen):
     Big_font = game_font(80)

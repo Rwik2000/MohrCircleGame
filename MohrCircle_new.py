@@ -104,6 +104,7 @@ def input_to_tensor(σxx,σyy,σzz,σxy,σyz,σzx, n_dim):
     find_Principal_Stress(σ_tensor)
 
 def execute(n_dim, input):
+    # print(input)
     if n_dim == 3:
         for i in range(3):
             if input[i+3]==None:
