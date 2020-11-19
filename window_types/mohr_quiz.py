@@ -50,7 +50,7 @@ def quizwindow(screen):
                     quiz_question_type = quiz_question_type[1:]
                     quizwindow_3d_check.makeCurrent()
                     quizwindow_check.endCurrent()
-                elif quiz_question_type[0] == 'Concept':   
+                elif quiz_question_type[0] == 'concept':   
                     quiz_question_type = quiz_question_type[1:]
                     quizwindow_concept_check.makeCurrent()
                     quizwindow_check.endCurrent()
@@ -75,19 +75,22 @@ def quiz_button_loop(event, x_button, current_window_check, ans_box, curr_questi
         global running              
         running = False
     if event.type == pygame.MOUSEBUTTONDOWN:
-        
+
         if x_button.isOver(pos):
             if curr_question_type!='concept':
                 if curr_question_type=='2-D':
                     mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy, 0,0,0]
-
                     execute(2,mohrCircle_input)
+
                 elif curr_question_type=='3-D':
                     mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx]
+                    execute(3,mohrCircle_input)
+                # sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx = None,None,None,None,None,None
+            # for ans in ans_box.keys():
+            #     print(ans.text)
 
-                execute(3,mohrCircle_input)
-            sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx = None,None,None,None,None,None
             if len(quiz_question_type) > 0:
+                print(quiz_question_type[0])
                 if quiz_question_type[0] == '2-D':
                     sigma_xx = round(random.uniform(1,30), 2)
                     sigma_yy = round(random.uniform(1,30), 2)
@@ -105,7 +108,7 @@ def quiz_button_loop(event, x_button, current_window_check, ans_box, curr_questi
                     quiz_question_type = quiz_question_type[1:]
                     current_window_check.endCurrent()
                     quizwindow_3d_check.makeCurrent()
-                elif quiz_question_type[0] == 'Concept':   
+                elif quiz_question_type[0] == 'concept':   
                     quiz_question_type = quiz_question_type[1:]
                     current_window_check.endCurrent()
                     quizwindow_concept_check.makeCurrent()
@@ -146,7 +149,8 @@ def quiz_button_loop(event, x_button, current_window_check, ans_box, curr_questi
         else:
             x_button.color = (180, 0, 0)
     return ans_box 
-
+def eval_window(screen):
+    pass
 def quizwindow_2d(screen):
     clock = pygame.time.Clock()
     Big_font = game_font(40)
