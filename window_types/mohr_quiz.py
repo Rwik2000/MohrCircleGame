@@ -8,8 +8,8 @@ import random
 from utilities.mohr_screen import *
 import time
 
-# quiz_question_type = ['2-D', '2-D', '3-D', '3-D','concept']
-quiz_question_type = ['3-D']
+quiz_question_type = ['2-D', '2-D', '3-D', '3-D']
+# quiz_question_type = ['3-D']
 
 curr_question_type = None
 correct_answer = None
@@ -87,50 +87,45 @@ def quiz_button_loop(event, x_button, current_window_check, ans_box):
     if event.type == pygame.MOUSEBUTTONDOWN:
 
         if x_button.isOver(pos):
-            if curr_question_type!='concept':
-                if curr_question_type=='2-D':
-                    mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy, 0,0,0]
-                    correct_answer=execute(2,mohrCircle_input)
 
-                elif curr_question_type=='3-D':
-                    mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx]
-                    correct_answer=execute(3,mohrCircle_input)
                 # sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx = None,None,None,None,None,None
             # for ans in ans_box.keys():
             #     print(ans.text)
-            eval_window()
-            if len(quiz_question_type) > 0:
-                print(quiz_question_type[0])
-                if quiz_question_type[0] == '2-D':
-                    sigma_xx = round(random.randint(-30,30), 2)
-                    sigma_yy = round(random.randint(-30,30), 2)
-                    sigma_xy = round(random.randint(-30,30), 2)
-                    quiz_question_type = quiz_question_type[1:]
-                    current_window_check.endCurrent()
-                    quizwindow_2d_check.makeCurrent()    
-                elif quiz_question_type[0] == '3-D':
-                    # sigma_xx = round(random.randint(-30,30), 2)
-                    # sigma_yy = round(random.randint(-30,30), 2)
-                    # sigma_zz = round(random.randint(-30,30), 2)
-                    # sigma_xy = round(random.randint(-30,30), 2)
-                    # sigma_yz = round(random.randint(-30,30), 2)
-                    # sigma_zx = round(random.randint(-30,30), 2)
-                    sigma_xx = 26
-                    sigma_yy = -3
-                    sigma_zz = -21
-                    sigma_xy = 27
-                    sigma_yz = 28
-                    sigma_zx = -19
-                    quiz_question_type = quiz_question_type[1:]
-                    current_window_check.endCurrent()
-                    quizwindow_3d_check.makeCurrent()
-                elif quiz_question_type[0] == 'concept':   
-                    quiz_question_type = quiz_question_type[1:]
-                    current_window_check.endCurrent()
-                    quizwindow_concept_check.makeCurrent()
-            else:
-                current_window_check.endCurrent()
-                quiz_end_window_check.makeCurrent()
+            # eval_window()
+            current_window_check.endCurrent()
+            eval_window_check.makeCurrent()
+            # if len(quiz_question_type) > 0:
+            #     print(quiz_question_type[0])
+            #     if quiz_question_type[0] == '2-D':
+            #         sigma_xx = round(random.randint(-30,30), 2)
+            #         sigma_yy = round(random.randint(-30,30), 2)
+            #         sigma_xy = round(random.randint(-30,30), 2)
+            #         quiz_question_type = quiz_question_type[1:]
+            #         current_window_check.endCurrent()
+            #         quizwindow_2d_check.makeCurrent()    
+            #     elif quiz_question_type[0] == '3-D':
+            #         # sigma_xx = round(random.randint(-30,30), 2)
+            #         # sigma_yy = round(random.randint(-30,30), 2)
+            #         # sigma_zz = round(random.randint(-30,30), 2)
+            #         # sigma_xy = round(random.randint(-30,30), 2)
+            #         # sigma_yz = round(random.randint(-30,30), 2)
+            #         # sigma_zx = round(random.randint(-30,30), 2)
+            #         sigma_xx = 26
+            #         sigma_yy = -3
+            #         sigma_zz = -21
+            #         sigma_xy = 27
+            #         sigma_yz = 28
+            #         sigma_zx = -19
+            #         quiz_question_type = quiz_question_type[1:]
+            #         current_window_check.endCurrent()
+            #         quizwindow_3d_check.makeCurrent()
+            #     elif quiz_question_type[0] == 'concept':   
+            #         quiz_question_type = quiz_question_type[1:]
+            #         current_window_check.endCurrent()
+            #         quizwindow_concept_check.makeCurrent()
+            # else:
+            #     current_window_check.endCurrent()
+            #     quiz_end_window_check.makeCurrent()
         for box in ans_box.keys():
             if box.render().collidepoint(event.pos):
                 # print("click")
@@ -165,20 +160,40 @@ def quiz_button_loop(event, x_button, current_window_check, ans_box):
         else:
             x_button.color = (180, 0, 0)
     return ans_box 
-def eval_window():
-    global correct_answer,curr_question_type,quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
+
+show_graph = 0
+def eval_window(screen):
+    global show_graph,correct_answer,curr_question_type,quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
+    
+    x_button = nextButton
+    if len(quiz_question_type) == 0:
+        x_button = submitButton
+    x_button.draw(screen, (0,0,0))
+
     Big_font = game_font(40)
     Small_font = game_font(20)
+    graphButton.draw(screen, (0,0,0))
     isCorrect = False
+
+    if show_graph == 0:
+        if curr_question_type!='concept':
+            if curr_question_type=='2-D':
+                mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy, 0,0,0]
+                correct_answer=execute(2,mohrCircle_input)
+
+            elif curr_question_type=='3-D':
+                mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx]
+                correct_answer=execute(3,mohrCircle_input)
+        show_graph+=1
+
     try:
         if curr_question_type == "2-D":
             if correct_answer[0][0] == float(C1_gen.text):
                 isCorrect = True
+
         elif curr_question_type == "3-D":
             user_answer = [[float(C1_gen.text)],[float(C2_gen.text)],[float(C3_gen.text)]]
             counter = 0
-            print(user_answer)
-            print(correct_answer)
             for k in user_answer:
                 for l in correct_answer:
                     if k[0] <l[0] + 1 and k[0] > l[0]-1:
@@ -186,12 +201,72 @@ def eval_window():
                         break
             if counter==3:
                 isCorrect = True
+
     except:
         pass
-    if isCorrect:
-        print('Correct')
+    
+    if(isCorrect):
+            text = Big_font.render("CORRECT :)", 1, (0,0,0))
+            screen.blit(text, (70, 250))
     else:
-        print('WRONG')
+            text = Big_font.render("WRONG :(", 1, (0,0,0))
+            screen.blit(text, (70, 250))
+
+    for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.QUIT:
+            global running
+            running = False
+
+        if event.type == pygame.MOUSEMOTION:
+            if graphButton.isOver(pos):
+                graphButton.color = (255, 0, 0)
+            else:
+                graphButton.color = (180, 0, 0)
+            
+            if x_button.isOver(pos):
+                x_button.color = (255, 0, 0)
+            else:
+                x_button.color = (180, 0, 0)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if graphButton.isOver(pos):
+                if curr_question_type!='concept':
+                    if curr_question_type=='2-D':
+                        mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy, 0,0,0]
+                        correct_answer=execute(2,mohrCircle_input)
+
+                    elif curr_question_type=='3-D':
+                        mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx]
+                        correct_answer=execute(3,mohrCircle_input)
+            if x_button.isOver(pos):
+                if len(quiz_question_type) > 0:
+                    # print(quiz_question_type[0])
+                    show_graph = 0
+                    if quiz_question_type[0] == '2-D':
+                        sigma_xx = round(random.randint(-30,30), 2)
+                        sigma_yy = round(random.randint(-30,30), 2)
+                        sigma_xy = round(random.randint(-30,30), 2)
+                        quiz_question_type = quiz_question_type[1:]
+                        eval_window_check.endCurrent()
+                        quizwindow_2d_check.makeCurrent()    
+                    elif quiz_question_type[0] == '3-D':
+                        sigma_xx = round(random.randint(-30,30), 2)
+                        sigma_yy = round(random.randint(-30,30), 2)
+                        sigma_zz = round(random.randint(-30,30), 2)
+                        sigma_xy = round(random.randint(-30,30), 2)
+                        sigma_yz = round(random.randint(-30,30), 2)
+                        sigma_zx = round(random.randint(-30,30), 2)
+                        quiz_question_type = quiz_question_type[1:]
+                        eval_window_check.endCurrent()
+                        quizwindow_3d_check.makeCurrent()
+                    elif quiz_question_type[0] == 'concept':   
+                        quiz_question_type = quiz_question_type[1:]
+                        eval_window_check.endCurrent()
+                        quizwindow_concept_check.makeCurrent()
+                else:
+                    eval_window_check.endCurrent()
+                    quiz_end_window_check.makeCurrent()
+
 
         
 def quizwindow_2d(screen):
@@ -326,7 +401,7 @@ def quiz_end_window(screen):
     text = Small_font.render ("Please proceed to get your Scores!!",1, (0,0,0))
     screen.blit(text, (60, 400))
     enterButton.draw(screen, (0,0,0))
-
+    
     for event in pygame.event.get():
         pos = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
