@@ -8,13 +8,13 @@ import random
 from utilities.mohr_screen import *
 import time
 
-quiz_question_type = ['2-D', '2-D', '3-D', '3-D']
+quiz_question_type = ['2-D', '2-D']
 # quiz_question_type = ['3-D']
 
 curr_question_type = None
 correct_answer = None
-# def game_font(size):
-#     return(pygame.font.Font('Fonts/pt mono regular.ttf', size))
+userScore = 0
+
 def quizwindow(screen):
     Small_font = game_font(20)
     text = Small_font.render("Quiz Mode",1, (0,0,0))
@@ -45,18 +45,12 @@ def quizwindow(screen):
                     quizwindow_2d_check.makeCurrent()
                     quizwindow_check.endCurrent()
                 elif quiz_question_type[0] == '3-D':
-                    # sigma_xx = round(random.randint(-30,30), 2)
-                    # sigma_yy = round(random.randint(-30,30), 2)
-                    # sigma_zz = round(random.randint(-30,30), 2)
-                    # sigma_xy = round(random.randint(-30,30), 2)
-                    # sigma_yz = round(random.randint(-30,30), 2)
-                    # sigma_zx = round(random.randint(-30,30), 2)
-                    sigma_xx = 26
-                    sigma_yy = -3
-                    sigma_zz = -21
-                    sigma_xy = 27
-                    sigma_yz = 28
-                    sigma_zx = -19
+                    sigma_xx = round(random.randint(-30,30), 2)
+                    sigma_yy = round(random.randint(-30,30), 2)
+                    sigma_zz = round(random.randint(-30,30), 2)
+                    sigma_xy = round(random.randint(-30,30), 2)
+                    sigma_yz = round(random.randint(-30,30), 2)
+                    sigma_zx = round(random.randint(-30,30), 2)
                     quiz_question_type = quiz_question_type[1:]
                     quizwindow_3d_check.makeCurrent()
                     quizwindow_check.endCurrent()
@@ -87,48 +81,11 @@ def quiz_button_loop(event, x_button, current_window_check, ans_box):
     if event.type == pygame.MOUSEBUTTONDOWN:
 
         if x_button.isOver(pos):
-
-                # sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx = None,None,None,None,None,None
-            # for ans in ans_box.keys():
-            #     print(ans.text)
-            # eval_window()
             current_window_check.endCurrent()
             eval_window_check.makeCurrent()
-            # if len(quiz_question_type) > 0:
-            #     print(quiz_question_type[0])
-            #     if quiz_question_type[0] == '2-D':
-            #         sigma_xx = round(random.randint(-30,30), 2)
-            #         sigma_yy = round(random.randint(-30,30), 2)
-            #         sigma_xy = round(random.randint(-30,30), 2)
-            #         quiz_question_type = quiz_question_type[1:]
-            #         current_window_check.endCurrent()
-            #         quizwindow_2d_check.makeCurrent()    
-            #     elif quiz_question_type[0] == '3-D':
-            #         # sigma_xx = round(random.randint(-30,30), 2)
-            #         # sigma_yy = round(random.randint(-30,30), 2)
-            #         # sigma_zz = round(random.randint(-30,30), 2)
-            #         # sigma_xy = round(random.randint(-30,30), 2)
-            #         # sigma_yz = round(random.randint(-30,30), 2)
-            #         # sigma_zx = round(random.randint(-30,30), 2)
-            #         sigma_xx = 26
-            #         sigma_yy = -3
-            #         sigma_zz = -21
-            #         sigma_xy = 27
-            #         sigma_yz = 28
-            #         sigma_zx = -19
-            #         quiz_question_type = quiz_question_type[1:]
-            #         current_window_check.endCurrent()
-            #         quizwindow_3d_check.makeCurrent()
-            #     elif quiz_question_type[0] == 'concept':   
-            #         quiz_question_type = quiz_question_type[1:]
-            #         current_window_check.endCurrent()
-            #         quizwindow_concept_check.makeCurrent()
-            # else:
-            #     current_window_check.endCurrent()
-            #     quiz_end_window_check.makeCurrent()
+            
         for box in ans_box.keys():
             if box.render().collidepoint(event.pos):
-                # print("click")
                 box.active = True
             else:
                 box.active = False
@@ -163,7 +120,7 @@ def quiz_button_loop(event, x_button, current_window_check, ans_box):
 
 show_graph = 0
 def eval_window(screen):
-    global show_graph,correct_answer,curr_question_type,quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
+    global userScore,show_graph,correct_answer,curr_question_type,quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
     
     x_button = nextButton
     if len(quiz_question_type) == 0:
@@ -184,27 +141,30 @@ def eval_window(screen):
             elif curr_question_type=='3-D':
                 mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx]
                 correct_answer=execute(3,mohrCircle_input)
-        show_graph+=1
+        
 
     try:
         if curr_question_type == "2-D":
-            if correct_answer[0][0] == float(C1_gen.text):
+            if correct_answer[0][0] < float(C1_gen.text) + 0.5 and correct_answer[0][0] > float(C1_gen.text) - 0.5:
+                
                 isCorrect = True
-
+                if show_graph ==0 :
+                    userScore +=5
         elif curr_question_type == "3-D":
             user_answer = [[float(C1_gen.text)],[float(C2_gen.text)],[float(C3_gen.text)]]
             counter = 0
             for k in user_answer:
                 for l in correct_answer:
-                    if k[0] <l[0] + 1 and k[0] > l[0]-1:
+                    if k[0] <l[0] + 0.5 and k[0] > l[0]-0.5:
                         counter+=1
                         break
             if counter==3:
                 isCorrect = True
-
+                if show_graph == 0:
+                    userScore +=5
     except:
         pass
-    
+    show_graph+=1
     if(isCorrect):
             text = Big_font.render("CORRECT :)", 1, (0,0,0))
             screen.blit(text, (70, 250))
@@ -307,8 +267,7 @@ def quizwindow_2d(screen):
     x_button.draw(screen, (0,0,0))
 
     for event in pygame.event.get():
-        ans_boxes_2d=quiz_button_loop(event, x_button, quizwindow_2d_check, ans_boxes_2d)
-          
+        ans_boxes_2d=quiz_button_loop(event, x_button, quizwindow_2d_check, ans_boxes_2d)          
 
     for box in ans_boxes_2d.keys():
         txt_surface = Small_font.render(box.text, True, box.color)
@@ -394,14 +353,14 @@ def quizwindow_concept(screen):
         quiz_button_loop(event, x_button, quizwindow_concept_check, {})
 
 def quiz_end_window(screen):
+    global userScore
     Big_font = game_font(80)
     Small_font = game_font(20)
     text = Big_font.render("Quiz Over", 1, (0,0,0))
     screen.blit(text, (70, 250))
-    text = Small_font.render ("Please proceed to get your Scores!!",1, (0,0,0))
+    text = Small_font.render ("Your Score : "+str(userScore),1, (0,0,0))
     screen.blit(text, (60, 400))
     enterButton.draw(screen, (0,0,0))
-    
     for event in pygame.event.get():
         pos = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
