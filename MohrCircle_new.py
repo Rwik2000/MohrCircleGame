@@ -16,13 +16,13 @@ def Plot_Mohr_Circle(Stress, dim):
         centre2_3=round((sigma2+sigma3)/2, 4)    
         radius1_3=abs(sigma3-centre1_3)    
         radius2_3=abs(sigma2-centre2_3)
-    #     print("The Principal Stresses are: \nσ1: {0} \nσ2: {1} \nσ3: {2} \n".format(sigma1,sigma2,sigma3))
-    #     print("Maximum Shear Stress τ_max: " +str(round((sigma1-sigma3)/2, 3)))
-    #     print("\nThe Centres of the circle are: \nC1: {0} \nC2: {1} \nC3: {2} \n".format(centre1_3,centre1_2,centre2_3))
-    # else:
-    #     print("The Principal Stresses are: \nσ1: {0} \nσ2: {1} \n".format(sigma1,sigma2))
-    #     print("Maximum Shear Stress τ_max: " +str(round((sigma1-sigma2)/2, 3))) 
-    #     print("\nThe Centre of the circle are: \nC1: {0}".format(centre1_2))           
+        print("The Principal Stresses are: \nσ1: {0} \nσ2: {1} \nσ3: {2} \n".format(sigma1,sigma2,sigma3))
+        print("Maximum Shear Stress τ_max: " +str(round((sigma1-sigma3)/2, 3)))
+        print("\nThe Centres of the circle are: \nC1: {0} \nC2: {1} \nC3: {2} \n".format(centre1_3,centre1_2,centre2_3))
+    else:
+        print("The Principal Stresses are: \nσ1: {0} \nσ2: {1} \n".format(sigma1,sigma2))
+        print("Maximum Shear Stress τ_max: " +str(round((sigma1-sigma2)/2, 3))) 
+        print("\nThe Centre of the circle are: \nC1: {0}".format(centre1_2))           
 
     
 
@@ -84,14 +84,14 @@ def find_Principal_Stress(Stress_tensor):
     elif Stress_tensor.shape == (2,2):
         a=Stress_tensor.copy()
         I1= a[0][0] + a[1][1]
-        print(a[0][1])
+        # print(a[0][1])
         I2= a[0][0]*a[1][1] - a[0][1]**2 
         a=np.linalg.eig(a)[0]    
         a=np.round(a, 4)
         return Plot_Mohr_Circle(list(a), dim=2)        
 
 def input_to_tensor(σxx,σyy,σzz,σxy,σyz,σzx, n_dim):
-    print()
+    # print()
     if n_dim==2:
         σ_tensor = [[σxx , σxy ],
                     [σxy , σyy ]]

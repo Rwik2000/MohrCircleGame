@@ -121,5 +121,7 @@ while running:
         mohr_quiz.quizwindow_concept(screen)
     if quiz_end_window_check.checkUpdate():
         mohr_quiz.quiz_end_window(screen)
+    if eval_window_check.checkUpdate():
+        mohr_quiz.eval_window(screen)
 
     pygame.display.update()
