@@ -42,6 +42,7 @@ startButton = button((180,0,0), 360, 400, 80, 30, 'START')
 nextButton = button((180,0,0), 680, 550, 80, 30, 'NEXT')
 submitButton = button((180,0,0), 680, 550, 80, 30, 'SUBMIT')
 graphButton = button((180,0,0), 530, 550, 80,30, 'GRAPH')
+back_to_homeButton = button((180,0,0), 680, 550, 80,30, 'BACK HOME')
 
 class inputtextbox():
     def __init__(self, color_inactive, color_active, x,y,width,height):

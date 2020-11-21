@@ -8,7 +8,7 @@ import random
 from utilities.mohr_screen import *
 import time
 
-quiz_question_type = ['2-D', '2-D']
+quiz_question_type = ['2-D', '2-D','3-D','3-D']
 # quiz_question_type = ['3-D']
 
 curr_question_type = None
@@ -360,7 +360,9 @@ def quiz_end_window(screen):
     screen.blit(text, (70, 250))
     text = Small_font.render ("Your Score : "+str(userScore),1, (0,0,0))
     screen.blit(text, (60, 400))
-    enterButton.draw(screen, (0,0,0))
+    # enterButton.draw(screen, (0,0,0))
+    back_to_homeButton.draw(screen,(0,0,0))
+
     for event in pygame.event.get():
         pos = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
@@ -368,8 +370,12 @@ def quiz_end_window(screen):
             running = False
 
         if event.type == pygame.MOUSEMOTION:
-            if enterButton.isOver(pos):
-                enterButton.color = (255, 0, 0)
+            if back_to_homeButton.isOver(pos):
+                back_to_homeButton.color = (255, 0, 0)
             else:
-                enterButton.color = (180, 0, 0)
+                back_to_homeButton.color = (180, 0, 0)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if back_to_homeButton.isOver(pos):
+                quiz_end_window_check.endCurrent()
+                enterWindow_check.makeCurrent()
     
