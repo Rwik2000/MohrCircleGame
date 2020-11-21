@@ -84,17 +84,21 @@ def general2D_input_window(screen):
                 # A.pop()
             if enterButton.isOver(pos):
                 mohrCircle_input = []
-                for box in input_boxes.keys():
-                    mohrCircle_input.append(float(box.text))
+                try:
+                    for box in input_boxes.keys():
+                        mohrCircle_input.append(float(box.text))
 
-                if len(mohrCircle_input) == 3:
-                    for i in range(3):
-                        mohrCircle_input.append(0)
-                    execute(2, mohrCircle_input)
-                    time.sleep(10)
-                    
-                else:
-                    print("Insufficient data")
+                    if len(mohrCircle_input) == 3:
+                        for i in range(3):
+                            mohrCircle_input.append(0)
+                        execute(2, mohrCircle_input)
+                        time.sleep(10)
+                        
+                    else:
+                        print("Insufficient data")
+                except:
+                    general2D_input_window_check.endCurrent()
+                    incompatible_input_window_check.makeCurrent()
             for box in input_boxes.keys():
                 if box.render().collidepoint(event.pos):
                     print("click")
