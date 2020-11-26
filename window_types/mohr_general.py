@@ -1,4 +1,3 @@
-
 import pygame
 import numpy as np
 from utilities.mohr_fonts import game_font
@@ -6,6 +5,7 @@ from utilities.mohr_user_input import *
 import random
 from utilities.mohr_screen import *
 from MohrCircle_stress import stress_execute
+from MohrCircle_strain import strain_execute
 
 stress_strain_win_select = [0,0]
 def generalwindow(screen, prev_win, windows):
@@ -58,6 +58,30 @@ def generalwindow(screen, prev_win, windows):
                 backButton.color = (255, 0, 0)
             else:
                 backButton.color = (180, 0, 0)
+def box_text_input(event, input_boxes):
+    if event.type == pygame.KEYDOWN:            
+        for box in input_boxes.keys():
+            if box.active:
+                if event.key == pygame.K_RETURN:
+                    print(box.text)
+                    box.text = ''
+                elif event.key == pygame.K_BACKSPACE:
+                    box.text = box.text[:-1]
+                else:
+                    try:
+                        _=float(event.unicode)
+                        box.text += event.unicode    
+                    except:
+                        if event.unicode == "." or event.unicode == "-":
+                            temp_text = box.text
+                            temp_text +=event.unicode
+                            try:
+                                float(temp_text)
+                                box.text +=event.unicode   
+                            except:
+                                if len(box.text) == 0:
+                                    if event.unicode == "-" or event.unicode=='.':
+                                        box.text +=event.unicode 
 
 def stress_strain_window(screen, prev_win, windows):
     global stress_strain_win_select
@@ -103,14 +127,13 @@ def stress_strain_window(screen, prev_win, windows):
 
 def gen2D_stress_input_window(screen, prev_win, windows): 
     clock = pygame.time.Clock()
-    input_boxes = {sigma_xx_gen:"sigma_xx", sigma_yy_gen:"sigma_yy", sigma_xy_gen:"sigma_xy"}
+    input_boxes = {sigma_xx_gen:"sigma_xx", sigma_yy_gen:"sigma_yy", sigma_xy_gen:"sigma_xy", angle_gen:"angle"}
     Small_font = game_font(20)
     head_text = Small_font.render("General 2- D Mode",1, (0,0,0))
     
     for box in input_boxes.keys():
         box_text = Small_font.render(input_boxes[box]+":",1,(0,0,0))
-        screen.blit(box_text,(box.x - 80, box.y))
-
+        screen.blit(box_text,(box.x - 120, box.y))
     screen.blit(head_text, (360, 100))  
     backButton.draw(screen, (0,0,0))
     enterButton.draw(screen, (0,0,0))
@@ -123,19 +146,22 @@ def gen2D_stress_input_window(screen, prev_win, windows):
             if backButton.isOver(pos):
                 generalwindow_check.makeCurrent()
                 gen2D_stress_input_window_check.endCurrent()
-                # global s
-                # s = s - 1
-                # A.pop()
             if enterButton.isOver(pos):
                 mohrCircle_input = []
                 try:
                     for box in input_boxes.keys():
-                        mohrCircle_input.append(float(box.text))
+                        if(input_boxes[box]!="angle"):
+                            mohrCircle_input.append(float(box.text))
 
                     if len(mohrCircle_input) == 3:
                         for i in range(3):
                             mohrCircle_input.append(0)
-                        stress_execute(2, mohrCircle_input)
+                        isAngle_stress, reqAngle_stress = False, None                        
+                        if(angle_gen.text!=''):
+                            isAngle_stress = True
+                            reqAngle_stress = float(angle_gen.text)
+                        stress_execute(2, mohrCircle_input, isAngle_stress, reqAngle_stress)
+                        isAngle_stress, reqAngle_stress = False, None
                         gen2D_stress_input_window_check.endCurrent()
                         gen2D_stress_input_window_check.makeCurrent()
                     else:
@@ -149,30 +175,7 @@ def gen2D_stress_input_window(screen, prev_win, windows):
                     box.active = True
                 else:
                     box.active = False
-        if event.type == pygame.KEYDOWN:
-            
-            for box in input_boxes.keys():
-                if box.active:
-                    if event.key == pygame.K_RETURN:
-                        print(box.text)
-                        box.text = ''
-                    elif event.key == pygame.K_BACKSPACE:
-                        box.text = box.text[:-1]
-                    else:
-                        try:
-                            _=float(event.unicode)
-                            box.text += event.unicode    
-                        except:
-                            if event.unicode == "." or event.unicode == "-":
-                                temp_text = box.text
-                                temp_text +=event.unicode
-                                try:
-                                    float(temp_text)
-                                    box.text +=event.unicode   
-                                except:
-                                    if len(box.text) == 0:
-                                        if event.unicode == "-" or event.unicode=='.':
-                                            box.text +=event.unicode 
+        box_text_input(event, input_boxes)
 
         if event.type == pygame.MOUSEMOTION:
             if backButton.isOver(pos):
@@ -193,13 +196,14 @@ def gen2D_stress_input_window(screen, prev_win, windows):
 
 def gen3D_stress_input_window(screen, prev_win, windows): 
     clock = pygame.time.Clock()
-    input_boxes = {sigma_xx_gen:"sigma_xx", sigma_yy_gen:"sigma_yy", sigma_xy_gen:"sigma_xy", sigma_zz_gen:"sigma_zz", sigma_yz_gen:"sigma_yz", sigma_zx_gen:"sigma_zx"}
+    input_boxes = {sigma_xx_gen:"sigma_xx", sigma_yy_gen:"sigma_yy", sigma_xy_gen:"sigma_xy", 
+                   sigma_zz_gen:"sigma_zz", sigma_yz_gen:"sigma_yz", sigma_zx_gen:"sigma_zx"}
     Small_font = game_font(20)
     head_text = Small_font.render("General 3-D Mode",1, (0,0,0))
     
     for box in input_boxes.keys():
         box_text = Small_font.render(input_boxes[box]+":",1,(0,0,0))
-        screen.blit(box_text,(box.x - 80, box.y))
+        screen.blit(box_text,(box.x - 120, box.y))
 
     screen.blit(head_text, (360, 100))  
     backButton.draw(screen, (0,0,0))
@@ -234,30 +238,8 @@ def gen3D_stress_input_window(screen, prev_win, windows):
                     box.active = True
                 else:
                     box.active = False
-        if event.type == pygame.KEYDOWN:
-            
-            for box in input_boxes.keys():
-                if box.active:
-                    if event.key == pygame.K_RETURN:
-                        print(box.text)
-                        box.text = ''
-                    elif event.key == pygame.K_BACKSPACE:
-                        box.text = box.text[:-1]
-                    else:
-                        try:
-                            _=float(event.unicode)
-                            box.text += event.unicode    
-                        except:
-                            if event.unicode == "." or event.unicode == "-":
-                                temp_text = box.text
-                                temp_text +=event.unicode
-                                try:
-                                    float(temp_text)
-                                    box.text +=event.unicode   
-                                except:
-                                    if len(box.text) == 0:
-                                        if event.unicode == "-" or event.unicode=='.':
-                                            box.text +=event.unicode
+        box_text_input(event, input_boxes)
+
 
         if event.type == pygame.MOUSEMOTION:
             if backButton.isOver(pos):
@@ -277,13 +259,13 @@ def gen3D_stress_input_window(screen, prev_win, windows):
 
 def gen2D_strain_input_window(screen, prev_win, windows): 
     clock = pygame.time.Clock()
-    input_boxes = {epsi_xx_gen:"epsi_xx", epsi_yy_gen:"epsi_yy", epsi_xy_gen:"epsi_xy"}
+    input_boxes = {epsi_xx_gen:"epsi_xx", epsi_yy_gen:"epsi_yy", epsi_xy_gen:"epsi_xy", angle_gen:"angle"}
     Small_font = game_font(20)
     head_text = Small_font.render("General 2- D Mode",1, (0,0,0))
     
     for box in input_boxes.keys():
         box_text = Small_font.render(input_boxes[box]+":",1,(0,0,0))
-        screen.blit(box_text,(box.x - 80, box.y))
+        screen.blit(box_text,(box.x - 120, box.y))
 
     screen.blit(head_text, (360, 100))  
     backButton.draw(screen, (0,0,0))
@@ -304,12 +286,18 @@ def gen2D_strain_input_window(screen, prev_win, windows):
                 mohrCircle_input = []
                 try:
                     for box in input_boxes.keys():
-                        mohrCircle_input.append(float(box.text))
+                        if(input_boxes[box]!="angle"):
+                            mohrCircle_input.append(float(box.text))
 
                     if len(mohrCircle_input) == 3:
                         for i in range(3):
                             mohrCircle_input.append(0)
-                        stress_execute(2, mohrCircle_input)
+                        isAngle_strain, reqAngle_strain = False, None    
+                        if(angle_gen.text!=''):
+                            isAngle_strain = True
+                            reqAngle_strain = float(angle_gen.text)                    
+                        strain_execute(2, mohrCircle_input, isAngle_strain, reqAngle_strain)
+                        isAngle_strain, reqAngle_strain = False, None
                         gen2D_strain_input_window_check.endCurrent()
                         gen2D_strain_input_window_check.makeCurrent()
                     else:
@@ -323,30 +311,8 @@ def gen2D_strain_input_window(screen, prev_win, windows):
                     box.active = True
                 else:
                     box.active = False
-        if event.type == pygame.KEYDOWN:
-            
-            for box in input_boxes.keys():
-                if box.active:
-                    if event.key == pygame.K_RETURN:
-                        print(box.text)
-                        box.text = ''
-                    elif event.key == pygame.K_BACKSPACE:
-                        box.text = box.text[:-1]
-                    else:
-                        try:
-                            _=float(event.unicode)
-                            box.text += event.unicode    
-                        except:
-                            if event.unicode == "." or event.unicode == "-":
-                                temp_text = box.text
-                                temp_text +=event.unicode
-                                try:
-                                    float(temp_text)
-                                    box.text +=event.unicode   
-                                except:
-                                    if len(box.text) == 0:
-                                        if event.unicode == "-" or event.unicode=='.':
-                                            box.text +=event.unicode 
+        box_text_input(event, input_boxes)
+
 
         if event.type == pygame.MOUSEMOTION:
             if backButton.isOver(pos):
@@ -367,13 +333,14 @@ def gen2D_strain_input_window(screen, prev_win, windows):
 
 def gen3D_strain_input_window(screen, prev_win, windows): 
     clock = pygame.time.Clock()
-    input_boxes = {epsi_xx_gen:"epsi_xx", epsi_yy_gen:"epsi_yy", epsi_xy_gen:"epsi_xy", epsi_zz_gen:"epsi_zz", epsi_yz_gen:"epsi_yz", epsi_zx_gen:"epsi_zx"}
+    input_boxes = {epsi_xx_gen:"epsi_xx", epsi_yy_gen:"epsi_yy", epsi_xy_gen:"epsi_xy",
+                   epsi_zz_gen:"epsi_zz", epsi_yz_gen:"epsi_yz", epsi_zx_gen:"epsi_zx"}
     Small_font = game_font(20)
     head_text = Small_font.render("General 3-D Mode",1, (0,0,0))
     
     for box in input_boxes.keys():
         box_text = Small_font.render(input_boxes[box]+":",1,(0,0,0))
-        screen.blit(box_text,(box.x - 80, box.y))
+        screen.blit(box_text,(box.x - 120, box.y))
 
     screen.blit(head_text, (360, 100))  
     backButton.draw(screen, (0,0,0))
@@ -394,7 +361,7 @@ def gen3D_strain_input_window(screen, prev_win, windows):
                         mohrCircle_input.append(float(box.text))
 
                     if len(mohrCircle_input) == 6:
-                        stress_execute(3, mohrCircle_input)
+                        strain_execute(3, mohrCircle_input)
                         gen3D_strain_input_window_check.endCurrent()
                         gen3D_strain_input_window_check.makeCurrent()
                     else:
@@ -408,30 +375,8 @@ def gen3D_strain_input_window(screen, prev_win, windows):
                     box.active = True
                 else:
                     box.active = False
-        if event.type == pygame.KEYDOWN:
-            
-            for box in input_boxes.keys():
-                if box.active:
-                    if event.key == pygame.K_RETURN:
-                        print(box.text)
-                        box.text = ''
-                    elif event.key == pygame.K_BACKSPACE:
-                        box.text = box.text[:-1]
-                    else:
-                        try:
-                            _=float(event.unicode)
-                            box.text += event.unicode    
-                        except:
-                            if event.unicode == "." or event.unicode == "-":
-                                temp_text = box.text
-                                temp_text +=event.unicode
-                                try:
-                                    float(temp_text)
-                                    box.text +=event.unicode   
-                                except:
-                                    if len(box.text) == 0:
-                                        if event.unicode == "-" or event.unicode=='.':
-                                            box.text +=event.unicode
+        box_text_input(event, input_boxes)
+
 
         if event.type == pygame.MOUSEMOTION:
             if backButton.isOver(pos):

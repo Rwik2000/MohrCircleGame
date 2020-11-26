@@ -10,7 +10,6 @@ from MohrCircle_strain import strain_execute
 import random
 from utilities.mohr_screen import *
 import time
-
 # quiz_question_type = ['2-D', '2-D','3-D','3-D', 'concept']
 quiz_question_type = ['2-D','2-D','3-D','3-D','concept','concept','concept']
 quest_nos = [1,2,3,4,5,6,7]

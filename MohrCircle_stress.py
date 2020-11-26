@@ -2,11 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sympy.solvers import solve
 from sympy import Symbol
-reqAngle = 30
-isAngle = True
+# reqAngle = 30
+# isAngle = True
 
-def Plot_Mohr_Circle(Stress, dim, Stress_tensor):
-    global isAngle, reqAngle
+def Plot_Mohr_Circle(Stress, dim, Stress_tensor, isAngle_stress, reqAngle_stress):
+    # global isAngle, reqAngle
     Stress.sort(reverse=True)
     sigma1=Stress[0]
     sigma2=Stress[1]
@@ -57,7 +57,7 @@ def Plot_Mohr_Circle(Stress, dim, Stress_tensor):
         points = [[Stress_tensor[0][0],Stress_tensor[0][1]],[Stress_tensor[1][1],-Stress_tensor[0][1]]]
         ax.plot(*zip(*points),marker='o', color='black', ls='')
         ax.plot([Stress_tensor[0][0],Stress_tensor[1][1]],[Stress_tensor[0][1],-Stress_tensor[0][1]])
-        if(isAngle):
+        if(isAngle_stress):
             try:
                 curr_angle = np.arctan((Stress_tensor[0][1])/(Stress_tensor[0][0]-centre1_2))
             except:
@@ -67,7 +67,7 @@ def Plot_Mohr_Circle(Stress, dim, Stress_tensor):
                 else:
                     print(-90)
                     curr_angle = np.deg2rad(-90)
-            total_angle = curr_angle + np.deg2rad(2*reqAngle)
+            total_angle = curr_angle + np.deg2rad(2*reqAngle_stress)
             # print(np.rad2deg(total_angle))
             new_x_1 = radius1_2*np.cos(total_angle) + centre1_2
             new_y_1 = radius1_2*np.sin(total_angle)    
@@ -98,7 +98,7 @@ def Plot_Mohr_Circle(Stress, dim, Stress_tensor):
     plt.show()
 
     return mohr_centre
-def find_Principal_Stress(Stress_tensor):
+def find_Principal_Stress(Stress_tensor, isAngle_stress, reqAngle_stress):
     if Stress_tensor.shape == (3,3):
         a=Stress_tensor.copy()
         I1= a[0][0] + a[1][1] + a[2][2]
@@ -106,7 +106,7 @@ def find_Principal_Stress(Stress_tensor):
         I3 = np.linalg.det(Stress_tensor)
         a=np.linalg.eig(a)[0]    
         a=np.round(a, 4)
-        return Plot_Mohr_Circle(list(a), dim=3,Stress_tensor=Stress_tensor)
+        return Plot_Mohr_Circle(list(a), dim=3,Stress_tensor=Stress_tensor, isAngle_stress=isAngle_stress, reqAngle_stress=reqAngle_stress)
     elif Stress_tensor.shape == (2,2):
         a=Stress_tensor.copy()
         I1= a[0][0] + a[1][1]
@@ -114,9 +114,9 @@ def find_Principal_Stress(Stress_tensor):
         I2= a[0][0]*a[1][1] - a[0][1]**2 
         a=np.linalg.eig(a)[0]    
         a=np.round(a, 4)
-        return Plot_Mohr_Circle(list(a), dim=2, Stress_tensor=Stress_tensor)        
+        return Plot_Mohr_Circle(list(a), dim=2, Stress_tensor=Stress_tensor, isAngle_stress=isAngle_stress, reqAngle_stress=reqAngle_stress)        
 
-def input_to_tensor(σxx,σyy,σzz,σxy,σyz,σzx, n_dim):
+def input_to_tensor(σxx,σyy,σzz,σxy,σyz,σzx, n_dim, isAngle_stress, reqAngle_stress):
     # print()
     if n_dim==2:
         σ_tensor = [[σxx , σxy ],
@@ -127,16 +127,17 @@ def input_to_tensor(σxx,σyy,σzz,σxy,σyz,σzx, n_dim):
                     [σzx , σyz , σzz]]
     σ_tensor= np.array(σ_tensor)
     # print(σ_tensor.shape)
-    return find_Principal_Stress(σ_tensor)
+    return find_Principal_Stress(σ_tensor, isAngle_stress, reqAngle_stress)
 
-def stress_execute(n_dim, input):
+def stress_execute(n_dim, input,isAngle_stress=False, reqAngle_stress=None):
     # print(input)
     if n_dim == 3:
         for i in range(3):
             if input[i+3]==None:
                 input[i+3]=0
     
-    return input_to_tensor(σxx = input[0],σyy = input[1],σzz = input[3],σxy = input[2],σyz = input[4],σzx = input[5], n_dim=n_dim)
+    return input_to_tensor(σxx = input[0],σyy = input[1],σzz = input[3],σxy = input[2],
+                           σyz = input[4],σzx = input[5], n_dim=n_dim, isAngle_stress=isAngle_stress,reqAngle_stress= reqAngle_stress)
 
 # ########### User input ##########
 # '''For two dimensional mohr circle, input only σxx,σyy,σxy, leave σzz,σyz,σzx as None'''
@@ -151,5 +152,5 @@ def stress_execute(n_dim, input):
 # input = [σxx, σyy, σxy, σzz, σyz, σzx]
 # ##################################
 
-# stress_execute(n_dim=2,  input=input)
+# stress_execute(n_dim=2,  input=input, isAngle_stress=True, reqAngle_stress=-22.5)
 
