@@ -17,8 +17,15 @@ def startwindow(screen, prev_win, windows):
     text = Big_font.render("Mohr's Circle", 1, (0,0,0))
     screen.blit(text, (70, 250))
     screen.blit(iitgn_logo, (280,0))
-    text = Small_font.render ("An interactive app to understand and visualise the concepts of Mohr's Circle in 2-Dimeansion and 3-Dimension",1, (0,0,0))
-    screen.blit(text, (60, 400))
+    new_text =["An interactive app to understand and visualise the concepts",
+                "   of Mohr's Circle in 2-Dimeansion and 3-Dimension"]
+    count = 0
+    for text_inp in new_text:
+        text = Small_font.render(text_inp,1,(0,0,0))
+        screen.blit(text,(60, 400+count))
+        count+=25
+    # text = Small_font.render ("An interactive app to understand and visualise the concepts of Mohr's Circle in 2-Dimeansion and 3-Dimension",1, (0,0,0))
+    # screen.blit(text, (60, 400))
     text = Small_font.render ("Rwik Rana| Shreyas Sonawane| Manish Alriya| Yash Meshram ",1, (0,0,0))
     screen.blit(text, (60, 550))
     enterButton.draw(screen, (0,0,0))

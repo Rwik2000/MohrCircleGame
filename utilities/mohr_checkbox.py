@@ -16,7 +16,7 @@ class checkBox():
         return (0,200,100),(self.x+10,self.y+10), 7
     def render(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
-check1 = checkBox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 200, 20, 20)
-check2 = checkBox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 250, 20, 20)
-check3 = checkBox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 300, 20, 20)
-check4 = checkBox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 350, 20, 20)
+check1 = checkBox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 30, 250, 20, 20)
+check2 = checkBox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 30, 300, 20, 20)
+check3 = checkBox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 30, 350, 20, 20)
+check4 = checkBox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 30, 400, 20, 20)

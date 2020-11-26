@@ -4,6 +4,7 @@ import numpy as np
 from utilities.mohr_fonts import game_font
 from utilities.mohr_user_input import *
 from utilities.mohr_checkbox import *
+from utilities.mohr_concept_questions import concept_quest
 from MohrCircle_stress import stress_execute
 from MohrCircle_strain import strain_execute
 import random
@@ -11,8 +12,9 @@ from utilities.mohr_screen import *
 import time
 
 # quiz_question_type = ['2-D', '2-D','3-D','3-D', 'concept']
-quiz_question_type = ['concept']
-
+quiz_question_type = ['concept','concept','concept']
+quest_nos = [1,2,3,4,5,6,7]
+quest_index = -1
 curr_question_type = None
 correct_answer = None
 userScore = 0
@@ -24,7 +26,7 @@ def quizwindow(screen, prev_win, windows):
     backButton.draw(screen, (0,0,0))
     startButton.draw(screen,(0,0,0))
 
-    global curr_question_type,quiz_question_type, sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
+    global curr_question_type,quiz_question_type, sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx,quest_nos,quest_index
     # print(len(quiz_question_type))
     random.shuffle(quiz_question_type)
 
@@ -58,6 +60,7 @@ def quizwindow(screen, prev_win, windows):
                     quizwindow_check.endCurrent()
                 elif quiz_question_type[0] == 'concept':   
                     quiz_question_type = quiz_question_type[1:]
+                    quest_index = random.randint(0,len(quest_nos)-1)
                     quizwindow_concept_check.makeCurrent()
                     quizwindow_check.endCurrent()
                 
@@ -122,7 +125,7 @@ def quiz_button_loop(event, x_button, current_window_check, ans_box):
 
 show_graph = 0
 def eval_window(screen, prev_win, windows):
-    global userScore,show_graph,correct_answer,curr_question_type,quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
+    global userScore,show_graph,correct_answer,curr_question_type,quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx, quest_nos, quest_index
     
     x_button = nextButton
     if len(quiz_question_type) == 0:
@@ -223,6 +226,9 @@ def eval_window(screen, prev_win, windows):
                         quizwindow_3d_check.makeCurrent()
                     elif quiz_question_type[0] == 'concept':   
                         quiz_question_type = quiz_question_type[1:]
+                        quest_nos.remove(quest_nos[quest_index])
+                        print(quest_nos)
+                        quest_index = random.randint(0,len(quest_nos)-1)
                         eval_window_check.endCurrent()
                         quizwindow_concept_check.makeCurrent()
                 else:
@@ -342,8 +348,17 @@ def quizwindow_3d(screen, prev_win, windows):
     clock.tick(30)
 
 def quizwindow_concept(screen, prev_win, windows):
-    global quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
+    global quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx, quest_nos,quest_index
     # print(len(quiz_question_type))
+    Big_font = game_font(40)
+    Small_font = game_font(15)
+    text = Big_font.render("Conceptual:",1, (0,0,0))
+    screen.blit(text, (30, 70))
+    count = 0
+    for conc_text in concept_quest[quest_nos[quest_index]][0]:
+        text = Small_font.render(conc_text,1, (0,0,0))
+        screen.blit(text, (30, 150+count))
+        count+=25
 
     x_button = nextButton
     if len(quiz_question_type) == 0:
@@ -351,7 +366,7 @@ def quizwindow_concept(screen, prev_win, windows):
     x_button.draw(screen, (0,0,0))
 
     check_boxes = [check1,check2,check3,check4]
-    curr_question_type = 'concept'
+    # curr_question_type = 'concept'
     for event in pygame.event.get():
         pos = pygame.mouse.get_pos()
 
@@ -363,22 +378,27 @@ def quizwindow_concept(screen, prev_win, windows):
                     check_box.active = False
 
         quiz_button_loop(event, x_button, quizwindow_concept_check, {})
-
+    
+    opt_count = 0
     for check_box in check_boxes:
+        text = Small_font.render(concept_quest[quest_nos[quest_index]][1][opt_count],1, (0,0,0))
+        screen.blit(text, (check_box.x + 30, check_box.y))
         pygame.draw.rect(screen, check_box.color, check_box.render(),2)
         if(check_box.active==True):
             color, centre, radius = check_box.draw_circ()
             pygame.draw.circle(screen,color,centre, radius)
+        opt_count +=1
 
 
 def quiz_end_window(screen, prev_win, windows):
-    global userScore
+    global userScore, quiz_question_type
     Big_font = game_font(80)
     Small_font = game_font(20)
     text = Big_font.render("Quiz Over", 1, (0,0,0))
     screen.blit(text, (70, 250))
     text = Small_font.render ("Your Score : "+str(userScore),1, (0,0,0))
     screen.blit(text, (60, 400))
+    quiz_question_type = ['concept']
     # enterButton.draw(screen, (0,0,0))
     back_to_homeButton.draw(screen,(0,0,0))
 
