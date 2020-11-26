@@ -103,7 +103,7 @@ def input_to_tensor(σxx,σyy,σzz,σxy,σyz,σzx, n_dim):
     # print(σ_tensor.shape)
     return find_Principal_Stress(σ_tensor)
 
-def execute(n_dim, input):
+def stress_execute(n_dim, input):
     # print(input)
     if n_dim == 3:
         for i in range(3):
@@ -125,5 +125,5 @@ def execute(n_dim, input):
 # input = [σxx, σyy, σxy, σzz, σyz, σzx]
 # ##################################
 
-# execute(n_dim=2,  input=input)
+# stress_execute(n_dim=2,  input=input)
 

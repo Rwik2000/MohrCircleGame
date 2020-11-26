@@ -3,19 +3,21 @@ import pygame
 import numpy as np
 from utilities.mohr_fonts import game_font
 from utilities.mohr_user_input import *
-from MohrCircle_new import execute
+from utilities.mohr_checkbox import *
+from MohrCircle_stress import stress_execute
+from MohrCircle_strain import strain_execute
 import random
 from utilities.mohr_screen import *
 import time
 
-quiz_question_type = ['2-D', '2-D','3-D','3-D']
-# quiz_question_type = ['3-D']
+# quiz_question_type = ['2-D', '2-D','3-D','3-D', 'concept']
+quiz_question_type = ['concept']
 
 curr_question_type = None
 correct_answer = None
 userScore = 0
 
-def quizwindow(screen):
+def quizwindow(screen, prev_win, windows):
     Small_font = game_font(20)
     text = Small_font.render("Quiz Mode",1, (0,0,0))
     screen.blit(text, (360, 100))
@@ -119,7 +121,7 @@ def quiz_button_loop(event, x_button, current_window_check, ans_box):
     return ans_box 
 
 show_graph = 0
-def eval_window(screen):
+def eval_window(screen, prev_win, windows):
     global userScore,show_graph,correct_answer,curr_question_type,quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
     
     x_button = nextButton
@@ -136,11 +138,11 @@ def eval_window(screen):
         if curr_question_type!='concept':
             if curr_question_type=='2-D':
                 mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy, 0,0,0]
-                correct_answer=execute(2,mohrCircle_input)
+                correct_answer=stress_execute(2,mohrCircle_input)
 
             elif curr_question_type=='3-D':
                 mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx]
-                correct_answer=execute(3,mohrCircle_input)
+                correct_answer=stress_execute(3,mohrCircle_input)
         
 
     try:
@@ -193,11 +195,11 @@ def eval_window(screen):
                 if curr_question_type!='concept':
                     if curr_question_type=='2-D':
                         mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy, 0,0,0]
-                        correct_answer=execute(2,mohrCircle_input)
+                        correct_answer=stress_execute(2,mohrCircle_input)
 
                     elif curr_question_type=='3-D':
                         mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx]
-                        correct_answer=execute(3,mohrCircle_input)
+                        correct_answer=stress_execute(3,mohrCircle_input)
             if x_button.isOver(pos):
                 if len(quiz_question_type) > 0:
                     # print(quiz_question_type[0])
@@ -229,7 +231,7 @@ def eval_window(screen):
 
 
         
-def quizwindow_2d(screen):
+def quizwindow_2d(screen, prev_win, windows):
     clock = pygame.time.Clock()
     Big_font = game_font(40)
     Small_font = game_font(20)
@@ -278,7 +280,7 @@ def quizwindow_2d(screen):
     
     clock.tick(30)
 
-def quizwindow_3d(screen):
+def quizwindow_3d(screen, prev_win, windows):
     clock = pygame.time.Clock()
     Big_font = game_font(40)
     Small_font = game_font(20)
@@ -339,7 +341,7 @@ def quizwindow_3d(screen):
     
     clock.tick(30)
 
-def quizwindow_concept(screen):
+def quizwindow_concept(screen, prev_win, windows):
     global quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
     # print(len(quiz_question_type))
 
@@ -348,11 +350,28 @@ def quizwindow_concept(screen):
         x_button = submitButton
     x_button.draw(screen, (0,0,0))
 
+    check_boxes = [check1,check2,check3,check4]
     curr_question_type = 'concept'
     for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for check_box in check_boxes:
+                if(check_box.render().collidepoint(event.pos)):
+                    check_box.active = not check_box.active
+                else:
+                    check_box.active = False
+
         quiz_button_loop(event, x_button, quizwindow_concept_check, {})
 
-def quiz_end_window(screen):
+    for check_box in check_boxes:
+        pygame.draw.rect(screen, check_box.color, check_box.render(),2)
+        if(check_box.active==True):
+            color, centre, radius = check_box.draw_circ()
+            pygame.draw.circle(screen,color,centre, radius)
+
+
+def quiz_end_window(screen, prev_win, windows):
     global userScore
     Big_font = game_font(80)
     Small_font = game_font(20)

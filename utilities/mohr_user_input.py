@@ -43,6 +43,9 @@ nextButton = button((180,0,0), 680, 550, 80, 30, 'NEXT')
 submitButton = button((180,0,0), 680, 550, 80, 30, 'SUBMIT')
 graphButton = button((180,0,0), 530, 550, 80,30, 'GRAPH')
 back_to_homeButton = button((180,0,0), 680, 550, 80,30, 'BACK HOME')
+stressButton = button((180,0,0), 360, 170, 80, 30, 'STRESS')
+strainButton = button((180,0,0), 360, 300, 80, 30, 'STRAIN')
+
 
 class inputtextbox():
     def __init__(self, color_inactive, color_active, x,y,width,height):
@@ -67,6 +70,14 @@ sigma_zz_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerb
 sigma_xy_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 350, 100, 25)
 sigma_yz_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 400, 100, 25)
 sigma_zx_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 450, 100, 25)
+
+epsi_xx_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 200, 100, 25)
+epsi_yy_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 250, 100, 25)
+epsi_zz_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 300, 100, 25)
+epsi_xy_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 350, 100, 25)
+epsi_yz_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 400, 100, 25)
+epsi_zx_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 150, 450, 100, 25)
+
 C1_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 400, 200, 100, 25)
 C2_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 400, 250, 100, 25)
 C3_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 400, 300, 100, 25)

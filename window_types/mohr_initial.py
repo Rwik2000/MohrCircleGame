@@ -1,6 +1,6 @@
 import pygame
-# import MohrCircle_new
-from MohrCircle_new import execute
+# import MohrCircle_stress
+from MohrCircle_stress import stress_execute
 import window_types.pop_up as pop_up
 import time
 import random
@@ -11,7 +11,7 @@ from utilities.mohr_screen import *
 iitgn_logo = pygame.image.load("Images/iitgn.png")
 iitgn_logo = pygame.transform.scale(iitgn_logo, (250, 250))
 
-def startwindow(screen):
+def startwindow(screen, prev_win, windows):
     Big_font = game_font(80)
     Small_font = game_font(20)
     text = Big_font.render("Mohr's Circle", 1, (0,0,0))
@@ -39,7 +39,7 @@ def startwindow(screen):
             else:
                 enterButton.color = (180, 0, 0)
 
-def enterwindow(screen):
+def enterwindow(screen, prev_win, windows):
     Small_font = game_font(20)
     text = Small_font.render ("Select Mode",1, (0,0,0))
     screen.blit(text, (360, 100))
@@ -57,7 +57,7 @@ def enterwindow(screen):
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if generalButton.isOver(pos):
-                generalwindow_check.makeCurrent()
+                stress_strain_window_check.makeCurrent()
                 enterWindow_check.endCurrent()
                 print("Entering in General Mode")
             if quizButton.isOver(pos):
