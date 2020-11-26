@@ -136,7 +136,8 @@ def eval_window(screen, prev_win, windows):
 
     Big_font = game_font(40)
     Small_font = game_font(20)
-    graphButton.draw(screen, (0,0,0))
+    if(curr_question_type!="concept"):
+        graphButton.draw(screen, (0,0,0))
     isCorrect = False
 
     if show_graph == 0:
@@ -195,11 +196,12 @@ def eval_window(screen, prev_win, windows):
             running = False
 
         if event.type == pygame.MOUSEMOTION:
-            if graphButton.isOver(pos):
-                graphButton.color = (255, 0, 0)
-            else:
-                graphButton.color = (180, 0, 0)
-            
+            if(curr_question_type!="concept"):
+                if graphButton.isOver(pos):
+                    graphButton.color = (255, 0, 0)
+                else:
+                    graphButton.color = (180, 0, 0)
+                
             if x_button.isOver(pos):
                 x_button.color = (255, 0, 0)
             else:
@@ -214,6 +216,7 @@ def eval_window(screen, prev_win, windows):
                     elif curr_question_type=='3-D':
                         mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx]
                         correct_answer=stress_execute(3,mohrCircle_input)
+            
             if x_button.isOver(pos):
                 if len(quiz_question_type) > 0:
                     # print(quiz_question_type[0])
