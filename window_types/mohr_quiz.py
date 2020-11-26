@@ -12,8 +12,9 @@ from utilities.mohr_screen import *
 import time
 
 # quiz_question_type = ['2-D', '2-D','3-D','3-D', 'concept']
-quiz_question_type = ['concept','concept','concept']
+quiz_question_type = ['2-D','2-D','3-D','3-D','concept','concept','concept']
 quest_nos = [1,2,3,4,5,6,7]
+user_concept_answer = -1
 quest_index = -1
 curr_question_type = None
 correct_answer = None
@@ -125,7 +126,8 @@ def quiz_button_loop(event, x_button, current_window_check, ans_box):
 
 show_graph = 0
 def eval_window(screen, prev_win, windows):
-    global userScore,show_graph,correct_answer,curr_question_type,quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx, quest_nos, quest_index
+    global userScore,show_graph,correct_answer,curr_question_type,quiz_question_type, user_concept_answer
+    global sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx, quest_nos, quest_index
     
     x_button = nextButton
     if len(quiz_question_type) == 0:
@@ -167,8 +169,17 @@ def eval_window(screen, prev_win, windows):
                 isCorrect = True
                 if show_graph == 0:
                     userScore +=5
+        elif curr_question_type == 'concept':
+            if(concept_quest[quest_nos[quest_index]][2] == user_concept_answer):
+                isCorrect = True
+                if show_graph == 0:
+                    userScore+=5
     except:
         pass
+    if(show_graph==0):
+        print(curr_question_type)
+    if(show_graph==0) and curr_question_type=='concept':
+        print(concept_quest[quest_nos[quest_index]][0],concept_quest[quest_nos[quest_index]][2])
     show_graph+=1
     if(isCorrect):
             text = Big_font.render("CORRECT :)", 1, (0,0,0))
@@ -224,7 +235,8 @@ def eval_window(screen, prev_win, windows):
                         quiz_question_type = quiz_question_type[1:]
                         eval_window_check.endCurrent()
                         quizwindow_3d_check.makeCurrent()
-                    elif quiz_question_type[0] == 'concept':   
+                    elif quiz_question_type[0] == 'concept':  
+                        user_concept_answer = -1 
                         quiz_question_type = quiz_question_type[1:]
                         quest_nos.remove(quest_nos[quest_index])
                         print(quest_nos)
@@ -348,7 +360,7 @@ def quizwindow_3d(screen, prev_win, windows):
     clock.tick(30)
 
 def quizwindow_concept(screen, prev_win, windows):
-    global quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx, quest_nos,quest_index
+    global quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx, quest_nos,quest_index, user_concept_answer, curr_question_type
     # print(len(quiz_question_type))
     Big_font = game_font(40)
     Small_font = game_font(15)
@@ -366,17 +378,19 @@ def quizwindow_concept(screen, prev_win, windows):
     x_button.draw(screen, (0,0,0))
 
     check_boxes = [check1,check2,check3,check4]
-    # curr_question_type = 'concept'
+    curr_question_type = 'concept'
     for event in pygame.event.get():
         pos = pygame.mouse.get_pos()
-
         if event.type == pygame.MOUSEBUTTONDOWN:
+            mcq_index = 0
             for check_box in check_boxes:
                 if(check_box.render().collidepoint(event.pos)):
                     check_box.active = not check_box.active
+                    if(check_box.active):
+                        user_concept_answer=mcq_index
                 else:
                     check_box.active = False
-
+                mcq_index+=1
         quiz_button_loop(event, x_button, quizwindow_concept_check, {})
     
     opt_count = 0
