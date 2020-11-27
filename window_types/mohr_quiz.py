@@ -5,7 +5,7 @@ from utilities.mohr_fonts import game_font
 from utilities.mohr_user_input import *
 from utilities.mohr_checkbox import *
 from utilities.mohr_concept_questions import concept_quest
-from MohrCircle_stress import stress_execute
+from MohrCircle_stress_2 import Stress_MohrCircle
 from MohrCircle_strain import strain_execute
 import random
 from utilities.mohr_screen import *
@@ -20,9 +20,10 @@ correct_answer = None
 userScore = 0
 
 def quizwindow(screen, prev_win, windows):
+    Big_font = game_font(80)
     Small_font = game_font(20)
-    text = Small_font.render("Quiz Mode",1, (0,0,0))
-    screen.blit(text, (360, 100))
+    text = Big_font.render("Quiz Mode",1, (0,0,0))
+    screen.blit(text, (150, 200))
     backButton.draw(screen, (0,0,0))
     startButton.draw(screen,(0,0,0))
 
@@ -45,6 +46,9 @@ def quizwindow(screen, prev_win, windows):
                     sigma_xx = round(random.randint(-30,30), 2)
                     sigma_yy = round(random.randint(-30,30), 2)
                     sigma_xy = round(random.randint(-30,30), 2)
+                    sigma_zz = 0
+                    sigma_yz = 0
+                    sigma_zx = 0
                     quiz_question_type = quiz_question_type[1:]
                     quizwindow_2d_check.makeCurrent()
                     quizwindow_check.endCurrent()
@@ -127,7 +131,11 @@ show_graph = 0
 def eval_window(screen, prev_win, windows):
     global userScore,show_graph,correct_answer,curr_question_type,quiz_question_type, user_concept_answer
     global sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx, quest_nos, quest_index
-    
+    if curr_question_type!='concept':
+        mohr_2d = Stress_MohrCircle(σxx= sigma_xx, σyy= sigma_yy,σzz= sigma_zz, σxy= sigma_xy, σyz= sigma_yz, σzx= sigma_zx)
+        mohr_2d.ndims = 2
+        mohr_3d = Stress_MohrCircle(σxx= sigma_xx, σyy= sigma_yy,σzz= sigma_zz, σxy= sigma_xy, σyz= sigma_yz, σzx= sigma_zx)
+        mohr_3d.ndims = 3
     x_button = nextButton
     if len(quiz_question_type) == 0:
         x_button = submitButton
@@ -142,12 +150,12 @@ def eval_window(screen, prev_win, windows):
     if show_graph == 0:
         if curr_question_type!='concept':
             if curr_question_type=='2-D':
-                mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy, 0,0,0]
-                correct_answer=stress_execute(2,mohrCircle_input)
+                mohr_2d.isGraph = False
+                correct_answer=mohr_2d.stress_execute()
 
             elif curr_question_type=='3-D':
-                mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx]
-                correct_answer=stress_execute(3,mohrCircle_input)
+                mohr_2d.isGraph = False
+                correct_answer=mohr_3d.stress_execute()
         
 
     try:
@@ -176,10 +184,6 @@ def eval_window(screen, prev_win, windows):
                     userScore+=5
     except:
         pass
-    if(show_graph==0):
-        print(curr_question_type)
-    if(show_graph==0) and curr_question_type=='concept':
-        print(concept_quest[quest_nos[quest_index]][0],concept_quest[quest_nos[quest_index]][2])
     show_graph+=1
     if(isCorrect):
             text = Big_font.render("CORRECT :)", 1, (0,0,0))
@@ -209,12 +213,12 @@ def eval_window(screen, prev_win, windows):
             if graphButton.isOver(pos):
                 if curr_question_type!='concept':
                     if curr_question_type=='2-D':
-                        mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy, 0,0,0]
-                        correct_answer=stress_execute(2,mohrCircle_input)
+                        mohr_2d.isGraph = True
+                        mohr_2d.stress_execute()
 
                     elif curr_question_type=='3-D':
-                        mohrCircle_input = [sigma_xx,sigma_yy,sigma_xy,sigma_zz,sigma_yz,sigma_zx]
-                        correct_answer=stress_execute(3,mohrCircle_input)
+                        mohr_3d.isGraph = True
+                        mohr_3d.stress_execute()
             
             if x_button.isOver(pos):
                 if len(quiz_question_type) > 0:
@@ -224,6 +228,9 @@ def eval_window(screen, prev_win, windows):
                         sigma_xx = round(random.randint(-30,30), 2)
                         sigma_yy = round(random.randint(-30,30), 2)
                         sigma_xy = round(random.randint(-30,30), 2)
+                        sigma_zz = 0
+                        sigma_yz = 0
+                        sigma_zx = 0
                         quiz_question_type = quiz_question_type[1:]
                         eval_window_check.endCurrent()
                         quizwindow_2d_check.makeCurrent()    

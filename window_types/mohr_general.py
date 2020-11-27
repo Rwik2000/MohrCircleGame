@@ -259,7 +259,7 @@ def gen3D_stress_input_window(screen, prev_win, windows):
 
 def gen2D_strain_input_window(screen, prev_win, windows): 
     clock = pygame.time.Clock()
-    input_boxes = {epsi_xx_gen:"epsi_xx", epsi_yy_gen:"epsi_yy", epsi_xy_gen:"epsi_xy", angle_gen:"angle"}
+    input_boxes = {tau_xx_gen:"tau_xx", tau_yy_gen:"tau_yy", tau_xy_gen:"tau_xy", angle_gen:"angle"}
     Small_font = game_font(20)
     head_text = Small_font.render("General 2- D Mode",1, (0,0,0))
     
@@ -333,8 +333,8 @@ def gen2D_strain_input_window(screen, prev_win, windows):
 
 def gen3D_strain_input_window(screen, prev_win, windows): 
     clock = pygame.time.Clock()
-    input_boxes = {epsi_xx_gen:"epsi_xx", epsi_yy_gen:"epsi_yy", epsi_xy_gen:"epsi_xy",
-                   epsi_zz_gen:"epsi_zz", epsi_yz_gen:"epsi_yz", epsi_zx_gen:"epsi_zx"}
+    input_boxes = {tau_xx_gen:"tau_xx", tau_yy_gen:"tau_yy", tau_xy_gen:"tau_xy",
+                   tau_zz_gen:"tau_zz", tau_yz_gen:"tau_yz", tau_zx_gen:"tau_zx"}
     Small_font = game_font(20)
     head_text = Small_font.render("General 3-D Mode",1, (0,0,0))
     
