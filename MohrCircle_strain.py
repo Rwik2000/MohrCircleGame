@@ -63,10 +63,8 @@ def Plot_Mohr_Circle(Strain, dim, Stress_tensor, isAngle_strain, reqAngle_strain
                 curr_angle = np.arctan((Stress_tensor[0][1])/(Stress_tensor[0][0]-centre1_2))
             except:
                 if(Stress_tensor[0][1]>=0):
-                    print(90)
                     curr_angle = np.deg2rad(90)
                 else:
-                    print(-90)
                     curr_angle = np.deg2rad(-90)
             total_angle = curr_angle + np.deg2rad(reqAngle_strain)
             # print(np.rad2deg(total_angle))

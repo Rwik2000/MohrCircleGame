@@ -4,7 +4,7 @@ from utilities.mohr_fonts import game_font
 from utilities.mohr_user_input import *
 import random
 from utilities.mohr_screen import *
-from MohrCircle_stress import stress_execute
+from MohrCircle_stress_2 import Stress_MohrCircle
 from MohrCircle_strain import strain_execute
 
 stress_strain_win_select = [0,0]
@@ -130,7 +130,6 @@ def gen2D_stress_input_window(screen, prev_win, windows):
     input_boxes = {sigma_xx_gen:"sigma_xx", sigma_yy_gen:"sigma_yy", sigma_xy_gen:"sigma_xy", angle_gen:"angle"}
     Small_font = game_font(20)
     head_text = Small_font.render("General 2- D Mode",1, (0,0,0))
-    
     for box in input_boxes.keys():
         box_text = Small_font.render(input_boxes[box]+":",1,(0,0,0))
         screen.blit(box_text,(box.x - 120, box.y))
@@ -147,25 +146,17 @@ def gen2D_stress_input_window(screen, prev_win, windows):
                 generalwindow_check.makeCurrent()
                 gen2D_stress_input_window_check.endCurrent()
             if enterButton.isOver(pos):
-                mohrCircle_input = []
                 try:
-                    for box in input_boxes.keys():
-                        if(input_boxes[box]!="angle"):
-                            mohrCircle_input.append(float(box.text))
-
-                    if len(mohrCircle_input) == 3:
-                        for i in range(3):
-                            mohrCircle_input.append(0)
-                        isAngle_stress, reqAngle_stress = False, None                        
-                        if(angle_gen.text!=''):
-                            isAngle_stress = True
-                            reqAngle_stress = float(angle_gen.text)
-                        stress_execute(2, mohrCircle_input, isAngle_stress, reqAngle_stress)
-                        isAngle_stress, reqAngle_stress = False, None
-                        gen2D_stress_input_window_check.endCurrent()
-                        gen2D_stress_input_window_check.makeCurrent()
-                    else:
-                        print("Insufficient data")
+                    mohr_2d = Stress_MohrCircle(σxx= float(sigma_xx_gen.text), σyy= float(sigma_yy_gen.text),σzz= 0, 
+                                                σxy= float(sigma_xy_gen.text), σyz=0, σzx=0)
+                    mohr_2d.ndims = 2
+                    mohr_2d.isGraph = True
+                    if(angle_gen!=''):
+                        mohr_2d.isAngle_stress = True
+                        mohr_2d.reqAngle_stress_2d = float(angle_gen.text)
+                    mohr_2d.stress_execute()
+                    gen2D_stress_input_window_check.endCurrent()
+                    gen2D_stress_input_window_check.makeCurrent()
                 except:
                     gen2D_stress_input_window_check.endCurrent()
                     incompatible_input_window_check.makeCurrent()
@@ -197,7 +188,8 @@ def gen2D_stress_input_window(screen, prev_win, windows):
 def gen3D_stress_input_window(screen, prev_win, windows): 
     clock = pygame.time.Clock()
     input_boxes = {sigma_xx_gen:"sigma_xx", sigma_yy_gen:"sigma_yy", sigma_xy_gen:"sigma_xy", 
-                   sigma_zz_gen:"sigma_zz", sigma_yz_gen:"sigma_yz", sigma_zx_gen:"sigma_zx"}
+                   sigma_zz_gen:"sigma_zz", sigma_yz_gen:"sigma_yz", sigma_zx_gen:"sigma_zx",
+                   angle1_gen:"Angle x", angle2_gen:'Angle y', angle3_gen:'Angle z'}
     Small_font = game_font(20)
     head_text = Small_font.render("General 3-D Mode",1, (0,0,0))
     
@@ -220,16 +212,19 @@ def gen3D_stress_input_window(screen, prev_win, windows):
             if enterButton.isOver(pos):
                 mohrCircle_input = []
                 try:
-                    for box in input_boxes.keys():
-                        mohrCircle_input.append(float(box.text))
-
-                    if len(mohrCircle_input) == 6:
-                        stress_execute(3, mohrCircle_input)
-                        gen3D_stress_input_window_check.endCurrent()
-                        gen3D_stress_input_window_check.makeCurrent()
-                    else:
-                        print("Insufficient data")
-                except:
+                    mohr_3d = Stress_MohrCircle(σxx= float(sigma_xx_gen.text), σyy= float(sigma_yy_gen.text),σzz= float(sigma_zz_gen.text), 
+                                                σxy= float(sigma_xy_gen.text), σyz= float(sigma_yz_gen.text),σzx= float(sigma_zx_gen.text))
+                    mohr_3d.ndims = 3
+                    mohr_3d.isGraph = True
+                    if(angle1_gen.text!='' and angle2_gen.text!= ''):
+                        mohr_3d.reqAngle_normal_3d = [round(np.cos(np.deg2rad(float(angle1_gen.text))),3), 
+                                                      round(np.cos(np.deg2rad(float(angle2_gen.text))),3), 0]
+                        mohr_3d.isAngle_stress = True
+                    mohr_3d.stress_execute()
+                    gen3D_stress_input_window_check.endCurrent()
+                    gen3D_stress_input_window_check.makeCurrent()
+                except Exception as e:
+                    print(e)
                     gen3D_stress_input_window_check.endCurrent()
                     incompatible_input_window_check.makeCurrent()                    
             for box in input_boxes.keys():

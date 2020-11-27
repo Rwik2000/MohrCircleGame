@@ -79,6 +79,9 @@ tau_yz_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblu
 tau_zx_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 450, 100, 25)
 
 angle_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 550, 200, 100, 25)
+angle1_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 550, 250, 100, 25)
+angle2_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 550, 300, 100, 25)
+angle3_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 550, 350, 100, 25)
 
 C1_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 400, 200, 100, 25)
 C2_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 400, 250, 100, 25)

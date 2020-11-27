@@ -65,15 +65,17 @@ class Stress_MohrCircle():
                     l = self.reqAngle_normal_3d[0]
                     m = self.reqAngle_normal_3d[1]
                     n2 = 1 - l**2 - m**2
+                    print(l,m,n2)
                     if(n2<0):
                         print("Invalid Angle input!!!!!")
-                    else:
-                        n = np.sqrt(n2)
-                        sigma_NN = (l**2)*sigma1 + (m**2)*sigma2 + (n**2)*sigma3
-                        sigma_NS = np.sqrt((l**2)*sigma1**2 + (m**2)*sigma2**2 + (n**2)*sigma3**2 - sigma_NN**2)
-                        new_points = [[sigma_NN,sigma_NS]]
-                        print(new_points)
-                        ax.plot(*zip(*new_points),marker='o', color='purple', ls='')
+                        raise ValueError('Bad input!')
+                    # else:
+                    n = np.sqrt(n2)
+                    sigma_NN = (l**2)*sigma1 + (m**2)*sigma2 + (n**2)*sigma3
+                    sigma_NS = np.sqrt((l**2)*sigma1**2 + (m**2)*sigma2**2 + (n**2)*sigma3**2 - sigma_NN**2)
+                    new_points = [[sigma_NN,sigma_NS]]
+                    print(new_points)
+                    ax.plot(*zip(*new_points),marker='o', color='purple', ls='')
                     # n = self.reqAngle_normal_3d[2]
                 ax.add_artist(Circle1_3)
                 ax.add_artist(Circle1_2)
@@ -94,10 +96,8 @@ class Stress_MohrCircle():
                         curr_angle = np.arctan((Stress_tensor[0][1])/(Stress_tensor[0][0]-centre1_2))
                     except:
                         if(Stress_tensor[0][1]>=0):
-                            print(90)
                             curr_angle = np.deg2rad(90)
                         else:
-                            print(-90)
                             curr_angle = np.deg2rad(-90)
                     total_angle = curr_angle + np.deg2rad(2*self.reqAngle_stress_2d)
                     # print(np.rad2deg(total_angle))
@@ -160,7 +160,8 @@ class Stress_MohrCircle():
 # m.ndims = 3
 # m.isGraph = True
 # m.isAngle_stress = True
-# m.reqAngle_normal_3d = [np.cos(45), np.cos(45), np.cos(0)]
+# m.reqAngle_normal_3d = [np.cos(0), round(np.cos(0),3), np.cos(90)]
+# print(m.reqAngle_normal_3d)
 # # m.isAngle_stress = True
 # # m.reqAngle_stress_2d = 45
 # m.stress_execute()
