@@ -24,36 +24,36 @@ class Strain_MohrCircle():
         Strain_tensor = self.𝜏_tensor
         # print(Strain)
         Strain.sort(reverse=True)
-        tau1=Strain[0]
-        tau2=Strain[1]
-        centre1_2=round((tau1+tau2)/2, 4)
-        radius1_2=abs(tau2-centre1_2)
+        epsi1=Strain[0]
+        epsi2=Strain[1]
+        centre1_2=round((epsi1+epsi2)/2, 4)
+        radius1_2=abs(epsi2-centre1_2)
         if self.ndims==3:
-            tau3=Strain[2]        
-            centre1_3=round((tau1+tau3)/2, 4)
-            centre2_3=round((tau2+tau3)/2, 4)    
-            radius1_3=abs(tau3-centre1_3)    
-            radius2_3=abs(tau2-centre2_3)
-            print("The Principal Straines are: \n𝜏1: {0} \n𝜏2: {1} \n𝜏3: {2} \n".format(tau1,tau2,tau3))
-            print("Maximum Shear Strain τ_max: " +str(round((tau1-tau3)/2, 3)))
+            epsi3=Strain[2]        
+            centre1_3=round((epsi1+epsi3)/2, 4)
+            centre2_3=round((epsi2+epsi3)/2, 4)    
+            radius1_3=abs(epsi3-centre1_3)    
+            radius2_3=abs(epsi2-centre2_3)
+            print("The Principal Straines are: \n𝜏1: {0} \n𝜏2: {1} \n𝜏3: {2} \n".format(epsi1,epsi2,epsi3))
+            print("Maximum Shear Strain τ_max: " +str(round((epsi1-epsi3)/2, 3)))
             print("\nThe Centres of the circle are: \nC1: {0} \nC2: {1} \nC3: {2} \n".format(centre1_3,centre1_2,centre2_3))
         else:
-            print("The Principal Straines are: \n𝜏1: {0} \n𝜏2: {1} \n".format(tau1,tau2))
-            print("Maximum Shear Strain τ_max: " +str(round((tau1-tau2)/2, 3))) 
+            print("The Principal Straines are: \n𝜏1: {0} \n𝜏2: {1} \n".format(epsi1,epsi2))
+            print("Maximum Shear Strain τ_max: " +str(round((epsi1-epsi2)/2, 3))) 
             print("\nThe Centre of the circle are: \nC1: {0}".format(centre1_2))           
 
         
 
         _, ax = plt.subplots()
         if self.ndims == 3:
-            ax.set(xlim=(centre1_3-(radius1_3+0.5), tau1+0.5), ylim = (-(radius1_3+1), radius1_3+1))
+            ax.set(xlim=(centre1_3-(radius1_3+0.5), epsi1+0.5), ylim = (-(radius1_3+1), radius1_3+1))
             mohr_centre=[[centre1_3,0],[centre2_3,0],[centre1_2,0]]
-            mohr_tau=[[tau1,0],[tau2,0],[tau3,0]]
+            mohr_epsi=[[epsi1,0],[epsi2,0],[epsi3,0]]
             if(self.isGraph):
                 ax.plot(*zip(*mohr_centre), marker='o', color='r', ls='')
-                ax.plot(*zip(*mohr_tau), marker='o', color='b', ls='')
-                for i in range(len(mohr_tau)):
-                    ax.annotate("𝜏"+str(i+1),tuple(mohr_tau[i]),fontsize=12)
+                ax.plot(*zip(*mohr_epsi), marker='o', color='b', ls='')
+                for i in range(len(mohr_epsi)):
+                    ax.annotate("𝜏"+str(i+1),tuple(mohr_epsi[i]),fontsize=12)
                 for i in range(len(mohr_centre)):
                     ax.annotate("C"+str(i+1),tuple(mohr_centre[i]),fontsize=12)
 
@@ -71,9 +71,9 @@ class Strain_MohrCircle():
                         raise ValueError('Bad input!')
                     # else:
                     n = np.sqrt(n2)
-                    tau_NN = (l**2)*tau1 + (m**2)*tau2 + (n**2)*tau3
-                    tau_NS = np.sqrt((l**2)*tau1**2 + (m**2)*tau2**2 + (n**2)*tau3**2 - tau_NN**2)
-                    new_points = [[tau_NN,tau_NS]]
+                    epsi_NN = (l**2)*epsi1 + (m**2)*epsi2 + (n**2)*epsi3
+                    epsi_NS = np.sqrt((l**2)*epsi1**2 + (m**2)*epsi2**2 + (n**2)*epsi3**2 - epsi_NN**2)
+                    new_points = [[epsi_NN,epsi_NS]]
                     print(new_points)
                     ax.plot(*zip(*new_points),marker='o', color='purple', ls='')
                     # n = self.reqAngle_normal_3d[2]
@@ -82,12 +82,12 @@ class Strain_MohrCircle():
                 ax.add_artist(Circle2_3)
                 ax.minorticks_on()
         elif self.ndims ==2:
-            ax.set(xlim=(centre1_2-(radius1_2+0.5), tau1+0.5), ylim = (-(radius1_2+0.5), radius1_2+0.5))
+            ax.set(xlim=(centre1_2-(radius1_2+0.5), epsi1+0.5), ylim = (-(radius1_2+0.5), radius1_2+0.5))
             mohr_centre=[[centre1_2,0]]
-            mohr_tau=[[tau1,0],[tau2,0]]
+            mohr_epsi=[[epsi1,0],[epsi2,0]]
             if(self.isGraph):
                 ax.plot(*zip(*mohr_centre), marker='o', color='r', ls='')
-                ax.plot(*zip(*mohr_tau), marker='o', color='b', ls='')
+                ax.plot(*zip(*mohr_epsi), marker='o', color='b', ls='')
                 points = [[Strain_tensor[0][0],Strain_tensor[0][1]],[Strain_tensor[1][1],-Strain_tensor[0][1]]]
                 ax.plot(*zip(*points),marker='o', color='black', ls='')
                 ax.plot([Strain_tensor[0][0],Strain_tensor[1][1]],[Strain_tensor[0][1],-Strain_tensor[0][1]])
@@ -109,8 +109,8 @@ class Strain_MohrCircle():
                     ax.plot(*zip(*new_points),marker='o', color='black', ls='')
                     ax.plot([new_x_1,new_x_2],[new_y_1,new_y_2])
                 ax.plot()
-                for i in range(len(mohr_tau)):
-                    ax.annotate("𝜏"+str(i+1),tuple(mohr_tau[i]),fontsize=12)
+                for i in range(len(mohr_epsi)):
+                    ax.annotate("𝜏"+str(i+1),tuple(mohr_epsi[i]),fontsize=12)
                 for i in range(len(mohr_centre)):
                     ax.annotate("C"+str(i+1),tuple(mohr_centre[i]),fontsize=12)
                 Circle1_2 = plt.Circle((centre1_2, 0),abs(radius1_2),fill=False, color="green")

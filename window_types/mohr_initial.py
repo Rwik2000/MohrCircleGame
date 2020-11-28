@@ -1,6 +1,5 @@
 import pygame
 # import MohrCircle_stress
-from MohrCircle_stress import stress_execute
 import window_types.pop_up as pop_up
 import time
 import random
@@ -64,13 +63,16 @@ def enterwindow(screen, prev_win, windows):
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if generalButton.isOver(pos):
-                stress_strain_window_check.makeCurrent()
+                gen_stress_strain_window_check.makeCurrent()
                 enterWindow_check.endCurrent()
                 print("Entering in General Mode")
             if quizButton.isOver(pos):
                 quizwindow_check.makeCurrent()
                 enterWindow_check.endCurrent()
                 print("Entering in Quiz Mode")
+            if tutorialButton.isOver(pos):
+                tutorialwindow_check.makeCurrent()
+                enterWindow_check.endCurrent()
             if backButton.isOver(pos):
                 startwindow_check.makeCurrent()
                 enterWindow_check.endCurrent()

@@ -4,9 +4,9 @@ from utilities.mohr_fonts import game_font
 from utilities.mohr_user_input import *
 import random
 from utilities.mohr_screen import *
-from MohrCircle_stress_2 import Stress_MohrCircle
-from MohrCircle_strain_2 import Strain_MohrCircle
-from MohrCircle_strain import strain_execute
+from MohrCircle_stress import Stress_MohrCircle
+from MohrCircle_strain import Strain_MohrCircle
+# from MohrCircle_strain import strain_execute
 
 stress_strain_win_select = [0,0]
 def generalwindow(screen, prev_win, windows):
@@ -43,7 +43,7 @@ def generalwindow(screen, prev_win, windows):
                     generalwindow_check.endCurrent()
                     print("Entering in strain 2-D Mode")
             if backButton.isOver(pos):
-                stress_strain_window_check.makeCurrent()
+                gen_stress_strain_window_check.makeCurrent()
                 generalwindow_check.endCurrent()
 
         if event.type == pygame.MOUSEMOTION:
@@ -84,7 +84,7 @@ def box_text_input(event, input_boxes):
                                     if event.unicode == "-" or event.unicode=='.':
                                         box.text +=event.unicode 
 
-def stress_strain_window(screen, prev_win, windows):
+def gen_stress_strain_window(screen, prev_win, windows):
     global stress_strain_win_select
     stress_strain_win_select = [0,0]
     stressButton.draw(screen, (0,0,0))
@@ -99,19 +99,19 @@ def stress_strain_window(screen, prev_win, windows):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if stressButton.isOver(pos):
                 generalwindow_check.makeCurrent()
-                stress_strain_window_check.endCurrent()
+                gen_stress_strain_window_check.endCurrent()
                 stress_strain_win_select = [1,0]
                 print(stress_strain_win_select)
                 print("Entering in General strain Mode")
             if strainButton.isOver(pos):
                 generalwindow_check.makeCurrent()
-                stress_strain_window_check.endCurrent()
+                gen_stress_strain_window_check.endCurrent()
                 stress_strain_win_select = [0,1]
                 print(stress_strain_win_select)
                 print("Entering in General strain Mode")
             if backButton.isOver(pos):
                 enterWindow_check.makeCurrent()
-                stress_strain_window_check.endCurrent()
+                gen_stress_strain_window_check.endCurrent()
         if event.type == pygame.MOUSEMOTION:
             if stressButton.isOver(pos):
                 stressButton.color = (255, 0, 0)
@@ -128,7 +128,7 @@ def stress_strain_window(screen, prev_win, windows):
 
 def gen2D_stress_input_window(screen, prev_win, windows): 
     clock = pygame.time.Clock()
-    input_boxes = {sigma_xx_gen:"sigma_xx", sigma_yy_gen:"sigma_yy", sigma_xy_gen:"sigma_xy", angle_gen:"angle"}
+    input_boxes = {sigma_xx_gen:"sigma_xx", sigma_yy_gen:"sigma_yy", tau_xy_gen:"tau_xy", angle_gen:"angle"}
     Small_font = game_font(20)
     head_text = Small_font.render("General 2- D Mode",1, (0,0,0))
     for box in input_boxes.keys():
@@ -149,7 +149,7 @@ def gen2D_stress_input_window(screen, prev_win, windows):
             if enterButton.isOver(pos):
                 try:
                     mohr_2d = Stress_MohrCircle(σxx= float(sigma_xx_gen.text), σyy= float(sigma_yy_gen.text),σzz= 0, 
-                                                σxy= float(sigma_xy_gen.text), σyz=0, σzx=0)
+                                                σxy= float(tau_xy_gen.text), σyz=0, σzx=0)
                     mohr_2d.ndims = 2
                     mohr_2d.isGraph = True
                     if(angle_gen!=''):
@@ -188,8 +188,8 @@ def gen2D_stress_input_window(screen, prev_win, windows):
 
 def gen3D_stress_input_window(screen, prev_win, windows): 
     clock = pygame.time.Clock()
-    input_boxes = {sigma_xx_gen:"sigma_xx", sigma_yy_gen:"sigma_yy", sigma_xy_gen:"sigma_xy", 
-                   sigma_zz_gen:"sigma_zz", sigma_yz_gen:"sigma_yz", sigma_zx_gen:"sigma_zx",
+    input_boxes = {sigma_xx_gen:"sigma_xx", sigma_yy_gen:"sigma_yy", tau_xy_gen:"tau_xy", 
+                   sigma_zz_gen:"sigma_zz", tau_yz_gen:"tau_yz", tau_zx_gen:"tau_zx",
                    angle1_gen:"Angle x", angle2_gen:'Angle y', angle3_gen:'Angle z'}
     Small_font = game_font(20)
     head_text = Small_font.render("General 3-D Mode",1, (0,0,0))
@@ -214,7 +214,7 @@ def gen3D_stress_input_window(screen, prev_win, windows):
                 mohrCircle_input = []
                 try:
                     mohr_3d = Strain_MohrCircle(𝜏xx= float(sigma_xx_gen.text), 𝜏yy= float(sigma_yy_gen.text),𝜏zz= float(sigma_zz_gen.text), 
-                                                𝜏xy= float(sigma_xy_gen.text), 𝜏yz= float(sigma_yz_gen.text),𝜏zx= float(sigma_zx_gen.text))
+                                                𝜏xy= float(tau_xy_gen.text), 𝜏yz= float(tau_yz_gen.text),𝜏zx= float(tau_zx_gen.text))
                     mohr_3d.ndims = 3
                     mohr_3d.isGraph = True
                     if(angle1_gen.text!='' and angle2_gen.text!= ''):
@@ -255,7 +255,7 @@ def gen3D_stress_input_window(screen, prev_win, windows):
 
 def gen2D_strain_input_window(screen, prev_win, windows): 
     clock = pygame.time.Clock()
-    input_boxes = {tau_xx_gen:"tau_xx", tau_yy_gen:"tau_yy", tau_xy_gen:"tau_xy", angle_gen:"angle"}
+    input_boxes = {epsi_xx_gen:"epsi_xx", epsi_yy_gen:"epsi_yy", epsi_xy_gen:"epsi_xy", angle_gen:"angle"}
     Small_font = game_font(20)
     head_text = Small_font.render("General 2- D Mode",1, (0,0,0))
     
@@ -281,8 +281,8 @@ def gen2D_strain_input_window(screen, prev_win, windows):
             if enterButton.isOver(pos):
                 mohrCircle_input = []
                 try:
-                    mohr_2d = Strain_MohrCircle(𝜏xx= float(tau_xx_gen.text), 𝜏yy= float(tau_yy_gen.text),𝜏zz= 0, 
-                                                𝜏xy= float(tau_xy_gen.text), 𝜏yz=0, 𝜏zx=0)
+                    mohr_2d = Strain_MohrCircle(𝜏xx= float(epsi_xx_gen.text), 𝜏yy= float(epsi_yy_gen.text),𝜏zz= 0, 
+                                                𝜏xy= float(epsi_xy_gen.text), 𝜏yz=0, 𝜏zx=0)
                     mohr_2d.ndims = 2
                     mohr_2d.isGraph = True
                     if(angle_gen!=''):
@@ -322,8 +322,8 @@ def gen2D_strain_input_window(screen, prev_win, windows):
 
 def gen3D_strain_input_window(screen, prev_win, windows): 
     clock = pygame.time.Clock()
-    input_boxes = {tau_xx_gen:"tau_xx", tau_yy_gen:"tau_yy", tau_xy_gen:"tau_xy",
-                   tau_zz_gen:"tau_zz", tau_yz_gen:"tau_yz", tau_zx_gen:"tau_zx",
+    input_boxes = {epsi_xx_gen:"epsi_xx", epsi_yy_gen:"epsi_yy", epsi_xy_gen:"epsi_xy",
+                   epsi_zz_gen:"epsi_zz", epsi_yz_gen:"epsi_yz", epsi_zx_gen:"epsi_zx",
                    angle1_gen:"Angle x", angle2_gen:'Angle y', angle3_gen:'Angle z'}
     Small_font = game_font(20)
     head_text = Small_font.render("General 3-D Mode",1, (0,0,0))
@@ -347,8 +347,8 @@ def gen3D_strain_input_window(screen, prev_win, windows):
             if enterButton.isOver(pos):
                 mohrCircle_input = []
                 try:
-                    mohr_3d = Strain_MohrCircle(σxx= float(tau_xx_gen.text), σyy= float(tau_yy_gen.text),σzz= float(tau_zz_gen.text), 
-                                                σxy= float(tau_xy_gen.text), σyz= float(tau_yz_gen.text),σzx= float(tau_zx_gen.text))
+                    mohr_3d = Strain_MohrCircle(σxx= float(epsi_xx_gen.text), σyy= float(epsi_yy_gen.text),σzz= float(epsi_zz_gen.text), 
+                                                σxy= float(epsi_xy_gen.text), σyz= float(epsi_yz_gen.text),σzx= float(epsi_zx_gen.text))
                     mohr_3d.ndims = 3
                     mohr_3d.isGraph = True
                     if(angle1_gen.text!='' and angle2_gen.text!= ''):

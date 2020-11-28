@@ -45,7 +45,7 @@ graphButton = button((180,0,0), 530, 550, 80,30, 'GRAPH')
 back_to_homeButton = button((180,0,0), 680, 550, 80,30, 'BACK HOME')
 stressButton = button((180,0,0), 360, 170, 80, 30, 'STRESS')
 strainButton = button((180,0,0), 360, 300, 80, 30, 'STRAIN')
-
+finishButton = button((180,0,0), 680, 550, 80, 30, 'FINISH')
 
 class inputtextbox():
     def __init__(self, color_inactive, color_active, x,y,width,height):
@@ -67,21 +67,40 @@ class inputtextbox():
 sigma_xx_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 200, 100, 25)
 sigma_yy_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 250, 100, 25)
 sigma_zz_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 300, 100, 25)
-sigma_xy_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 350, 100, 25)
-sigma_yz_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 400, 100, 25)
-sigma_zx_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 450, 100, 25)
-
-tau_xx_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 200, 100, 25)
-tau_yy_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 250, 100, 25)
-tau_zz_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 300, 100, 25)
 tau_xy_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 350, 100, 25)
 tau_yz_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 400, 100, 25)
 tau_zx_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 450, 100, 25)
+
+epsi_xx_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 200, 100, 25)
+epsi_yy_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 250, 100, 25)
+epsi_zz_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 300, 100, 25)
+epsi_xy_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 350, 100, 25)
+epsi_yz_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 400, 100, 25)
+epsi_zx_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 450, 100, 25)
 
 angle_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 550, 200, 100, 25)
 angle1_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 550, 250, 100, 25)
 angle2_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 550, 300, 100, 25)
 angle3_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 550, 350, 100, 25)
+
+sigma_xx_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 200, 100, 25)
+sigma_yy_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 250, 100, 25)
+sigma_zz_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 300, 100, 25)
+tau_xy_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 350, 100, 25)
+tau_yz_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 400, 100, 25)
+tau_zx_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 450, 100, 25)
+
+epsi_xx_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 200, 100, 25)
+epsi_yy_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 250, 100, 25)
+epsi_zz_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 300, 100, 25)
+epsi_xy_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 350, 100, 25)
+epsi_yz_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 400, 100, 25)
+epsi_zx_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 200, 450, 100, 25)
+
+angle_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 550, 200, 100, 25)
+angle1_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 550, 250, 100, 25)
+angle2_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 550, 300, 100, 25)
+angle3_tut = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 550, 350, 100, 25)
 
 C1_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 400, 200, 100, 25)
 C2_gen = inputtextbox(pygame.Color('lightskyblue3'), pygame.Color('dodgerblue2'), 400, 250, 100, 25)

@@ -156,13 +156,13 @@ class Stress_MohrCircle():
         # print(σ_tensor.shape)
         return Stress_MohrCircle.find_Principal_Stress(self)
 
-m = Stress_MohrCircle(σxx= 34.3, σyy= 74,σzz= 3, σxy= -83.9, σyz= 5, σzx= 6)
-m.ndims = 2
-m.isGraph = True
+# m = Stress_MohrCircle(σxx= 34.3, σyy= 74,σzz= 3, σxy= -83.9, σyz= 5, σzx= 6)
+# m.ndims = 2
+# m.isGraph = True
+# # m.isAngle_stress = True
+# # m.reqAngle_normal_3d = [np.cos(0), round(np.cos(0),3), np.cos(90)]
+# # print(m.reqAngle_normal_3d)
 # m.isAngle_stress = True
-# m.reqAngle_normal_3d = [np.cos(0), round(np.cos(0),3), np.cos(90)]
-# print(m.reqAngle_normal_3d)
-m.isAngle_stress = True
-m.reqAngle_stress_2d = 54.6
-m.stress_execute()
+# m.reqAngle_stress_2d = 54.6
+# m.stress_execute()
 

@@ -5,8 +5,8 @@ from utilities.mohr_fonts import game_font
 from utilities.mohr_user_input import *
 from utilities.mohr_checkbox import *
 from utilities.mohr_concept_questions import concept_quest
-from MohrCircle_stress_2 import Stress_MohrCircle
-from MohrCircle_strain import strain_execute
+from MohrCircle_stress import Stress_MohrCircle
+# from MohrCircle_strain import strain_execute
 import random
 from utilities.mohr_screen import *
 import time
@@ -27,7 +27,7 @@ def quizwindow(screen, prev_win, windows):
     backButton.draw(screen, (0,0,0))
     startButton.draw(screen,(0,0,0))
 
-    global curr_question_type,quiz_question_type, sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx,quest_nos,quest_index
+    global curr_question_type,quiz_question_type, sigma_xx, sigma_yy, sigma_zz, tau_xy, tau_yz, tau_zx,quest_nos,quest_index
     # print(len(quiz_question_type))
     random.shuffle(quiz_question_type)
 
@@ -45,10 +45,10 @@ def quizwindow(screen, prev_win, windows):
                 if quiz_question_type[0] == '2-D':
                     sigma_xx = round(random.randint(-30,30), 2)
                     sigma_yy = round(random.randint(-30,30), 2)
-                    sigma_xy = round(random.randint(-30,30), 2)
+                    tau_xy = round(random.randint(-30,30), 2)
                     sigma_zz = 0
-                    sigma_yz = 0
-                    sigma_zx = 0
+                    tau_yz = 0
+                    tau_zx = 0
                     quiz_question_type = quiz_question_type[1:]
                     quizwindow_2d_check.makeCurrent()
                     quizwindow_check.endCurrent()
@@ -56,9 +56,9 @@ def quizwindow(screen, prev_win, windows):
                     sigma_xx = round(random.randint(-30,30), 2)
                     sigma_yy = round(random.randint(-30,30), 2)
                     sigma_zz = round(random.randint(-30,30), 2)
-                    sigma_xy = round(random.randint(-30,30), 2)
-                    sigma_yz = round(random.randint(-30,30), 2)
-                    sigma_zx = round(random.randint(-30,30), 2)
+                    tau_xy = round(random.randint(-30,30), 2)
+                    tau_yz = round(random.randint(-30,30), 2)
+                    tau_zx = round(random.randint(-30,30), 2)
                     quiz_question_type = quiz_question_type[1:]
                     quizwindow_3d_check.makeCurrent()
                     quizwindow_check.endCurrent()
@@ -81,7 +81,7 @@ def quizwindow(screen, prev_win, windows):
 
 def quiz_button_loop(event, x_button, current_window_check, ans_box):
     Small_font = game_font(20)
-    global correct_answer,curr_question_type,quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
+    global correct_answer,curr_question_type,quiz_question_type,sigma_xx, sigma_yy, sigma_zz, tau_xy, tau_yz, tau_zx
     pos = pygame.mouse.get_pos()
 
     if event.type == pygame.QUIT:  
@@ -130,11 +130,11 @@ def quiz_button_loop(event, x_button, current_window_check, ans_box):
 show_graph = 0
 def eval_window(screen, prev_win, windows):
     global userScore,show_graph,correct_answer,curr_question_type,quiz_question_type, user_concept_answer
-    global sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx, quest_nos, quest_index
+    global sigma_xx, sigma_yy, sigma_zz, tau_xy, tau_yz, tau_zx, quest_nos, quest_index
     if curr_question_type!='concept':
-        mohr_2d = Stress_MohrCircle(σxx= sigma_xx, σyy= sigma_yy,σzz= sigma_zz, σxy= sigma_xy, σyz= sigma_yz, σzx= sigma_zx)
+        mohr_2d = Stress_MohrCircle(σxx= sigma_xx, σyy= sigma_yy,σzz= sigma_zz, σxy= tau_xy, σyz= tau_yz, σzx= tau_zx)
         mohr_2d.ndims = 2
-        mohr_3d = Stress_MohrCircle(σxx= sigma_xx, σyy= sigma_yy,σzz= sigma_zz, σxy= sigma_xy, σyz= sigma_yz, σzx= sigma_zx)
+        mohr_3d = Stress_MohrCircle(σxx= sigma_xx, σyy= sigma_yy,σzz= sigma_zz, σxy= tau_xy, σyz= tau_yz, σzx= tau_zx)
         mohr_3d.ndims = 3
     x_button = nextButton
     if len(quiz_question_type) == 0:
@@ -227,10 +227,10 @@ def eval_window(screen, prev_win, windows):
                     if quiz_question_type[0] == '2-D':
                         sigma_xx = round(random.randint(-30,30), 2)
                         sigma_yy = round(random.randint(-30,30), 2)
-                        sigma_xy = round(random.randint(-30,30), 2)
+                        tau_xy = round(random.randint(-30,30), 2)
                         sigma_zz = 0
-                        sigma_yz = 0
-                        sigma_zx = 0
+                        tau_yz = 0
+                        tau_zx = 0
                         quiz_question_type = quiz_question_type[1:]
                         eval_window_check.endCurrent()
                         quizwindow_2d_check.makeCurrent()    
@@ -238,9 +238,9 @@ def eval_window(screen, prev_win, windows):
                         sigma_xx = round(random.randint(-30,30), 2)
                         sigma_yy = round(random.randint(-30,30), 2)
                         sigma_zz = round(random.randint(-30,30), 2)
-                        sigma_xy = round(random.randint(-30,30), 2)
-                        sigma_yz = round(random.randint(-30,30), 2)
-                        sigma_zx = round(random.randint(-30,30), 2)
+                        tau_xy = round(random.randint(-30,30), 2)
+                        tau_yz = round(random.randint(-30,30), 2)
+                        tau_zx = round(random.randint(-30,30), 2)
                         quiz_question_type = quiz_question_type[1:]
                         eval_window_check.endCurrent()
                         quizwindow_3d_check.makeCurrent()
@@ -272,7 +272,7 @@ def quizwindow_2d(screen, prev_win, windows):
         box_text = Small_font.render(ans_boxes_2d[box]+":",1,(0,0,0))
         screen.blit(box_text,(box.x - 80, box.y))
 
-    global curr_question_type,quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
+    global curr_question_type,quiz_question_type,sigma_xx, sigma_yy, sigma_zz, tau_xy, tau_yz, tau_zx
     # print(len(quiz_question_type))
     curr_question_type = '2-D'
 
@@ -280,14 +280,14 @@ def quizwindow_2d(screen, prev_win, windows):
     screen.blit(text, (50, 200))
     text = Small_font.render("sigma_yy = ",1, (0,0,0))
     screen.blit(text, (50, 250))
-    text = Small_font.render("sigma_xy = ",1, (0,0,0))
+    text = Small_font.render("tau_xy = ",1, (0,0,0))
     screen.blit(text, (50, 300))
 
     text = Small_font.render(str(sigma_xx) , 1, (0,0,0))
     screen.blit(text, (180, 200))
     text = Small_font.render(str(sigma_yy) ,1, (0,0,0))
     screen.blit(text, (180, 250))
-    text = Small_font.render(str(sigma_xy) ,1, (0,0,0))
+    text = Small_font.render(str(tau_xy) ,1, (0,0,0))
     screen.blit(text, (180, 300))
 
     x_button = nextButton
@@ -321,7 +321,7 @@ def quizwindow_3d(screen, prev_win, windows):
         box_text = Small_font.render(ans_boxes_3d[box]+":",1,(0,0,0))
         screen.blit(box_text,(box.x - 80, box.y))
 
-    global curr_question_type,quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx
+    global curr_question_type,quiz_question_type,sigma_xx, sigma_yy, sigma_zz, tau_xy, tau_yz, tau_zx
     # print(len(quiz_question_type  ))
     curr_question_type = '3-D'
     
@@ -331,11 +331,11 @@ def quizwindow_3d(screen, prev_win, windows):
     screen.blit(text, (50, 250))
     text = Small_font.render("sigma_zz = ",1, (0,0,0))
     screen.blit(text, (50, 300))
-    text = Small_font.render("sigma_xy = ",1, (0,0,0))
+    text = Small_font.render("tau_xy = ",1, (0,0,0))
     screen.blit(text, (50, 350))
-    text = Small_font.render("sigma_yz = ",1, (0,0,0))
+    text = Small_font.render("tau_yz = ",1, (0,0,0))
     screen.blit(text, (50, 400))
-    text = Small_font.render("sigma_zx = ",1, (0,0,0))
+    text = Small_font.render("tau_zx = ",1, (0,0,0))
     screen.blit(text, (50, 450))
 
     text = Small_font.render(str(sigma_xx) , 1, (0,0,0))
@@ -344,11 +344,11 @@ def quizwindow_3d(screen, prev_win, windows):
     screen.blit(text, (180, 250))
     text = Small_font.render(str(sigma_zz) ,1, (0,0,0))
     screen.blit(text, (180, 300))
-    text = Small_font.render(str(sigma_xy) ,1, (0,0,0))
+    text = Small_font.render(str(tau_xy) ,1, (0,0,0))
     screen.blit(text, (180, 350))
-    text = Small_font.render(str(sigma_yz) ,1, (0,0,0))
+    text = Small_font.render(str(tau_yz) ,1, (0,0,0))
     screen.blit(text, (180, 400))
-    text = Small_font.render(str(sigma_zx) ,1, (0,0,0))
+    text = Small_font.render(str(tau_zx) ,1, (0,0,0))
     screen.blit(text, (180, 450))
 
     x_button = nextButton
@@ -369,7 +369,7 @@ def quizwindow_3d(screen, prev_win, windows):
     clock.tick(30)
 
 def quizwindow_concept(screen, prev_win, windows):
-    global quiz_question_type,sigma_xx, sigma_yy, sigma_zz, sigma_xy, sigma_yz, sigma_zx, quest_nos,quest_index, user_concept_answer, curr_question_type
+    global quiz_question_type,sigma_xx, sigma_yy, sigma_zz, tau_xy, tau_yz, tau_zx, quest_nos,quest_index, user_concept_answer, curr_question_type
     # print(len(quiz_question_type))
     Big_font = game_font(40)
     Small_font = game_font(15)
