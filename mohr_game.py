@@ -1,6 +1,5 @@
 import pygame
 # import MohrCircle_stress
-from MohrCircle_stress import stress_execute
 import window_types.mohr_quiz as mohr_quiz
 import window_types.mohr_general as mohr_general
 import window_types.pop_up as pop_up
