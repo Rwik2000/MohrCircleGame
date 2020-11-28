@@ -88,12 +88,12 @@ class Stress_MohrCircle():
             if(self.isGraph):
                 ax.plot(*zip(*mohr_centre), marker='o', color='r', ls='')
                 ax.plot(*zip(*mohr_sigma), marker='o', color='b', ls='')
-                points = [[Stress_tensor[0][0],Stress_tensor[0][1]],[Stress_tensor[1][1],-Stress_tensor[0][1]]]
+                points = [[Stress_tensor[0][0],-Stress_tensor[0][1]],[Stress_tensor[1][1],Stress_tensor[0][1]]]
                 ax.plot(*zip(*points),marker='o', color='black', ls='')
-                ax.plot([Stress_tensor[0][0],Stress_tensor[1][1]],[Stress_tensor[0][1],-Stress_tensor[0][1]])
+                ax.plot([Stress_tensor[0][0],Stress_tensor[1][1]],[-Stress_tensor[0][1],Stress_tensor[0][1]])
                 if(self.isAngle_stress):
                     try:
-                        curr_angle = np.arctan((Stress_tensor[0][1])/(Stress_tensor[0][0]-centre1_2))
+                        curr_angle = np.arctan((-Stress_tensor[0][1])/(Stress_tensor[0][0]-centre1_2))
                     except:
                         if(Stress_tensor[0][1]>=0):
                             curr_angle = np.deg2rad(90)
@@ -156,13 +156,13 @@ class Stress_MohrCircle():
         # print(σ_tensor.shape)
         return Stress_MohrCircle.find_Principal_Stress(self)
 
-# m = Stress_MohrCircle(σxx= 1, σyy= 2,σzz= 3, σxy= 4, σyz= 5, σzx= 6)
-# m.ndims = 3
-# m.isGraph = True
+m = Stress_MohrCircle(σxx= 34.3, σyy= 74,σzz= 3, σxy= -83.9, σyz= 5, σzx= 6)
+m.ndims = 2
+m.isGraph = True
 # m.isAngle_stress = True
 # m.reqAngle_normal_3d = [np.cos(0), round(np.cos(0),3), np.cos(90)]
 # print(m.reqAngle_normal_3d)
-# # m.isAngle_stress = True
-# # m.reqAngle_stress_2d = 45
-# m.stress_execute()
+m.isAngle_stress = True
+m.reqAngle_stress_2d = 54.6
+m.stress_execute()
 

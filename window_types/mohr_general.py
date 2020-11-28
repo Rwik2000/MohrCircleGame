@@ -5,6 +5,7 @@ from utilities.mohr_user_input import *
 import random
 from utilities.mohr_screen import *
 from MohrCircle_stress_2 import Stress_MohrCircle
+from MohrCircle_strain_2 import Strain_MohrCircle
 from MohrCircle_strain import strain_execute
 
 stress_strain_win_select = [0,0]
@@ -212,17 +213,17 @@ def gen3D_stress_input_window(screen, prev_win, windows):
             if enterButton.isOver(pos):
                 mohrCircle_input = []
                 try:
-                    mohr_3d = Stress_MohrCircle(σxx= float(sigma_xx_gen.text), σyy= float(sigma_yy_gen.text),σzz= float(sigma_zz_gen.text), 
-                                                σxy= float(sigma_xy_gen.text), σyz= float(sigma_yz_gen.text),σzx= float(sigma_zx_gen.text))
+                    mohr_3d = Strain_MohrCircle(𝜏xx= float(sigma_xx_gen.text), 𝜏yy= float(sigma_yy_gen.text),𝜏zz= float(sigma_zz_gen.text), 
+                                                𝜏xy= float(sigma_xy_gen.text), 𝜏yz= float(sigma_yz_gen.text),𝜏zx= float(sigma_zx_gen.text))
                     mohr_3d.ndims = 3
                     mohr_3d.isGraph = True
                     if(angle1_gen.text!='' and angle2_gen.text!= ''):
                         mohr_3d.reqAngle_normal_3d = [round(np.cos(np.deg2rad(float(angle1_gen.text))),3), 
                                                       round(np.cos(np.deg2rad(float(angle2_gen.text))),3), 0]
-                        mohr_3d.isAngle_stress = True
-                    mohr_3d.stress_execute()
-                    gen3D_stress_input_window_check.endCurrent()
-                    gen3D_stress_input_window_check.makeCurrent()
+                        mohr_3d.isAngle_strain = True
+                    mohr_3d.strain_execute()
+                    gen3D_strain_input_window_check.endCurrent()
+                    gen3D_strain_input_window_check.makeCurrent()
                 except Exception as e:
                     print(e)
                     gen3D_stress_input_window_check.endCurrent()
@@ -280,23 +281,16 @@ def gen2D_strain_input_window(screen, prev_win, windows):
             if enterButton.isOver(pos):
                 mohrCircle_input = []
                 try:
-                    for box in input_boxes.keys():
-                        if(input_boxes[box]!="angle"):
-                            mohrCircle_input.append(float(box.text))
-
-                    if len(mohrCircle_input) == 3:
-                        for i in range(3):
-                            mohrCircle_input.append(0)
-                        isAngle_strain, reqAngle_strain = False, None    
-                        if(angle_gen.text!=''):
-                            isAngle_strain = True
-                            reqAngle_strain = float(angle_gen.text)                    
-                        strain_execute(2, mohrCircle_input, isAngle_strain, reqAngle_strain)
-                        isAngle_strain, reqAngle_strain = False, None
-                        gen2D_strain_input_window_check.endCurrent()
-                        gen2D_strain_input_window_check.makeCurrent()
-                    else:
-                        print("Insufficient data")
+                    mohr_2d = Strain_MohrCircle(𝜏xx= float(tau_xx_gen.text), 𝜏yy= float(tau_yy_gen.text),𝜏zz= 0, 
+                                                𝜏xy= float(tau_xy_gen.text), 𝜏yz=0, 𝜏zx=0)
+                    mohr_2d.ndims = 2
+                    mohr_2d.isGraph = True
+                    if(angle_gen!=''):
+                        mohr_2d.isAngle_strain = True
+                        mohr_2d.reqAngle_strain_2d = float(angle_gen.text)
+                    mohr_2d.strain_execute()
+                    gen2D_strain_input_window_check.endCurrent()
+                    gen2D_strain_input_window_check.makeCurrent()
                 except:
                     gen2D_strain_input_window_check.endCurrent()
                     incompatible_input_window_check.makeCurrent()
@@ -329,7 +323,8 @@ def gen2D_strain_input_window(screen, prev_win, windows):
 def gen3D_strain_input_window(screen, prev_win, windows): 
     clock = pygame.time.Clock()
     input_boxes = {tau_xx_gen:"tau_xx", tau_yy_gen:"tau_yy", tau_xy_gen:"tau_xy",
-                   tau_zz_gen:"tau_zz", tau_yz_gen:"tau_yz", tau_zx_gen:"tau_zx"}
+                   tau_zz_gen:"tau_zz", tau_yz_gen:"tau_yz", tau_zx_gen:"tau_zx",
+                   angle1_gen:"Angle x", angle2_gen:'Angle y', angle3_gen:'Angle z'}
     Small_font = game_font(20)
     head_text = Small_font.render("General 3-D Mode",1, (0,0,0))
     
@@ -352,15 +347,17 @@ def gen3D_strain_input_window(screen, prev_win, windows):
             if enterButton.isOver(pos):
                 mohrCircle_input = []
                 try:
-                    for box in input_boxes.keys():
-                        mohrCircle_input.append(float(box.text))
-
-                    if len(mohrCircle_input) == 6:
-                        strain_execute(3, mohrCircle_input)
-                        gen3D_strain_input_window_check.endCurrent()
-                        gen3D_strain_input_window_check.makeCurrent()
-                    else:
-                        print("Insufficient data")
+                    mohr_3d = Strain_MohrCircle(σxx= float(tau_xx_gen.text), σyy= float(tau_yy_gen.text),σzz= float(tau_zz_gen.text), 
+                                                σxy= float(tau_xy_gen.text), σyz= float(tau_yz_gen.text),σzx= float(tau_zx_gen.text))
+                    mohr_3d.ndims = 3
+                    mohr_3d.isGraph = True
+                    if(angle1_gen.text!='' and angle2_gen.text!= ''):
+                        mohr_3d.reqAngle_normal_3d = [round(np.cos(np.deg2rad(float(angle1_gen.text))),3), 
+                                                      round(np.cos(np.deg2rad(float(angle2_gen.text))),3), 0]
+                        mohr_3d.isAngle_stress = True
+                    mohr_3d.stress_execute()
+                    gen3D_stress_input_window_check.endCurrent()
+                    gen3D_stress_input_window_check.makeCurrent()
                 except:
                     gen3D_strain_input_window_check.endCurrent()
                     incompatible_input_window_check.makeCurrent()                    
