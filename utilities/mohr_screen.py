@@ -24,15 +24,27 @@ gen_stress_strain_window_check = Screen_check()
 tutorialwindow_check = Screen_check()
 tut2D_stress_input_window_check = Screen_check()
 tut3D_stress_input_window_check = Screen_check()
+
 tut2D_strain_input_window_check = Screen_check()
 tut3D_strain_input_window_check = Screen_check()
 tut_stress_strain_window_check = Screen_check()
+
 tut2D_step1_window_check = Screen_check()
 tut2D_step2_window_check = Screen_check()
 tut2D_step3_window_check = Screen_check()
 tut2D_step4_window_check = Screen_check()
 tut2D_step5_window_check = Screen_check()
 tut2D_final_window_check = Screen_check()
+
+tut3D_step1_window_check = Screen_check()
+tut3D_step2_window_check = Screen_check()
+tut3D_step3_window_check = Screen_check()
+tut3D_step4_window_check = Screen_check()
+tut3D_step5_window_check = Screen_check()
+tut3D_step6_window_check = Screen_check()
+tut3D_step7_window_check = Screen_check()
+
+tut3D_final_window_check = Screen_check()
 
 
 quizwindow_check = Screen_check()

@@ -5,10 +5,9 @@ from utilities.mohr_user_input import *
 import random
 from utilities.mohr_screen import *
 from MohrCircle_stress import Stress_MohrCircle
-from MohrCircle_strain import Strain_MohrCircle
-# from MohrCircle_strain import strain_execute
+from MohrCircle_stress_tut import tut_Stress_MohrCircle
+
 angle_check = 0
-stress_strain_win_select = [0,0]
 def tutorialwindow(screen, prev_win, windows):
     Small_font = game_font(20)
     text = Small_font.render("Tutorial Mode",1, (0,0,0))
@@ -29,16 +28,11 @@ def tutorialwindow(screen, prev_win, windows):
                     tutorialwindow_check.endCurrent()
                     print("Entering in stress 2-D Mode")
             if threedButton.isOver(pos):
-                if(stress_strain_win_select[0]==1):
                     tut3D_stress_input_window_check.makeCurrent()
                     tutorialwindow_check.endCurrent()
                     print("Entering in 3-D Mode")
-                else:
-                    tut3D_strain_input_window_check.makeCurrent()
-                    tutorialwindow_check.endCurrent()
-                    print("Entering in strain 2-D Mode")
             if backButton.isOver(pos):
-                tut_stress_strain_window_check.makeCurrent()
+                enterWindow_check.makeCurrent()
                 tutorialwindow_check.endCurrent()
 
         if event.type == pygame.MOUSEMOTION:
@@ -79,47 +73,6 @@ def box_text_input(event, input_boxes):
                                     if event.unicode == "-" or event.unicode=='.':
                                         box.text +=event.unicode 
 
-def tut_stress_strain_window(screen, prev_win, windows):
-    global stress_strain_win_select
-    stress_strain_win_select = [0,0]
-    stressButton.draw(screen, (0,0,0))
-    strainButton.draw(screen, (0,0,0))
-    # quizButton.draw(screen, (0,0,0))
-    backButton.draw(screen, (0,0,0))
-    for event in pygame.event.get():
-        pos = pygame.mouse.get_pos()
-        if event.type == pygame.QUIT:
-            global running
-            running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if stressButton.isOver(pos):
-                tutorialwindow_check.makeCurrent()
-                tut_stress_strain_window_check.endCurrent()
-                stress_strain_win_select = [1,0]
-                print(stress_strain_win_select)
-                print("Entering in Tutorial strain Mode")
-            if strainButton.isOver(pos):
-                tutorialwindow_check.makeCurrent()
-                tut_stress_strain_window_check.endCurrent()
-                stress_strain_win_select = [0,1]
-                print(stress_strain_win_select)
-                print("Entering in Tutorial strain Mode")
-            if backButton.isOver(pos):
-                enterWindow_check.makeCurrent()
-                tut_stress_strain_window_check.endCurrent()
-        if event.type == pygame.MOUSEMOTION:
-            if stressButton.isOver(pos):
-                stressButton.color = (255, 0, 0)
-            else:
-                stressButton.color = (180, 0, 0)  
-            if strainButton.isOver(pos):
-                strainButton.color = (255, 0, 0)
-            else:
-                strainButton.color = (180, 0, 0) 
-            if backButton.isOver(pos):
-                backButton.color = (255, 0, 0)
-            else:
-                backButton.color = (180, 0, 0)
 
 def tut2D_step1_window(screen, prev_win, windows):
     Big_font = game_font(60)
@@ -155,7 +108,11 @@ def tut2D_step1_window(screen, prev_win, windows):
             if nextButton.isOver(pos):
                 tut2D_step1_window_check.endCurrent()
                 tut2D_step2_window_check.makeCurrent()
-
+            if graphButton.isOver(pos):
+                req_mohr = tut_Stress_MohrCircle(float(sigma_xx_tut.text), 
+                                                    float(sigma_yy_tut.text),float(tau_xy_tut.text))
+                req_mohr.ndims = 2
+                req_mohr.plot_init_pts()
 def tut2D_step2_window(screen, prev_win, windows):
     Big_font = game_font(60)
     Small_font = game_font(25)
@@ -191,6 +148,11 @@ def tut2D_step2_window(screen, prev_win, windows):
             if nextButton.isOver(pos):
                 tut2D_step2_window_check.endCurrent()
                 tut2D_step3_window_check.makeCurrent()
+            if graphButton.isOver(pos):
+                req_mohr = tut_Stress_MohrCircle(float(sigma_xx_tut.text), 
+                                                    float(sigma_yy_tut.text),float(tau_xy_tut.text))
+                req_mohr.ndims = 2
+                req_mohr.plot_cent()
 def tut2D_step3_window(screen, prev_win, windows):
     global angle_check
     Big_font = game_font(60)
@@ -204,7 +166,9 @@ def tut2D_step3_window(screen, prev_win, windows):
     tut_text=["Now, using the centre and radius being ",
               "the distance between the centre and one ",
               "of the plotted points, draw a circle.",
-              "Thus you get your Mohr's Circle"]
+              "Thus you get your Mohr's Circle",
+              "The points where the circle cuts the X-axis",
+              "are the principal stresses."]
     count =0 
     for text in tut_text:
         text = Small_font.render(text,1,(0,0,0))
@@ -232,6 +196,11 @@ def tut2D_step3_window(screen, prev_win, windows):
                 else:
                     tut2D_step3_window_check.endCurrent()
                     tut2D_final_window_check.makeCurrent()
+            if graphButton.isOver(pos):
+                req_mohr = tut_Stress_MohrCircle(float(sigma_xx_tut.text), 
+                                                    float(sigma_yy_tut.text),float(tau_xy_tut.text))
+                req_mohr.ndims = 2
+                req_mohr.plot_circle()
 def tut2D_step4_window(screen, prev_win, windows):
     Big_font = game_font(60)
     Small_font = game_font(25)
@@ -268,6 +237,12 @@ def tut2D_step4_window(screen, prev_win, windows):
             if nextButton.isOver(pos):
                 tut2D_step5_window_check.makeCurrent()
                 tut2D_step4_window_check.endCurrent()
+            if graphButton.isOver(pos):
+                req_mohr = tut_Stress_MohrCircle(float(sigma_xx_tut.text), 
+                                                    float(sigma_yy_tut.text),float(tau_xy_tut.text))
+                req_mohr.angle = float(angle_tut.text)
+                req_mohr.ndims = 2
+                req_mohr.plot_angle()
 def tut2D_step5_window(screen, prev_win, windows):
     Big_font = game_font(60)
     Small_font = game_font(25)
@@ -304,7 +279,12 @@ def tut2D_step5_window(screen, prev_win, windows):
             if finishButton.isOver(pos):
                 tut2D_final_window_check.makeCurrent()
                 tut2D_step5_window_check.endCurrent()
-
+            if graphButton.isOver(pos):
+                req_mohr = tut_Stress_MohrCircle(float(sigma_xx_tut.text), 
+                                                    float(sigma_yy_tut.text),float(tau_xy_tut.text))
+                req_mohr.angle = float(angle_tut.text)
+                req_mohr.ndims = 2
+                req_mohr.plot_angle()
 def tut2D_final_window(screen, prev_win, windows):
     Big_font = game_font(60)
     Small_font = game_font(25)
@@ -401,9 +381,379 @@ def tut2D_stress_input_window(screen, prev_win, windows):
         pygame.draw.rect(screen, box.color, box.render(), 2)
     
     clock.tick(30)
+def tut3D_step1_window(screen, prev_win, windows):
+    Big_font = game_font(60)
+    Small_font = game_font(25)
+    mid_font = game_font(40)
+    # print(sigma_xx_tut.text, sigma_yy_tut.text, tau_xy_tut.text, angle_tut.text)
+    head_text = Big_font.render("Tutorial 3-D Mode",1, (0,0,0))
+    mid_text = mid_font.render("STEP-1",1,(0,0,0))
+    screen.blit(head_text, (80, 70))
+    screen.blit(mid_text, (80, 150))
+    tut_text=["The first step to draw a 3-d Mohr circle ",
+              "for the given stress state is to find the",
+              "principle stresses. we find it by first ",
+              "placing the stresses in a stress-tensor" ,
+            ]
+    tens_init_text = ["[sig_xx tau_xy tau_xz",
+                       " tay_xy sig_yy tau_yz    =",
+                       " tau_xz tau_yz sig_zz]"]
+    user_tens_text = ["["+str(sigma_xx_tut.text) +" "+ str(tau_xy_tut.text) +" " +str(tau_zx_tut.text),
+                       " "+str(tau_xy_tut.text) +" "+ str(sigma_yy_tut.text) +" " +str(tau_yz_tut.text),
+                       " "+str(tau_zx_tut.text) +" "+ str(tau_yz_tut.text) +" " +str(sigma_zz_tut.text)+"]"]
+    count =0 
+    for text in tut_text:
+        text = Small_font.render(text,1,(0,0,0))
+        screen.blit(text,(120, 200+count))
+        count+=30
+    count=0
+    for text in tens_init_text:
+        text = Small_font.render(text,1,(0,0,0))
+        screen.blit(text,(30, 350+count))
+        count+=30
+    count = 0
+    for text in user_tens_text:
+        text = Small_font.render(text,1,(0,0,0))
+        screen.blit(text,(500, 350+count))
+        count+=30
+    backButton.draw(screen, (0,0,0))
+    nextButton.draw(screen, (0,0,0))
+    for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.QUIT:  
+            global running              
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if backButton.isOver(pos):
+                tut3D_stress_input_window_check.makeCurrent()
+                tut3D_step1_window_check.endCurrent()
+            if nextButton.isOver(pos):
+                tut3D_step1_window_check.endCurrent()
+                tut3D_step2_window_check.makeCurrent()
+def tut3D_step2_window(screen, prev_win, windows):
+    Big_font = game_font(60)
+    Small_font = game_font(25)
+    extra_small_font = game_font(15)
+    mid_font = game_font(40)
+    # print(sigma_xx_tut.text, sigma_yy_tut.text, tau_xy_tut.text, angle_tut.text)
+    head_text = Big_font.render("Tutorial 3-D Mode",1, (0,0,0))
+    mid_text = mid_font.render("STEP-2",1,(0,0,0))
+    screen.blit(head_text, (80, 70))
+    screen.blit(mid_text, (80, 150))
+    tut_text=["After placing the values appropriately,",
+              "the next step involves solving for eigen",
+              "values. So, the Characteristic Equation is:",
+              "lamb^3 - I1*lamb^2 + I2*lamb -I3 = 0"]
+    formula_text = ["where, I1, I2, I3 are given by: " ,
+              "I1 = sig_xx + sig_yy + sig_zz",
+              "I2 = sig_xx*sig_yy + sig_xx*sig_zz + sig_yy*sig_zz - tau_xy^2 - tau_xz^2 + tau_yz^2",
+              "I3 = determinant(Tensor)"]
+    count =0 
+    for text in tut_text:
+        text = Small_font.render(text,1,(0,0,0))
+        screen.blit(text,(120, 200+count))
+        count+=40
+    count = 0
+    for text in formula_text:
+        text = extra_small_font.render(text,1,(0,0,0))
+        screen.blit(text,(40, 400+count))
+        count+=40
+    backButton.draw(screen, (0,0,0))
+    nextButton.draw(screen, (0,0,0))
+    for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.QUIT:  
+            global running              
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if backButton.isOver(pos):
+                tut3D_step1_window_check.makeCurrent()
+                tut3D_step2_window_check.endCurrent()
+            if nextButton.isOver(pos):
+                tut3D_step2_window_check.endCurrent()
+                tut3D_step3_window_check.makeCurrent()
 
+def tut3D_step3_window(screen, prev_win, windows):
+    global angle_check
+    Big_font = game_font(60)
+    Small_font = game_font(25)
+    mid_font = game_font(40)
+    # print(sigma_xx_tut.text, sigma_yy_tut.text, tau_xy_tut.text, angle_tut.text)
+    head_text = Big_font.render("Tutorial 3-D Mode",1, (0,0,0))
+    mid_text = mid_font.render("STEP-3",1,(0,0,0))
+    screen.blit(head_text, (80, 70))
+    screen.blit(mid_text, (80, 150))
+    m = tut_Stress_MohrCircle(σxx= float(sigma_xx_tut.text), σyy= float(sigma_yy_tut.text),σzz= float(sigma_zz_tut.text), 
+                              σxy= float(tau_xy_tut.text), σyz=float(tau_yz_tut.text), σzx=float(tau_zx_tut.text))
+    m.ndims = 3
+    Is = m.get_I_values()
+    tut_text=["Now, using the centre and radius being ",
+              "Therefore, the corresponding values are : ",
+              "I1 = "+str(Is[0]),
+              "I2 = "+str(Is[1]),
+              "I3 = "+str(Is[2]),
+              ]
+    eqn_text = ["The next step would be to calculate the",
+                "values of lamb from previous slide.",
+                "our equation becomes : ",
+                "lamb^3 - "+str(Is[0]) + "*lamb^2 + "+str(Is[1])+"*lamb - "+str(Is[0]),
+                ]
+    count =0 
+    for text in tut_text:
+        text = Small_font.render(text,1,(0,0,0))
+        screen.blit(text,(120, 200+count))
+        count+=40
+    count = 0
+    for text in eqn_text:
+        text = Small_font.render(text,1,(0,0,0))
+        screen.blit(text,(120, 410+count))
+        count+=30
+    backButton.draw(screen, (0,0,0))
+    nextButton.draw(screen, (0,0,0))
+
+    for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.QUIT:  
+            global running              
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if backButton.isOver(pos):
+                tut3D_step2_window_check.makeCurrent()
+                tut3D_step3_window_check.endCurrent()
+            if nextButton.isOver(pos):
+                tut3D_step3_window_check.endCurrent()
+                tut3D_step4_window_check.makeCurrent()
+
+def tut3D_step4_window(screen, prev_win, windows):
+    Big_font = game_font(60)
+    Small_font = game_font(25)
+    mid_font = game_font(40)
+    # print(sigma_xx_tut.text, sigma_yy_tut.text, tau_xy_tut.text, angle_tut.text)
+    head_text = Big_font.render("Tutorial 3-D Mode",1, (0,0,0))
+    mid_text = mid_font.render("STEP-4",1,(0,0,0))
+    screen.blit(head_text, (80, 70))
+    screen.blit(mid_text, (80, 150))
+    m = tut_Stress_MohrCircle(σxx= float(sigma_xx_tut.text), σyy= float(sigma_yy_tut.text),σzz= float(sigma_zz_tut.text), 
+                              σxy= float(tau_xy_tut.text), σyz=float(tau_yz_tut.text), σzx=float(tau_zx_tut.text))
+    m.ndims = 3
+    eigen = m.get_princip_values()
+    prin_stress = np.sort(eigen)[::-1]
+    tut_text=["Now, using the centre and radius being ",
+              "Solving the equation gives us : ", 
+              "lamb = " + str(eigen[0]) + ", lamb = " + str(eigen[1]) + ", lamb = " + str(eigen[2]),
+              " ", "Arrange the values such that sig_1",
+              "is the largest and sig_3 is the least",
+              "sig_1, sig_2, sig_3 are principle stresses",
+              "sig_1 = " + str(prin_stress[0]) + ", sig_2 = " + str(prin_stress[1]) + ", sig_3 = " + str(prin_stress[2]),]
+    count =0 
+    for text in tut_text:
+        text = Small_font.render(text,1,(0,0,0))
+        screen.blit(text,(120, 200+count))
+        count+=40
+    backButton.draw(screen, (0,0,0))
+    nextButton.draw(screen, (0,0,0))
+    graphButton.draw(screen, (0,0,0))
+    for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.QUIT:  
+            global running              
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if backButton.isOver(pos):
+                tut3D_step3_window_check.makeCurrent()
+                tut3D_step4_window_check.endCurrent()
+            if nextButton.isOver(pos):
+                tut3D_step5_window_check.makeCurrent()
+                tut3D_step4_window_check.endCurrent()
+
+
+def tut3D_step5_window(screen, prev_win, windows):
+    Big_font = game_font(60)
+    Small_font = game_font(25)
+    mid_font = game_font(40)
+    # print(sigma_xx_tut.text, sigma_yy_tut.text, tau_xy_tut.text, angle_tut.text)
+    head_text = Big_font.render("Tutorial 2-D Mode",1, (0,0,0))
+    mid_text = mid_font.render("STEP-5",1,(0,0,0))
+    screen.blit(head_text, (80, 70))
+    screen.blit(mid_text, (80, 150))
+    tut_text=["Now, using the principle stresses, ",
+              "Plot the stresses calculated on the X-axis",
+              "Find the midpoint between each of the three",
+              "points",
+              ]
+    count =0 
+    for text in tut_text:
+        text = Small_font.render(text,1,(0,0,0))
+        screen.blit(text,(120, 200+count))
+        count+=40
+    backButton.draw(screen, (0,0,0))
+    nextButton.draw(screen,(0,0,0))
+    graphButton.draw(screen, (0,0,0))
+    for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.QUIT:  
+            global running              
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if backButton.isOver(pos):
+                tut3D_step4_window_check.makeCurrent()
+                tut3D_step5_window_check.endCurrent()
+            if nextButton.isOver(pos):
+                tut3D_step6_window_check.makeCurrent()
+                tut3D_step5_window_check.endCurrent()
+            if graphButton.isOver(pos):
+                req_mohr = tut_Stress_MohrCircle(float(sigma_xx_tut.text), float(sigma_yy_tut.text),float(tau_xy_tut.text),
+                                                 float(sigma_zz_tut.text), float(tau_yz_tut.text), float(tau_zx_tut.text))
+                req_mohr.ndims = 3
+                req_mohr.plot_cent()
+def tut3D_step6_window(screen, prev_win, windows):
+    global angle_check
+    Big_font = game_font(60)
+    Small_font = game_font(25)
+    mid_font = game_font(40)
+    # print(sigma_xx_tut.text, sigma_yy_tut.text, tau_xy_tut.text, angle_tut.text)
+    head_text = Big_font.render("Tutorial 2-D Mode",1, (0,0,0))
+    mid_text = mid_font.render("STEP-6",1,(0,0,0))
+    screen.blit(head_text, (80, 70))
+    screen.blit(mid_text, (80, 150))
+    tut_text=["Using the centres, and the corresponding ",
+              "principle stresse, draw circles with radii",
+              "being distance between the centres and their",
+              "corresponding principle stresses.",
+              ]
+    count =0 
+    for text in tut_text:
+        text = Small_font.render(text,1,(0,0,0))
+        screen.blit(text,(120, 200+count))
+        count+=40
+    backButton.draw(screen, (0,0,0))
+    xButton = nextButton
+    if angle_check==0:
+        xButton = finishButton
+    xButton.draw(screen, (0,0,0))
+    graphButton.draw(screen, (0,0,0))
+    for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.QUIT:  
+            global running              
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if backButton.isOver(pos):
+                tut3D_step5_window_check.makeCurrent()
+                tut3D_step6_window_check.endCurrent()
+            if xButton.isOver(pos):
+                if xButton == nextButton:
+                    tut3D_step7_window_check.makeCurrent()
+                    tut3D_step6_window_check.endCurrent()
+                else:
+                    tut3D_final_window_check.makeCurrent()
+                    tut3D_step6_window_check.endCurrent()
+            if graphButton.isOver(pos):
+                req_mohr = tut_Stress_MohrCircle(float(sigma_xx_tut.text), float(sigma_yy_tut.text),float(tau_xy_tut.text),
+                                                 float(sigma_zz_tut.text), float(tau_yz_tut.text), float(tau_zx_tut.text))
+                req_mohr.ndims = 3
+                req_mohr.plot_circle_3d()  
+                
+def tut3D_step7_window(screen, prev_win, windows):
+    Big_font = game_font(60)
+    Small_font = game_font(25)
+    extra_small_font = game_font(18)
+    mid_font = game_font(40)
+    # print(sigma_xx_tut.text, sigma_yy_tut.text, tau_xy_tut.text, angle_tut.text)
+    head_text = Big_font.render("Tutorial 2-D Mode",1, (0,0,0))
+    mid_text = mid_font.render("STEP-7",1,(0,0,0))
+    screen.blit(head_text, (80, 70))
+    screen.blit(mid_text, (80, 150))
+    l = np.cos(np.deg2rad(float(angle1_tut.text)))
+    m = np.cos(np.deg2rad(float(angle2_tut.text)))
+    n = np.sqrt(1-l**2-m**2)
+    if(n==None):
+        n=0
+    tut_text=["To find the the value of stresses on plane",
+              "whose normal's direction vector is (l,m,n)",
+              "l = cos("+str(angle1_tut.text)+") = "+str(round(l,3)),
+              "m = cos("+str(angle2_tut.text)+") = "+str(round(m,3)),
+              "n = sqrt(1 - l^2 -m^2) =  "+str(round(n,3)),
+              ]
+    tut2_text=["use the following formula to obtain normal",
+               "and shear stress : ",
+               "sig_normal = l^2*sig_1+m^2*sig_2+n^2*sig_3",
+               "sig_shear = l^2*sig_1^2 + m^2*sig_2^2 + n^2*sig_3^2 - sig_normal^2"
+               "PLot these points"
+               ]
+    count =0 
+    for text in tut_text:
+        text = Small_font.render(text,1,(0,0,0))
+        screen.blit(text,(120, 180+count))
+        count+=40
+    count =0
+    for text in tut2_text:
+        text = extra_small_font.render(text,1,(0,0,0))
+        screen.blit(text,(40, 400+count))
+        count+=25
+    backButton.draw(screen, (0,0,0))
+    graphButton.draw(screen, (0,0,0))
+    for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.QUIT:  
+            global running              
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if backButton.isOver(pos):
+                tut3D_step6_window_check.makeCurrent()
+                tut3D_step7_window_check.endCurrent()
+            if finishButton.isOver(pos):
+                tut3D_final_window_check.makeCurrent()
+                tut3D_step5_window_check.endCurrent()
+            if graphButton.isOver(pos):
+                mohr_3d = Stress_MohrCircle(σxx= float(sigma_xx_tut.text), σyy= float(sigma_yy_tut.text),σzz= float(sigma_zz_tut.text), 
+                                                σxy= float(tau_xy_tut.text), σyz= float(tau_yz_tut.text),σzx= float(tau_zx_tut.text))
+                mohr_3d.ndims = 3
+                mohr_3d.isGraph = True
+                if(angle1_tut.text!='' and angle2_tut.text!= ''):
+                    angle_check = 1
+                    mohr_3d.reqAngle_normal_3d = [round(np.cos(np.deg2rad(float(angle1_tut.text))),3), 
+                                                    round(np.cos(np.deg2rad(float(angle2_tut.text))),3), 0]
+                    mohr_3d.isAngle_stress = True
+                mohr_3d.stress_execute()
+
+def tut3D_final_window(screen, prev_win, windows):
+    Big_font = game_font(60)
+    Small_font = game_font(25)
+    mid_font = game_font(40)
+    # print(sigma_xx_tut.text, sigma_yy_tut.text, tau_xy_tut.text, angle_tut.text)
+    head_text = Big_font.render("Tutorial 2-D Mode",1, (0,0,0))
+    mid_text = mid_font.render("Congratulations!!",1,(0,0,0))
+    screen.blit(head_text, (80, 70))
+    screen.blit(mid_text, (80, 150))
+    tut_text=["Now, using the centre and radius being ",
+              "you have learnt to draw a Mohr Circle",
+              "and find the component of stress at various",
+              "angles.",
+              "Try out the Quiz! or Explore in General Mode"]
+    count =0 
+    for text in tut_text:
+        text = Small_font.render(text,1,(0,0,0))
+        screen.blit(text,(120, 200+count))
+        count+=40
+    backButton.draw(screen, (0,0,0))
+    back_to_homeButton.draw(screen, (0,0,0))
+    graphButton.draw(screen, (0,0,0))
+    for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.QUIT:  
+            global running              
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if backButton.isOver(pos):
+                windows[prev_win][1].makeCurrent()
+                tut3D_final_window_check.endCurrent()
+            if back_to_homeButton.isOver(pos):
+                enterWindow_check.makeCurrent()
+                tut3D_final_window_check.endCurrent()
 
 def tut3D_stress_input_window(screen, prev_win, windows): 
+    global angle_check
     clock = pygame.time.Clock()
     input_boxes = {sigma_xx_tut:"sigma_xx", sigma_yy_tut:"sigma_yy", tau_xy_tut:"tau_xy", 
                    sigma_zz_tut:"sigma_zz", tau_yz_tut:"tau_yz", tau_zx_tut:"tau_zx",
@@ -430,153 +780,21 @@ def tut3D_stress_input_window(screen, prev_win, windows):
             if enterButton.isOver(pos):
                 mohrCircle_input = []
                 try:
-                    mohr_3d = Strain_MohrCircle(𝜏xx= float(sigma_xx_tut.text), 𝜏yy= float(sigma_yy_tut.text),𝜏zz= float(sigma_zz_tut.text), 
-                                                𝜏xy= float(tau_xy_tut.text), 𝜏yz= float(tau_yz_tut.text),𝜏zx= float(tau_zx_tut.text))
+                    mohr_3d = Stress_MohrCircle(σxx= float(sigma_xx_tut.text), σyy= float(sigma_yy_tut.text),σzz= float(sigma_zz_tut.text), 
+                                                σxy= float(tau_xy_tut.text), σyz= float(tau_yz_tut.text),σzx= float(tau_zx_tut.text))
                     mohr_3d.ndims = 3
-                    mohr_3d.isGraph = True
+                    mohr_3d.isGraph = False
                     if(angle1_tut.text!='' and angle2_tut.text!= ''):
-                        mohr_3d.reqAngle_normal_3d = [round(np.cos(np.deg2rad(float(angle1_tut.text))),3), 
-                                                      round(np.cos(np.deg2rad(float(angle2_tut.text))),3), 0]
-                        mohr_3d.isAngle_strain = True
-                    mohr_3d.strain_execute()
-                    tut3D_strain_input_window_check.endCurrent()
-                    tut3D_strain_input_window_check.makeCurrent()
-                except Exception as e:
-                    print(e)
-                    tut3D_stress_input_window_check.endCurrent()
-                    incompatible_input_window_check.makeCurrent()                    
-            for box in input_boxes.keys():
-                if box.render().collidepoint(event.pos):
-                    print("click")
-                    box.active = True
-                else:
-                    box.active = False
-        box_text_input(event, input_boxes)
-
-
-        if event.type == pygame.MOUSEMOTION:
-            if backButton.isOver(pos):
-                backButton.color = (255, 0, 0)
-            else:
-                backButton.color = (180, 0, 0)
-
-
-    for box in input_boxes.keys():
-        txt_surface = Small_font.render(box.text, True, box.color)
-        width = max(200, txt_surface.get_width()+10)
-        box.render().w = width
-        screen.blit(txt_surface, (box.x+5, box.y+5))
-        pygame.draw.rect(screen, box.color, box.render(), 2)
-    
-    clock.tick(30)
-
-def tut2D_strain_input_window(screen, prev_win, windows): 
-    clock = pygame.time.Clock()
-    input_boxes = {epsi_xx_tut:"epsi_xx", epsi_yy_tut:"epsi_yy", epsi_xy_tut:"epsi_xy", angle_tut:"angle"}
-    Small_font = game_font(20)
-    head_text = Small_font.render("Tutorial 2- D Mode",1, (0,0,0))
-    
-    for box in input_boxes.keys():
-        box_text = Small_font.render(input_boxes[box]+":",1,(0,0,0))
-        screen.blit(box_text,(box.x - 120, box.y))
-
-    screen.blit(head_text, (360, 100))  
-    backButton.draw(screen, (0,0,0))
-    enterButton.draw(screen, (0,0,0))
-    for event in pygame.event.get():
-        pos = pygame.mouse.get_pos()
-        if event.type == pygame.QUIT:  
-            global running              
-            running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if backButton.isOver(pos):
-                tutorialwindow_check.makeCurrent()
-                tut2D_strain_input_window_check.endCurrent()
-                # global s
-                # s = s - 1
-                # A.pop()
-            if enterButton.isOver(pos):
-                mohrCircle_input = []
-                try:
-                    mohr_2d = Strain_MohrCircle(𝜏xx= float(epsi_xx_tut.text), 𝜏yy= float(epsi_yy_tut.text),𝜏zz= 0, 
-                                                𝜏xy= float(epsi_xy_tut.text), 𝜏yz=0, 𝜏zx=0)
-                    mohr_2d.ndims = 2
-                    mohr_2d.isGraph = True
-                    if(angle_tut!=''):
-                        mohr_2d.isAngle_strain = True
-                        mohr_2d.reqAngle_strain_2d = float(angle_tut.text)
-                    mohr_2d.strain_execute()
-                    tut2D_strain_input_window_check.endCurrent()
-                    tut2D_strain_input_window_check.makeCurrent()
-                except:
-                    tut2D_strain_input_window_check.endCurrent()
-                    incompatible_input_window_check.makeCurrent()
-            for box in input_boxes.keys():
-                if box.render().collidepoint(event.pos):
-                    print("click")
-                    box.active = True
-                else:
-                    box.active = False
-        box_text_input(event, input_boxes)
-
-
-        if event.type == pygame.MOUSEMOTION:
-            if backButton.isOver(pos):
-                backButton.color = (255, 0, 0)
-            else:
-                backButton.color = (180, 0, 0)
-
-
-    for box in input_boxes.keys():
-        txt_surface = Small_font.render(box.text, True, box.color)
-        width = max(200, txt_surface.get_width()+10)
-        box.render().w = width
-        screen.blit(txt_surface, (box.x+5, box.y+5))
-        pygame.draw.rect(screen, box.color, box.render(), 2)
-    
-    clock.tick(30)
-
-
-def tut3D_strain_input_window(screen, prev_win, windows): 
-    clock = pygame.time.Clock()
-    input_boxes = {epsi_xx_tut:"epsi_xx", epsi_yy_tut:"epsi_yy", epsi_xy_tut:"epsi_xy",
-                   epsi_zz_tut:"epsi_zz", epsi_yz_tut:"epsi_yz", epsi_zx_tut:"epsi_zx",
-                   angle1_tut:"Angle x", angle2_tut:'Angle y', angle3_tut:'Angle z'}
-    Small_font = game_font(20)
-    head_text = Small_font.render("Tutorial 3-D Mode",1, (0,0,0))
-    
-    for box in input_boxes.keys():
-        box_text = Small_font.render(input_boxes[box]+":",1,(0,0,0))
-        screen.blit(box_text,(box.x - 120, box.y))
-
-    screen.blit(head_text, (360, 100))  
-    backButton.draw(screen, (0,0,0))
-    enterButton.draw(screen, (0,0,0))
-    for event in pygame.event.get():
-        pos = pygame.mouse.get_pos()
-        if event.type == pygame.QUIT:  
-            global running              
-            running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if backButton.isOver(pos):
-                tutorialwindow_check.makeCurrent()
-                tut3D_strain_input_window_check.endCurrent()
-            if enterButton.isOver(pos):
-                mohrCircle_input = []
-                try:
-                    mohr_3d = Strain_MohrCircle(σxx= float(epsi_xx_tut.text), σyy= float(epsi_yy_tut.text),σzz= float(epsi_zz_tut.text), 
-                                                σxy= float(epsi_xy_tut.text), σyz= float(epsi_yz_tut.text),σzx= float(epsi_zx_tut.text))
-                    mohr_3d.ndims = 3
-                    mohr_3d.isGraph = True
-                    if(angle1_tut.text!='' and angle2_tut.text!= ''):
+                        angle_check = 1
                         mohr_3d.reqAngle_normal_3d = [round(np.cos(np.deg2rad(float(angle1_tut.text))),3), 
                                                       round(np.cos(np.deg2rad(float(angle2_tut.text))),3), 0]
                         mohr_3d.isAngle_stress = True
                     mohr_3d.stress_execute()
                     tut3D_stress_input_window_check.endCurrent()
-                    tut3D_stress_input_window_check.makeCurrent()
-                except:
-                    tut3D_strain_input_window_check.endCurrent()
+                    tut3D_step1_window_check.makeCurrent()
+                except Exception as e:
+                    print(e)
+                    tut3D_stress_input_window_check.endCurrent()
                     incompatible_input_window_check.makeCurrent()                    
             for box in input_boxes.keys():
                 if box.render().collidepoint(event.pos):

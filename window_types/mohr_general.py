@@ -213,17 +213,17 @@ def gen3D_stress_input_window(screen, prev_win, windows):
             if enterButton.isOver(pos):
                 mohrCircle_input = []
                 try:
-                    mohr_3d = Strain_MohrCircle(𝜏xx= float(sigma_xx_gen.text), 𝜏yy= float(sigma_yy_gen.text),𝜏zz= float(sigma_zz_gen.text), 
-                                                𝜏xy= float(tau_xy_gen.text), 𝜏yz= float(tau_yz_gen.text),𝜏zx= float(tau_zx_gen.text))
+                    mohr_3d = Stress_MohrCircle(σxx= float(sigma_xx_gen.text), σyy= float(sigma_yy_gen.text),σzz= float(sigma_zz_gen.text), 
+                                                σxy= float(tau_xy_gen.text), σyz= float(tau_yz_gen.text),σzx= float(tau_zx_gen.text))
                     mohr_3d.ndims = 3
                     mohr_3d.isGraph = True
                     if(angle1_gen.text!='' and angle2_gen.text!= ''):
                         mohr_3d.reqAngle_normal_3d = [round(np.cos(np.deg2rad(float(angle1_gen.text))),3), 
                                                       round(np.cos(np.deg2rad(float(angle2_gen.text))),3), 0]
-                        mohr_3d.isAngle_strain = True
-                    mohr_3d.strain_execute()
-                    gen3D_strain_input_window_check.endCurrent()
-                    gen3D_strain_input_window_check.makeCurrent()
+                        mohr_3d.isAngle_stress = True
+                    mohr_3d.stress_execute()
+                    gen3D_stress_input_window_check.endCurrent()
+                    gen3D_stress_input_window_check.makeCurrent()
                 except Exception as e:
                     print(e)
                     gen3D_stress_input_window_check.endCurrent()
@@ -280,20 +280,20 @@ def gen2D_strain_input_window(screen, prev_win, windows):
                 # A.pop()
             if enterButton.isOver(pos):
                 mohrCircle_input = []
-                try:
-                    mohr_2d = Strain_MohrCircle(𝜏xx= float(epsi_xx_gen.text), 𝜏yy= float(epsi_yy_gen.text),𝜏zz= 0, 
-                                                𝜏xy= float(epsi_xy_gen.text), 𝜏yz=0, 𝜏zx=0)
-                    mohr_2d.ndims = 2
-                    mohr_2d.isGraph = True
-                    if(angle_gen!=''):
-                        mohr_2d.isAngle_strain = True
-                        mohr_2d.reqAngle_strain_2d = float(angle_gen.text)
-                    mohr_2d.strain_execute()
-                    gen2D_strain_input_window_check.endCurrent()
-                    gen2D_strain_input_window_check.makeCurrent()
-                except:
-                    gen2D_strain_input_window_check.endCurrent()
-                    incompatible_input_window_check.makeCurrent()
+                # try:
+                mohr_2d = Strain_MohrCircle(εxx= float(epsi_xx_gen.text), εyy= float(epsi_yy_gen.text),εzz= 0, 
+                                            εxy= float(epsi_xy_gen.text), εyz=0, εzx=0)
+                mohr_2d.ndims = 2
+                mohr_2d.isGraph = True
+                if(angle_gen.text!=''):
+                    mohr_2d.isAngle_strain = True
+                    mohr_2d.reqAngle_strain_2d = float(angle_gen.text)
+                mohr_2d.strain_execute()
+                gen2D_strain_input_window_check.endCurrent()
+                gen2D_strain_input_window_check.makeCurrent()
+                # except:
+                #     gen2D_strain_input_window_check.endCurrent()
+                #     incompatible_input_window_check.makeCurrent()
             for box in input_boxes.keys():
                 if box.render().collidepoint(event.pos):
                     print("click")
@@ -347,17 +347,17 @@ def gen3D_strain_input_window(screen, prev_win, windows):
             if enterButton.isOver(pos):
                 mohrCircle_input = []
                 try:
-                    mohr_3d = Strain_MohrCircle(σxx= float(epsi_xx_gen.text), σyy= float(epsi_yy_gen.text),σzz= float(epsi_zz_gen.text), 
-                                                σxy= float(epsi_xy_gen.text), σyz= float(epsi_yz_gen.text),σzx= float(epsi_zx_gen.text))
+                    mohr_3d = Strain_MohrCircle(𝜏xx= float(epsi_xx_gen.text), 𝜏yy= float(epsi_yy_gen.text),𝜏zz= float(epsi_zz_gen.text), 
+                                                𝜏xy= float(epsi_xy_gen.text), 𝜏yz= float(epsi_yz_gen.text),𝜏zx= float(epsi_zx_gen.text))
                     mohr_3d.ndims = 3
                     mohr_3d.isGraph = True
                     if(angle1_gen.text!='' and angle2_gen.text!= ''):
                         mohr_3d.reqAngle_normal_3d = [round(np.cos(np.deg2rad(float(angle1_gen.text))),3), 
-                                                      round(np.cos(np.deg2rad(float(angle2_gen.text))),3), 0]
-                        mohr_3d.isAngle_stress = True
-                    mohr_3d.stress_execute()
-                    gen3D_stress_input_window_check.endCurrent()
-                    gen3D_stress_input_window_check.makeCurrent()
+                                                        round(np.cos(np.deg2rad(float(angle2_gen.text))),3), 0]
+                        mohr_3d.isAngle_strain = True
+                    mohr_3d.strain_execute()
+                    gen3D_strain_input_window_check.endCurrent()
+                    gen3D_strain_input_window_check.makeCurrent()
                 except:
                     gen3D_strain_input_window_check.endCurrent()
                     incompatible_input_window_check.makeCurrent()                    

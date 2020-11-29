@@ -152,11 +152,12 @@ def eval_window(screen, prev_win, windows):
             if curr_question_type=='2-D':
                 mohr_2d.isGraph = False
                 correct_answer=mohr_2d.stress_execute()
+                correct_answer = correct_answer[0]
 
             elif curr_question_type=='3-D':
                 mohr_2d.isGraph = False
                 correct_answer=mohr_3d.stress_execute()
-        
+                correct_answer = correct_answer[0]        
 
     try:
         if curr_question_type == "2-D":
