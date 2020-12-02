@@ -46,7 +46,9 @@ class Stress_MohrCircle():
         new_x_1, new_x_2,new_y_1,new_y_2 = None, None, None, None
         sigma_NN,sigma_NS = None, None
         radius = []
-        _, ax = plt.subplots()
+        ax = None
+        if self.isGraph:
+            _, ax = plt.subplots()
         if self.ndims == 3:
             ax.set(xlim=(center1_3-(radius1_3+0.5), sigma1+0.5), ylim = (-(radius1_3+1), radius1_3+1))
             radius = [radius1_2,radius2_3,radius1_3]
@@ -85,7 +87,6 @@ class Stress_MohrCircle():
                 ax.add_artist(Circle2_3)
                 ax.minorticks_on()
         elif self.ndims ==2:
-            ax.set(xlim=(center1_2-(radius1_2+0.5), sigma1+0.5), ylim = (-(radius1_2+0.5), radius1_2+0.5))
             radius = [radius1_2]
             mohr_center=[[center1_2,0]]
             mohr_sigma=[[sigma1,0],[sigma2,0]]
@@ -104,6 +105,7 @@ class Stress_MohrCircle():
                 new_x_2 = radius1_2*np.cos(total_angle + np.deg2rad(180))+center1_2
                 new_y_2 = radius1_2*np.sin(total_angle + np.deg2rad(180))
             if(self.isGraph):
+                ax.set(xlim=(center1_2-(radius1_2+0.5), sigma1+0.5), ylim = (-(radius1_2+0.5), radius1_2+0.5))
                 ax.plot(*zip(*mohr_center), marker='o', color='r', ls='')
                 ax.plot(*zip(*mohr_sigma), marker='o', color='b', ls='')
                 points = [[Stress_tensor[0][0],-Stress_tensor[0][1]],[Stress_tensor[1][1],Stress_tensor[0][1]]]
