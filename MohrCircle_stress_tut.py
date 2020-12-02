@@ -19,18 +19,20 @@ class tut_Stress_MohrCircle():
         # self.angle1, self.angle2, self.angle2 = np.cos(np.deg2rad(angle1)), np.cos(np.deg2rad(angle2)), np.cos(np.deg2rad(angle3))
         # self.angle3d = [np.cos(np.deg2rad(angle1)),np.cos(np.deg2rad(angle2)),np.cos(np.deg2rad(angle3))]
         self.ndims = 3
+
     def _plot(self, ax):
             ax.minorticks_on()
-            ax.set_aspect('equal', adjustable='box')
+            ax.set_aspect('equal', adjustable='datalim')
             ax.spines['bottom'].set_position('center')
             ax.xaxis.set_ticks_position('bottom')
             ax.yaxis.set_ticks_position('left')
             ax.grid(which='major', axis='both', linestyle ='--')
+            plt.xlabel("σ Normal")
+            plt.ylabel("σ Shear")
             plt.show()
     def _calc_mohr(self):
             mohr_circle = Stress_MohrCircle(self.σxx, self.σyy,self.σxy, self.σzz,self.σyz,self.σzx)
             if(self.angle2d!=None and self.ndims==2):
-                print("yes")
                 mohr_circle.isAngle_stress = True
                 mohr_circle.reqAngle_stress_2d = self.angle2d
             elif(self.ndims==3 and self.angle1!=None and self.angle2!=None):
@@ -40,6 +42,7 @@ class tut_Stress_MohrCircle():
                 mohr_circle.reqAngle_normal_3d = list([l,m,n])
             mohr_circle.ndims = self.ndims
             return mohr_circle.stress_execute()
+
     def plot_cent(self):
         if(self.ndims == 2):
             mohr_cent,_,_,_,_ = self._calc_mohr()
@@ -48,12 +51,21 @@ class tut_Stress_MohrCircle():
             init_pts = [[self.σxx, self.σyy],[-self.σxy,self.σxy]]
             ax.plot(*zip(init_pts), marker = 'o', color='b', ls='')
             ax.plot([self.σxx,self.σyy],[-self.σxy,self.σxy])
+            plt.xlabel("σ Normal")
+            plt.ylabel("σ Shear")
             self._plot(ax)
         else:
-            mohr_cent,mohr_sigma,_,_ = self._calc_mohr()
+            mohr_cent, mohr_sigma,_,_ = self._calc_mohr()
             _,ax = plt.subplots()
             ax.plot(*zip(*mohr_cent), marker='o', color='r', ls='')
             ax.plot(*zip(*mohr_sigma), marker = 'o', color='b', ls='')
+
+            for i in range(len(mohr_sigma)):
+                ax.annotate("σ"+str(i+1),tuple(mohr_sigma[i]),fontsize=12)
+            for i in range(len(mohr_cent)):
+                ax.annotate("C"+str(i+1),tuple(mohr_cent[i]),fontsize=12)
+            plt.xlabel("σ Normal")
+            plt.ylabel("σ Shear")
             self._plot(ax)
 
     def plot_init_pts(self):
@@ -61,6 +73,8 @@ class tut_Stress_MohrCircle():
             _,ax = plt.subplots()
             init_pts = [[self.σxx, self.σyy],[-self.σxy,self.σxy]]
             ax.plot(*zip(init_pts), marker = 'o', color='b', ls='')
+            plt.xlabel("σ Normal")
+            plt.ylabel("σ Shear")
             self._plot(ax)
 
     def plot_circle(self):
@@ -84,7 +98,6 @@ class tut_Stress_MohrCircle():
             ax.plot(*zip(*fin_pts), marker='o', color='orange', ls='')
             ax.plot([new1[0],new2[0]],[new1[1],new2[1]])
             print(fin_pts)
-
 
             ax.plot(*zip(*mohr_cent), marker='o', color='r', ls='')
             ax.plot(*zip(*mohr_sigma),marker='o', color='black', ls='')
