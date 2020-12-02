@@ -252,9 +252,9 @@ def tut2D_step4_window(screen, prev_win, windows):
             if graphButton.isOver(pos):
                 req_mohr = tut_Stress_MohrCircle(float(sigma_xx_tut.text), 
                                                     float(sigma_yy_tut.text),float(tau_xy_tut.text))
-                req_mohr.angle = float(angle_tut.text)
+                req_mohr.angle2d= float(angle_tut.text)
                 req_mohr.ndims = 2
-                req_mohr.plot_angle()
+                req_mohr.plot_angle2d()
 def tut2D_step5_window(screen, prev_win, windows):
     Big_font = game_font(60)
     Small_font = game_font(25)
@@ -296,7 +296,7 @@ def tut2D_step5_window(screen, prev_win, windows):
                                                     float(sigma_yy_tut.text),float(tau_xy_tut.text))
                 req_mohr.angle = float(angle_tut.text)
                 req_mohr.ndims = 2
-                req_mohr.plot_angle()
+                req_mohr.plot_angle2d()
 def tut2D_final_window(screen, prev_win, windows):
     Big_font = game_font(60)
     Small_font = game_font(25)

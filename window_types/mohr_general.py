@@ -458,23 +458,20 @@ def gen3D_strain_input_window(screen, prev_win, windows):
 
     try:
         if is_new_input == True: 
-            mohr_2d = Strain_MohrCircle(εxx= float(epsi_xx_gen.text), εyy= float(epsi_yy_gen.text),εzz= 0, 
-                                                    εxy= float(epsi_xy_gen.text), εyz=0, εzx=0)
+            mohr_2d = Strain_MohrCircle(εxx= float(epsi_xx_gen.text), εyy= float(epsi_yy_gen.text),εzz= float(epsi_zz_gen.text), 
+                                        εxy= float(epsi_xy_gen.text), εyz=float(epsi_yz_gen.text), εzx=float(epsi_zx_gen.text))
             mohr_2d.ndims = 3
             mohr_2d.isGraph = False
-            if(angle_gen.text!=''):
-                mohr_2d.isAngle_strain = True
-                mohr_2d.reqAngle_strain_2d = float(angle_gen.text)
-            _,sig,_,_,_ = mohr_2d.strain_execute()
-            epsi1, epsi2 = sig[0][0], sig[1][0], sig[2][0]
-            answer_txt = "epsi_1 : "+str(epsi1)+"  epsi_2 : "+str(epsi2) + "  epsi_3 : "+str(epsi2)
+            _,sig,_,_, = mohr_2d.strain_execute()
+            epsi1, epsi2, epsi3 = sig[0][0], sig[1][0], sig[2][0]
+            answer_txt = "epsi_1 : "+str(epsi1)+"  epsi_2 : "+str(epsi2) + "  epsi_3 : "+str(epsi3)
             answer_txt = Small_font.render(answer_txt,1,(0,0,0))
             screen.blit(answer_txt, (80, 540)) 
         else:
-            answer_txt = "epsi_1 : "+str(epsi1)+"  epsi_2 : "+str(epsi2) + "  epsi_3 : "+str(epsi2)
+            answer_txt = "epsi_1 : "+str(epsi1)+"  epsi_2 : "+str(epsi2) + "  epsi_3 : "+str(epsi3)
             answer_txt = Small_font.render(answer_txt,1,(0,0,0))
             screen.blit(answer_txt, (80, 540))
-    except:
+    except ValueError:
         # print(e)
         answer_txt = "epsi_1 :   epsi_2 :   epsi_3:"
         answer_txt = Small_font.render(answer_txt,1,(0,0,0))
