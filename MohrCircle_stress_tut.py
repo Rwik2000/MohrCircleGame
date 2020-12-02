@@ -21,7 +21,7 @@ class tut_Stress_MohrCircle():
         self.ndims = 3
     def _plot(self, ax):
             ax.minorticks_on()
-            ax.set_aspect('equal', adjustable='datalim')
+            ax.set_aspect('equal', adjustable='box')
             ax.spines['bottom'].set_position('center')
             ax.xaxis.set_ticks_position('bottom')
             ax.yaxis.set_ticks_position('left')
@@ -30,6 +30,7 @@ class tut_Stress_MohrCircle():
     def _calc_mohr(self):
             mohr_circle = Stress_MohrCircle(self.σxx, self.σyy,self.σxy, self.σzz,self.σyz,self.σzx)
             if(self.angle2d!=None and self.ndims==2):
+                print("yes")
                 mohr_circle.isAngle_stress = True
                 mohr_circle.reqAngle_stress_2d = self.angle2d
             elif(self.ndims==3 and self.angle1!=None and self.angle2!=None):

@@ -132,13 +132,15 @@ class Strain_MohrCircle():
             ax.xaxis.set_ticks_position('bottom')
             ax.yaxis.set_ticks_position('left')
             ax.grid(which='major', axis='both', linestyle ='--')
+            plt.xlabel("ε Normal")
+            plt.ylabel("ε Shear")
             plt.show()
             plt.close('all')
 
         if(self.ndims == 2):
             return mohr_center, mohr_epsi, radius ,(new_x_1, new_y_1), (new_x_2, new_y_2)
         else:
-            return mohr_center, mohr_epsi, radius ,(sigma_NN, sigma_NS)
+            return mohr_center, mohr_epsi, radius ,(epsi_NN, epsi_NS)
     def find_Principal_Strain(self):
         if self.ε_tensor.shape == (3,3):
             a=self.ε_tensor.copy()

@@ -66,7 +66,7 @@ class Stress_MohrCircle():
                 sigma_NN = (l**2)*sigma1 + (m**2)*sigma2 + (n**2)*sigma3
                 sigma_NS = np.sqrt((l**2)*sigma1**2 + (m**2)*sigma2**2 + (n**2)*sigma3**2 - sigma_NN**2)
             if(self.isGraph):
-                ax.set(xlim=(center1_3-(radius1_3+0.5), sigma1+0.5), ylim = (-(radius1_3+1), radius1_3+1))
+                ax.set(xlim=(center1_3-(radius1_3+1), sigma1+1), ylim = (-(radius1_3+1), radius1_3+1))
 
                 ax.plot(*zip(*mohr_center), marker='o', color='r', ls='')
                 ax.plot(*zip(*mohr_sigma), marker='o', color='b', ls='')
@@ -106,7 +106,7 @@ class Stress_MohrCircle():
                 new_x_2 = radius1_2*np.cos(total_angle + np.deg2rad(180))+center1_2
                 new_y_2 = radius1_2*np.sin(total_angle + np.deg2rad(180))
             if(self.isGraph):
-                ax.set(xlim=(center1_2-(radius1_2+0.5), sigma1+0.5), ylim = (-(radius1_2+0.5), radius1_2+0.5))
+                ax.set(xlim=(center1_2-(radius1_2+1), sigma1+1), ylim = (-(radius1_2+1), radius1_2+1))
                 ax.plot(*zip(*mohr_center), marker='o', color='r', ls='')
                 ax.plot(*zip(*mohr_sigma), marker='o', color='b', ls='')
                 points = [[Stress_tensor[0][0],-Stress_tensor[0][1]],[Stress_tensor[1][1],Stress_tensor[0][1]]]
@@ -118,7 +118,7 @@ class Stress_MohrCircle():
                     ax.plot([new_x_1,new_x_2],[new_y_1,new_y_2])
                 # ax.plot()
                 for i in range(len(mohr_sigma)):
-                    ax.annotate("ε"+str(i+1),tuple(mohr_sigma[i]),fontsize=12)
+                    ax.annotate("σ"+str(i+1),tuple(mohr_sigma[i]),fontsize=12)
                 for i in range(len(mohr_center)):
                     ax.annotate("C"+str(i+1),tuple(mohr_center[i]),fontsize=12)
                 Circle1_2 = plt.Circle((center1_2, 0),abs(radius1_2),fill=False, color="green")
@@ -131,6 +131,9 @@ class Stress_MohrCircle():
             ax.xaxis.set_ticks_position('bottom')
             ax.yaxis.set_ticks_position('left')
             ax.grid(which='major', axis='both', linestyle ='--')
+            plt.xlabel("σ Normal")
+            plt.ylabel("σ Shear")
+
             plt.show()
             plt.close('all')
         if(self.ndims == 2):
