@@ -35,7 +35,7 @@ running =True
 curr_win = 'startwindow'
 prev_win = 'startwindow'
 while running:
-    screen.fill((255,255,255))
+    screen.fill((255,230,230))
     for win in windows.keys():
         screen, curr_win, prev_win=window_check(curr_win, prev_win,
                                                 win, windows[win], screen)

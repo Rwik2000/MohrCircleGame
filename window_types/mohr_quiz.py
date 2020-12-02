@@ -11,8 +11,8 @@ import random
 from utilities.mohr_screen import *
 import time
 # quiz_question_type = ['2-D', '2-D','3-D','3-D', 'concept']
-quiz_question_type = ['2-D','2-D','3-D','3-D','concept','concept','concept']
-quest_nos = [1,2,3,4,5,6,7]
+quiz_question_type = ['2-D','2-D','3-D','3-D','concept','concept','concept','concept','concept','concept','concept','concept' ]
+quest_nos = [1,2,3,4,5,6,7,8,9,10]
 user_concept_answer = -1
 quest_index = -1
 curr_question_type = None
@@ -192,6 +192,15 @@ def eval_window(screen, prev_win, windows):
     else:
             text = Big_font.render("WRONG :(", 1, (0,0,0))
             screen.blit(text, (70, 250))
+            
+    if curr_question_type=='concept':
+        line_brk = 0
+        exp_text = concept_quest[quest_nos[quest_index]][3]
+        # print(exp_text)
+        for exp in exp_text:
+            exp = Small_font.render(exp, 1, (0,0,0))
+            screen.blit(exp, (70, 300 + line_brk))
+            line_brk+=20
 
     for event in pygame.event.get():
         pos = pygame.mouse.get_pos()
@@ -409,8 +418,8 @@ def quizwindow_concept(screen, prev_win, windows):
         screen.blit(text, (check_box.x + 30, check_box.y))
         pygame.draw.rect(screen, check_box.color, check_box.render(),2)
         if(check_box.active==True):
-            color, centre, radius = check_box.draw_circ()
-            pygame.draw.circle(screen,color,centre, radius)
+            color, center, radius = check_box.draw_circ()
+            pygame.draw.circle(screen,color,center, radius)
         opt_count +=1
 
 

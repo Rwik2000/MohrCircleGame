@@ -26,21 +26,21 @@ class Stress_MohrCircle():
         Stress.sort(reverse=True)
         sigma1=Stress[0]
         sigma2=Stress[1]
-        centre1_2=round((sigma1+sigma2)/2, 4)
-        radius1_2=abs(sigma2-centre1_2)
+        center1_2=round((sigma1+sigma2)/2, 4)
+        radius1_2=abs(sigma2-center1_2)
         if self.ndims==3:
             sigma3=Stress[2]        
-            centre1_3=round((sigma1+sigma3)/2, 4)
-            centre2_3=round((sigma2+sigma3)/2, 4)    
-            radius1_3=abs(sigma3-centre1_3)    
-            radius2_3=abs(sigma2-centre2_3)
+            center1_3=round((sigma1+sigma3)/2, 4)
+            center2_3=round((sigma2+sigma3)/2, 4)    
+            radius1_3=abs(sigma3-center1_3)    
+            radius2_3=abs(sigma2-center2_3)
             print("The Principal Stresses are: \nε1: {0} \nε2: {1} \nε3: {2} \n".format(sigma1,sigma2,sigma3))
             print("Maximum Shear Stress τ_max: " +str(round((sigma1-sigma3)/2, 3)))
-            print("\nThe Centres of the circle are: \nC1: {0} \nC2: {1} \nC3: {2} \n".format(centre1_3,centre1_2,centre2_3))
+            print("\nThe centers of the circle are: \nC1: {0} \nC2: {1} \nC3: {2} \n".format(center1_3,center1_2,center2_3))
         else:
             print("The Principal Stresses are: \nε1: {0} \nε2: {1} \n".format(sigma1,sigma2))
             print("Maximum Shear Stress τ_max: " +str(round((sigma1-sigma2)/2, 3))) 
-            print("\nThe Centre of the circle are: \nC1: {0}".format(centre1_2))           
+            print("\nThe center of the circle are: \nC1: {0}".format(center1_2))           
 
         
         new_x_1, new_x_2,new_y_1,new_y_2 = None, None, None, None
@@ -48,9 +48,9 @@ class Stress_MohrCircle():
         radius = []
         _, ax = plt.subplots()
         if self.ndims == 3:
-            ax.set(xlim=(centre1_3-(radius1_3+0.5), sigma1+0.5), ylim = (-(radius1_3+1), radius1_3+1))
+            ax.set(xlim=(center1_3-(radius1_3+0.5), sigma1+0.5), ylim = (-(radius1_3+1), radius1_3+1))
             radius = [radius1_2,radius2_3,radius1_3]
-            mohr_centre=[[centre1_3,0],[centre2_3,0],[centre1_2,0]]
+            mohr_center=[[center1_3,0],[center2_3,0],[center1_2,0]]
             mohr_sigma=[[sigma1,0],[sigma2,0],[sigma3,0]]
             if(self.isAngle_stress):
                 l = self.reqAngle_normal_3d[0]
@@ -65,16 +65,16 @@ class Stress_MohrCircle():
                 sigma_NN = (l**2)*sigma1 + (m**2)*sigma2 + (n**2)*sigma3
                 sigma_NS = np.sqrt((l**2)*sigma1**2 + (m**2)*sigma2**2 + (n**2)*sigma3**2 - sigma_NN**2)
             if(self.isGraph):
-                ax.plot(*zip(*mohr_centre), marker='o', color='r', ls='')
+                ax.plot(*zip(*mohr_center), marker='o', color='r', ls='')
                 ax.plot(*zip(*mohr_sigma), marker='o', color='b', ls='')
                 for i in range(len(mohr_sigma)):
                     ax.annotate("σ"+str(i+1),tuple(mohr_sigma[i]),fontsize=12)
-                for i in range(len(mohr_centre)):
-                    ax.annotate("C"+str(i+1),tuple(mohr_centre[i]),fontsize=12)
+                for i in range(len(mohr_center)):
+                    ax.annotate("C"+str(i+1),tuple(mohr_center[i]),fontsize=12)
 
-                Circle1_3 = plt.Circle((centre1_3, 0),abs(radius1_3),fill=False, color="red")
-                Circle2_3 = plt.Circle((centre2_3, 0),abs(radius2_3),fill=False, color="blue")
-                Circle1_2 = plt.Circle((centre1_2, 0),abs(radius1_2),fill=False, color="green")
+                Circle1_3 = plt.Circle((center1_3, 0),abs(radius1_3),fill=False, color="red")
+                Circle2_3 = plt.Circle((center2_3, 0),abs(radius2_3),fill=False, color="blue")
+                Circle1_2 = plt.Circle((center1_2, 0),abs(radius1_2),fill=False, color="green")
                 if(self.isAngle_stress):
                     new_points = [[sigma_NN,sigma_NS]]
                     print(new_points)
@@ -85,13 +85,13 @@ class Stress_MohrCircle():
                 ax.add_artist(Circle2_3)
                 ax.minorticks_on()
         elif self.ndims ==2:
-            ax.set(xlim=(centre1_2-(radius1_2+0.5), sigma1+0.5), ylim = (-(radius1_2+0.5), radius1_2+0.5))
+            ax.set(xlim=(center1_2-(radius1_2+0.5), sigma1+0.5), ylim = (-(radius1_2+0.5), radius1_2+0.5))
             radius = [radius1_2]
-            mohr_centre=[[centre1_2,0]]
+            mohr_center=[[center1_2,0]]
             mohr_sigma=[[sigma1,0],[sigma2,0]]
             if(self.isAngle_stress):
                 try:
-                    curr_angle = np.arctan((-Stress_tensor[0][1])/(Stress_tensor[0][0]-centre1_2))
+                    curr_angle = np.arctan((-Stress_tensor[0][1])/(Stress_tensor[0][0]-center1_2))
                 except:
                     if(Stress_tensor[0][1]>=0):
                         curr_angle = np.deg2rad(90)
@@ -99,12 +99,12 @@ class Stress_MohrCircle():
                         curr_angle = np.deg2rad(-90)
                 total_angle = curr_angle + np.deg2rad(2*self.reqAngle_stress_2d)
                 # print(np.rad2deg(total_angle))
-                new_x_1 = radius1_2*np.cos(total_angle) + centre1_2
+                new_x_1 = radius1_2*np.cos(total_angle) + center1_2
                 new_y_1 = radius1_2*np.sin(total_angle)    
-                new_x_2 = radius1_2*np.cos(total_angle + np.deg2rad(180))+centre1_2
+                new_x_2 = radius1_2*np.cos(total_angle + np.deg2rad(180))+center1_2
                 new_y_2 = radius1_2*np.sin(total_angle + np.deg2rad(180))
             if(self.isGraph):
-                ax.plot(*zip(*mohr_centre), marker='o', color='r', ls='')
+                ax.plot(*zip(*mohr_center), marker='o', color='r', ls='')
                 ax.plot(*zip(*mohr_sigma), marker='o', color='b', ls='')
                 points = [[Stress_tensor[0][0],-Stress_tensor[0][1]],[Stress_tensor[1][1],Stress_tensor[0][1]]]
                 ax.plot(*zip(*points),marker='o', color='black', ls='')
@@ -116,26 +116,24 @@ class Stress_MohrCircle():
                 # ax.plot()
                 for i in range(len(mohr_sigma)):
                     ax.annotate("ε"+str(i+1),tuple(mohr_sigma[i]),fontsize=12)
-                for i in range(len(mohr_centre)):
-                    ax.annotate("C"+str(i+1),tuple(mohr_centre[i]),fontsize=12)
-                Circle1_2 = plt.Circle((centre1_2, 0),abs(radius1_2),fill=False, color="green")
+                for i in range(len(mohr_center)):
+                    ax.annotate("C"+str(i+1),tuple(mohr_center[i]),fontsize=12)
+                Circle1_2 = plt.Circle((center1_2, 0),abs(radius1_2),fill=False, color="green")
                 ax.add_artist(Circle1_2)
         if(self.isGraph):
             ax.minorticks_on()
-            if self.ndims == 3:
-                ax.set_aspect('equal', adjustable='box')
-            else:
-                ax.set_aspect('equal', adjustable='datalim')
+            ax.set_aspect('equal', adjustable='box')
 
             ax.spines['bottom'].set_position('center')
             ax.xaxis.set_ticks_position('bottom')
             ax.yaxis.set_ticks_position('left')
             ax.grid(which='major', axis='both', linestyle ='--')
             plt.show()
+            plt.close('all')
         if(self.ndims == 2):
-            return mohr_centre, mohr_sigma, radius ,(new_x_1, new_y_1), (new_x_2, new_y_2)
+            return mohr_center, mohr_sigma, radius ,(new_x_1, new_y_1), (new_x_2, new_y_2)
         else:
-            return mohr_centre, mohr_sigma, radius ,(sigma_NN, sigma_NS)
+            return mohr_center, mohr_sigma, radius ,(sigma_NN, sigma_NS)
     def find_Principal_Stress(self):
         if self.σ_tensor.shape == (3,3):
             a=self.σ_tensor.copy()

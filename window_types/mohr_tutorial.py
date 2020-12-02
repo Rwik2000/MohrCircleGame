@@ -9,14 +9,26 @@ from MohrCircle_stress_tut import tut_Stress_MohrCircle
 
 angle_check = 0
 def tutorialwindow(screen, prev_win, windows):
-    Small_font = game_font(20)
+    Small_font = game_font(40)
+    extra_small_font = game_font(18)
     text = Small_font.render("Tutorial Mode",1, (0,0,0))
-    screen.blit(text, (360, 100))
+    screen.blit(text, (220, 100))
 
     twodButton.draw(screen, (0,0,0))
     threedButton.draw(screen, (0,0,0))
     backButton.draw(screen, (0,0,0))
-
+    note_text = ["NOTE: This is a step-by-step tutorial to",
+                 "draw Mohr Circle for Stresses in 2-D and",
+                 "3-D only. The entire procedure for strains",
+                 "both in 2-D and 3-D are similar, the user",
+                 "has to plot (1/2)*(shear values) in 2-D",
+                 "and place half of the (1/2)*(shear values)",
+                 "in stress tensor for 3-D strain Mohr-Circle."]
+    count =0
+    for text in note_text:
+        text = extra_small_font.render(text,1,(0,0,0))
+        screen.blit(text,(180, 380+count))
+        count+=30
     for event in pygame.event.get():
         pos = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
@@ -91,7 +103,7 @@ def tut2D_step1_window(screen, prev_win, windows):
     count =0 
     for text in tut_text:
         text = Small_font.render(text,1,(0,0,0))
-        screen.blit(text,(120, 200+count))
+        screen.blit(text,(70, 200+count))
         count+=40
     backButton.draw(screen, (0,0,0))
     nextButton.draw(screen, (0,0,0))
@@ -126,12 +138,12 @@ def tut2D_step2_window(screen, prev_win, windows):
               "for the given stress state is to draw",
               "is to join the points plotted using a ",
               "straight line. Mark the point where the ",
-              "line intersects X-axis as the centre of ",
+              "line intersects X-axis as the center of ",
               "the circle" ,]
     count =0 
     for text in tut_text:
         text = Small_font.render(text,1,(0,0,0))
-        screen.blit(text,(120, 200+count))
+        screen.blit(text,(70, 200+count))
         count+=40
     backButton.draw(screen, (0,0,0))
     nextButton.draw(screen, (0,0,0))
@@ -163,8 +175,8 @@ def tut2D_step3_window(screen, prev_win, windows):
     mid_text = mid_font.render("STEP-3",1,(0,0,0))
     screen.blit(head_text, (80, 70))
     screen.blit(mid_text, (80, 150))
-    tut_text=["Now, using the centre and radius being ",
-              "the distance between the centre and one ",
+    tut_text=["Now, using the center and radius being ",
+              "the distance between the center and one ",
               "of the plotted points, draw a circle.",
               "Thus you get your Mohr's Circle",
               "The points where the circle cuts the X-axis",
@@ -172,7 +184,7 @@ def tut2D_step3_window(screen, prev_win, windows):
     count =0 
     for text in tut_text:
         text = Small_font.render(text,1,(0,0,0))
-        screen.blit(text,(120, 200+count))
+        screen.blit(text,(70, 200+count))
         count+=40
     backButton.draw(screen, (0,0,0))
     xButton = nextButton
@@ -210,9 +222,9 @@ def tut2D_step4_window(screen, prev_win, windows):
     mid_text = mid_font.render("STEP-4",1,(0,0,0))
     screen.blit(head_text, (80, 70))
     screen.blit(mid_text, (80, 150))
-    tut_text=["Now, using the centre and radius being ",
+    tut_text=["Now, using the center and radius being ",
               "To find the values of stress at an angle", 
-              "say theta. Rotate the line about the centre",
+              "say theta. Rotate the line about the center",
               "by an angle of 2*theta.", " ",
               "NOTE: the rotation should be in anticlockwise ",
               "direction with the angle is positive and",
@@ -220,7 +232,7 @@ def tut2D_step4_window(screen, prev_win, windows):
     count =0 
     for text in tut_text:
         text = Small_font.render(text,1,(0,0,0))
-        screen.blit(text,(120, 200+count))
+        screen.blit(text,(70, 200+count))
         count+=40
     backButton.draw(screen, (0,0,0))
     nextButton.draw(screen, (0,0,0))
@@ -252,7 +264,7 @@ def tut2D_step5_window(screen, prev_win, windows):
     mid_text = mid_font.render("STEP-5",1,(0,0,0))
     screen.blit(head_text, (80, 70))
     screen.blit(mid_text, (80, 150))
-    tut_text=["Now, using the centre and radius being ",
+    tut_text=["Now, using the center and radius being ",
               "Thus the new line has its end-points on",
               "the circle. These endpoints denote the new",
               "(sigma_xx, -tau_xy) and (sigma_yy, tau_xy)",
@@ -262,7 +274,7 @@ def tut2D_step5_window(screen, prev_win, windows):
     count =0 
     for text in tut_text:
         text = Small_font.render(text,1,(0,0,0))
-        screen.blit(text,(120, 200+count))
+        screen.blit(text,(70, 200+count))
         count+=40
     backButton.draw(screen, (0,0,0))
     finishButton.draw(screen, (0,0,0))
@@ -294,7 +306,7 @@ def tut2D_final_window(screen, prev_win, windows):
     mid_text = mid_font.render("Congratulations!!",1,(0,0,0))
     screen.blit(head_text, (80, 70))
     screen.blit(mid_text, (80, 150))
-    tut_text=["Now, using the centre and radius being ",
+    tut_text=["Now, using the center and radius being ",
               "you have learnt to draw a Mohr Circle",
               "and find the component of stress at various",
               "angles.",
@@ -302,7 +314,7 @@ def tut2D_final_window(screen, prev_win, windows):
     count =0 
     for text in tut_text:
         text = Small_font.render(text,1,(0,0,0))
-        screen.blit(text,(120, 200+count))
+        screen.blit(text,(70, 200+count))
         count+=40
     backButton.draw(screen, (0,0,0))
     back_to_homeButton.draw(screen, (0,0,0))
@@ -404,7 +416,7 @@ def tut3D_step1_window(screen, prev_win, windows):
     count =0 
     for text in tut_text:
         text = Small_font.render(text,1,(0,0,0))
-        screen.blit(text,(120, 200+count))
+        screen.blit(text,(70, 200+count))
         count+=30
     count=0
     for text in tens_init_text:
@@ -446,12 +458,12 @@ def tut3D_step2_window(screen, prev_win, windows):
               "lamb^3 - I1*lamb^2 + I2*lamb -I3 = 0"]
     formula_text = ["where, I1, I2, I3 are given by: " ,
               "I1 = sig_xx + sig_yy + sig_zz",
-              "I2 = sig_xx*sig_yy + sig_xx*sig_zz + sig_yy*sig_zz - tau_xy^2 - tau_xz^2 + tau_yz^2",
+              "I2 = sig_xx*sig_yy + sig_xx*sig_zz + sig_yy*sig_zz - tau_xy^2 - tau_xz^2 - tau_yz^2",
               "I3 = determinant(Tensor)"]
     count =0 
     for text in tut_text:
         text = Small_font.render(text,1,(0,0,0))
-        screen.blit(text,(120, 200+count))
+        screen.blit(text,(70, 200+count))
         count+=40
     count = 0
     for text in formula_text:
@@ -477,6 +489,7 @@ def tut3D_step3_window(screen, prev_win, windows):
     global angle_check
     Big_font = game_font(60)
     Small_font = game_font(25)
+    extra_small_font = game_font(18)
     mid_font = game_font(40)
     # print(sigma_xx_tut.text, sigma_yy_tut.text, tau_xy_tut.text, angle_tut.text)
     head_text = Big_font.render("Tutorial 3-D Mode",1, (0,0,0))
@@ -487,26 +500,26 @@ def tut3D_step3_window(screen, prev_win, windows):
                               σxy= float(tau_xy_tut.text), σyz=float(tau_yz_tut.text), σzx=float(tau_zx_tut.text))
     m.ndims = 3
     Is = m.get_I_values()
-    tut_text=["Now, using the centre and radius being ",
+    tut_text=["Now, using the center and radius being ",
               "Therefore, the corresponding values are : ",
-              "I1 = "+str(Is[0]),
-              "I2 = "+str(Is[1]),
-              "I3 = "+str(Is[2]),
+              "I1 = "+str(round(Is[0],3)),
+              "I2 = "+str(round(Is[1],3)),
+              "I3 = "+str(round(Is[2],3)),
               ]
     eqn_text = ["The next step would be to calculate the",
                 "values of lamb from previous slide.",
                 "our equation becomes : ",
-                "lamb^3 - "+str(Is[0]) + "*lamb^2 + "+str(Is[1])+"*lamb - "+str(Is[0]),
+                "lamb^3 - ("+str(round(Is[0],3)) + ")*lamb^2 + "+str(round(Is[1],3))+"*lamb -("+str(round(Is[2],3))+") = 0",
                 ]
     count =0 
     for text in tut_text:
         text = Small_font.render(text,1,(0,0,0))
-        screen.blit(text,(120, 200+count))
+        screen.blit(text,(70, 200+count))
         count+=40
     count = 0
     for text in eqn_text:
-        text = Small_font.render(text,1,(0,0,0))
-        screen.blit(text,(120, 410+count))
+        text = extra_small_font.render(text,1,(0,0,0))
+        screen.blit(text,(70, 410+count))
         count+=30
     backButton.draw(screen, (0,0,0))
     nextButton.draw(screen, (0,0,0))
@@ -538,7 +551,7 @@ def tut3D_step4_window(screen, prev_win, windows):
     m.ndims = 3
     eigen = m.get_princip_values()
     prin_stress = np.sort(eigen)[::-1]
-    tut_text=["Now, using the centre and radius being ",
+    tut_text=["Now, using the center and radius being ",
               "Solving the equation gives us : ", 
               "lamb = " + str(eigen[0]) + ", lamb = " + str(eigen[1]) + ", lamb = " + str(eigen[2]),
               " ", "Arrange the values such that sig_1",
@@ -548,7 +561,7 @@ def tut3D_step4_window(screen, prev_win, windows):
     count =0 
     for text in tut_text:
         text = Small_font.render(text,1,(0,0,0))
-        screen.blit(text,(120, 200+count))
+        screen.blit(text,(65, 200+count))
         count+=40
     backButton.draw(screen, (0,0,0))
     nextButton.draw(screen, (0,0,0))
@@ -584,7 +597,7 @@ def tut3D_step5_window(screen, prev_win, windows):
     count =0 
     for text in tut_text:
         text = Small_font.render(text,1,(0,0,0))
-        screen.blit(text,(120, 200+count))
+        screen.blit(text,(70, 200+count))
         count+=40
     backButton.draw(screen, (0,0,0))
     nextButton.draw(screen,(0,0,0))
@@ -612,19 +625,19 @@ def tut3D_step6_window(screen, prev_win, windows):
     Small_font = game_font(25)
     mid_font = game_font(40)
     # print(sigma_xx_tut.text, sigma_yy_tut.text, tau_xy_tut.text, angle_tut.text)
-    head_text = Big_font.render("Tutorial 2-D Mode",1, (0,0,0))
+    head_text = Big_font.render("Tutorial 3-D Mode",1, (0,0,0))
     mid_text = mid_font.render("STEP-6",1,(0,0,0))
     screen.blit(head_text, (80, 70))
     screen.blit(mid_text, (80, 150))
-    tut_text=["Using the centres, and the corresponding ",
+    tut_text=["Using the centers, and the corresponding ",
               "principle stresse, draw circles with radii",
-              "being distance between the centres and their",
+              "being distance between the centers and their",
               "corresponding principle stresses.",
               ]
     count =0 
     for text in tut_text:
         text = Small_font.render(text,1,(0,0,0))
-        screen.blit(text,(120, 200+count))
+        screen.blit(text,(70, 200+count))
         count+=40
     backButton.draw(screen, (0,0,0))
     xButton = nextButton
@@ -660,7 +673,7 @@ def tut3D_step7_window(screen, prev_win, windows):
     extra_small_font = game_font(18)
     mid_font = game_font(40)
     # print(sigma_xx_tut.text, sigma_yy_tut.text, tau_xy_tut.text, angle_tut.text)
-    head_text = Big_font.render("Tutorial 2-D Mode",1, (0,0,0))
+    head_text = Big_font.render("Tutorial 3-D Mode",1, (0,0,0))
     mid_text = mid_font.render("STEP-7",1,(0,0,0))
     screen.blit(head_text, (80, 70))
     screen.blit(mid_text, (80, 150))
@@ -678,13 +691,13 @@ def tut3D_step7_window(screen, prev_win, windows):
     tut2_text=["use the following formula to obtain normal",
                "and shear stress : ",
                "sig_normal = l^2*sig_1+m^2*sig_2+n^2*sig_3",
-               "sig_shear = l^2*sig_1^2 + m^2*sig_2^2 + n^2*sig_3^2 - sig_normal^2"
-               "PLot these points"
+               "sig_shear = l^2*sig_1^2 + m^2*sig_2^2 + n^2*sig_3^2 - sig_normal^2",
+               "PLot the point (sig_normal, sig_shear)"
                ]
     count =0 
     for text in tut_text:
         text = Small_font.render(text,1,(0,0,0))
-        screen.blit(text,(120, 180+count))
+        screen.blit(text,(70, 200+count))
         count+=40
     count =0
     for text in tut2_text:
@@ -693,6 +706,7 @@ def tut3D_step7_window(screen, prev_win, windows):
         count+=25
     backButton.draw(screen, (0,0,0))
     graphButton.draw(screen, (0,0,0))
+    finishButton.draw(screen, (0,0,0))
     for event in pygame.event.get():
         pos = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:  
@@ -704,7 +718,7 @@ def tut3D_step7_window(screen, prev_win, windows):
                 tut3D_step7_window_check.endCurrent()
             if finishButton.isOver(pos):
                 tut3D_final_window_check.makeCurrent()
-                tut3D_step5_window_check.endCurrent()
+                tut3D_step7_window_check.endCurrent()
             if graphButton.isOver(pos):
                 mohr_3d = Stress_MohrCircle(σxx= float(sigma_xx_tut.text), σyy= float(sigma_yy_tut.text),σzz= float(sigma_zz_tut.text), 
                                                 σxy= float(tau_xy_tut.text), σyz= float(tau_yz_tut.text),σzx= float(tau_zx_tut.text))
@@ -722,11 +736,11 @@ def tut3D_final_window(screen, prev_win, windows):
     Small_font = game_font(25)
     mid_font = game_font(40)
     # print(sigma_xx_tut.text, sigma_yy_tut.text, tau_xy_tut.text, angle_tut.text)
-    head_text = Big_font.render("Tutorial 2-D Mode",1, (0,0,0))
+    head_text = Big_font.render("Tutorial 3-D Mode",1, (0,0,0))
     mid_text = mid_font.render("Congratulations!!",1,(0,0,0))
     screen.blit(head_text, (80, 70))
     screen.blit(mid_text, (80, 150))
-    tut_text=["Now, using the centre and radius being ",
+    tut_text=["Now, using the center and radius being ",
               "you have learnt to draw a Mohr Circle",
               "and find the component of stress at various",
               "angles.",

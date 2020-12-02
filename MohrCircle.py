@@ -9,56 +9,56 @@ def Plot_Mohr_Circle(Stress, dim):
     global sigma1, sigma2, sigma3
     sigma1=Stress[0]
     sigma2=Stress[1]
-    centre1_2=round((sigma1+sigma2)/2, 4)
-    radius1_2=abs(sigma2-centre1_2)
+    center1_2=round((sigma1+sigma2)/2, 4)
+    radius1_2=abs(sigma2-center1_2)
 
     if dim==3:
         sigma3=Stress[2]        
-        centre1_3=round((sigma1+sigma3)/2, 4)
-        centre2_3=round((sigma2+sigma3)/2, 4)    
-        radius1_3=abs(sigma3-centre1_3)    
-        radius2_3=abs(sigma2-centre2_3)
+        center1_3=round((sigma1+sigma3)/2, 4)
+        center2_3=round((sigma2+sigma3)/2, 4)    
+        radius1_3=abs(sigma3-center1_3)    
+        radius2_3=abs(sigma2-center2_3)
         
         print("The Principal Stresses are: \nσ1: {0} \nσ2: {1} \nσ3: {2} \n".format(sigma1,sigma2,sigma3))
         print("Maximum Shear Stress τ_max: " +str(round((sigma1-sigma3)/2, 3)))
-        print("\nThe Centres of the circle are: \nC1: {0} \nC2: {1} \nC3: {2} \n".format(centre1_3,centre1_2,centre2_3))
+        print("\nThe centers of the circle are: \nC1: {0} \nC2: {1} \nC3: {2} \n".format(center1_3,center1_2,center2_3))
     else:
         print("The Principal Stresses are: \nσ1: {0} \nσ2: {1} \n".format(sigma1,sigma2))
         print("Maximum Shear Stress τ_max: " +str(round((sigma1-sigma2)/2, 3))) 
-        print("\nThe Centre of the circle are: \nC1: {0}".format(centre1_2))           
+        print("\nThe center of the circle are: \nC1: {0}".format(center1_2))           
 
     
 
     _, ax = plt.subplots()
     if dim == 3:
-        ax.set(xlim=(centre1_3-(radius1_3+0.5), sigma1+0.5), ylim = (-(radius1_3+1), radius1_3+1))
-        mohr_centre=[[centre1_3,0],[centre2_3,0],[centre1_2,0]]
+        ax.set(xlim=(center1_3-(radius1_3+0.5), sigma1+0.5), ylim = (-(radius1_3+1), radius1_3+1))
+        mohr_center=[[center1_3,0],[center2_3,0],[center1_2,0]]
         mohr_sigma=[[sigma1,0],[sigma2,0],[sigma3,0]]
-        ax.plot(*zip(*mohr_centre), marker='o', color='r', ls='')
+        ax.plot(*zip(*mohr_center), marker='o', color='r', ls='')
         ax.plot(*zip(*mohr_sigma), marker='o', color='b', ls='')
         for i in range(len(mohr_sigma)):
             ax.annotate("σ"+str(i+1),tuple(mohr_sigma[i]),fontsize=12)
-        for i in range(len(mohr_centre)):
-            ax.annotate("C"+str(i+1),tuple(mohr_centre[i]),fontsize=12)
+        for i in range(len(mohr_center)):
+            ax.annotate("C"+str(i+1),tuple(mohr_center[i]),fontsize=12)
 
-        Circle1_3 = plt.Circle((centre1_3, 0),abs(radius1_3),fill=False, color="red")
-        Circle2_3 = plt.Circle((centre2_3, 0),abs(radius2_3),fill=False, color="blue")
-        Circle1_2 = plt.Circle((centre1_2, 0),abs(radius1_2),fill=False, color="green")
+        Circle1_3 = plt.Circle((center1_3, 0),abs(radius1_3),fill=False, color="red")
+        Circle2_3 = plt.Circle((center2_3, 0),abs(radius2_3),fill=False, color="blue")
+        Circle1_2 = plt.Circle((center1_2, 0),abs(radius1_2),fill=False, color="green")
         ax.add_artist(Circle1_3)
         ax.add_artist(Circle1_2)
         ax.add_artist(Circle2_3)
         ax.minorticks_on()
     elif dim ==2:
-        ax.set(xlim=(centre1_2-(radius1_2+0.5), sigma1+0.5), ylim = (-(radius1_2+0.5), radius1_2+0.5))
-        mohr_centre=[[centre1_2,0]]
+        ax.set(xlim=(center1_2-(radius1_2+0.5), sigma1+0.5), ylim = (-(radius1_2+0.5), radius1_2+0.5))
+        mohr_center=[[center1_2,0]]
         mohr_sigma=[[sigma1,0],[sigma2,0]]
-        ax.plot(*zip(*mohr_centre), marker='o', color='r', ls='')
+        ax.plot(*zip(*mohr_center), marker='o', color='r', ls='')
         ax.plot(*zip(*mohr_sigma), marker='o', color='b', ls='')
         for i in range(len(mohr_sigma)):
             ax.annotate("σ"+str(i+1),tuple(mohr_sigma[i]),fontsize=12)
-        for i in range(len(mohr_centre)):
-            ax.annotate("C"+str(i+1),tuple(mohr_centre[i]),fontsize=12)
-        Circle1_2 = plt.Circle((centre1_2, 0),abs(radius1_2),fill=False, color="green")
+        for i in range(len(mohr_center)):
+            ax.annotate("C"+str(i+1),tuple(mohr_center[i]),fontsize=12)
+        Circle1_2 = plt.Circle((center1_2, 0),abs(radius1_2),fill=False, color="green")
         ax.add_artist(Circle1_2)
 
     ax.minorticks_on()

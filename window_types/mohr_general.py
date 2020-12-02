@@ -7,7 +7,9 @@ from utilities.mohr_screen import *
 from MohrCircle_stress import Stress_MohrCircle
 from MohrCircle_strain import Strain_MohrCircle
 # from MohrCircle_strain import strain_execute
-
+is_new_input = False
+sigma1, sigma2 = None, None
+box_img = pygame.image.load("Images/box.png")
 stress_strain_win_select = [0,0]
 def generalwindow(screen, prev_win, windows):
     Small_font = game_font(20)
@@ -60,7 +62,9 @@ def generalwindow(screen, prev_win, windows):
             else:
                 backButton.color = (180, 0, 0)
 def box_text_input(event, input_boxes):
-    if event.type == pygame.KEYDOWN:            
+    global is_new_input
+    if event.type == pygame.KEYDOWN:
+        is_new_input = True
         for box in input_boxes.keys():
             if box.active:
                 if event.key == pygame.K_RETURN:
@@ -83,7 +87,8 @@ def box_text_input(event, input_boxes):
                                 if len(box.text) == 0:
                                     if event.unicode == "-" or event.unicode=='.':
                                         box.text +=event.unicode 
-
+    else:
+        is_new_input = False
 def gen_stress_strain_window(screen, prev_win, windows):
     global stress_strain_win_select
     stress_strain_win_select = [0,0]
@@ -127,13 +132,46 @@ def gen_stress_strain_window(screen, prev_win, windows):
                 backButton.color = (180, 0, 0)
 
 def gen2D_stress_input_window(screen, prev_win, windows): 
+    global box_img, is_new_input, sigma1, sigma2
     clock = pygame.time.Clock()
     input_boxes = {sigma_xx_gen:"sigma_xx", sigma_yy_gen:"sigma_yy", tau_xy_gen:"tau_xy", angle_gen:"angle"}
     Small_font = game_font(20)
+    # ang = 90
+    if(angle_gen.text in ["-","","+"]):
+        box_img_cp = pygame.transform.rotate(box_img, 0)
+    else:
+        box_img_cp = pygame.transform.rotate(box_img, float(angle_gen.text))
+    screen.blit(box_img_cp,(480, 270))
+    # ang = 
     head_text = Small_font.render("General 2- D Mode",1, (0,0,0))
     for box in input_boxes.keys():
         box_text = Small_font.render(input_boxes[box]+":",1,(0,0,0))
         screen.blit(box_text,(box.x - 120, box.y))
+    
+    try:
+        if is_new_input == True: 
+            mohr_2d = Stress_MohrCircle(σxx= float(sigma_xx_gen.text), σyy= float(sigma_yy_gen.text),σzz= 0, 
+                                                    σxy= float(tau_xy_gen.text), σyz=0, σzx=0)
+            mohr_2d.ndims = 2
+            mohr_2d.isGraph = False
+            if(angle_gen.text!=''):
+                mohr_2d.isAngle_stress = True
+                mohr_2d.reqAngle_stress_2d = float(angle_gen.text)
+            
+            _,sig,_,_,_ = mohr_2d.stress_execute()
+            sigma1, sigma2 = sig[0][0], sig[1][0]
+            answer_txt = "sigma_1 : "+str(sigma1)+"  sigma_2 : "+str(sigma2)
+            answer_txt = Small_font.render(answer_txt,1,(0,0,0))
+            screen.blit(answer_txt, (80, 540)) 
+        else:
+            answer_txt = "sigma_1 : "+str(sigma1)+"  sigma_2 : "+str(sigma2)
+            answer_txt = Small_font.render(answer_txt,1,(0,0,0))
+            screen.blit(answer_txt, (80, 540)) 
+    except:
+        answer_txt = "sigma_1 :   sigma_2 : "
+        answer_txt = Small_font.render(answer_txt,1,(0,0,0))
+        screen.blit(answer_txt, (80, 540)) 
+
     screen.blit(head_text, (360, 100))  
     backButton.draw(screen, (0,0,0))
     enterButton.draw(screen, (0,0,0))
@@ -152,7 +190,7 @@ def gen2D_stress_input_window(screen, prev_win, windows):
                                                 σxy= float(tau_xy_gen.text), σyz=0, σzx=0)
                     mohr_2d.ndims = 2
                     mohr_2d.isGraph = True
-                    if(angle_gen!=''):
+                    if(angle_gen.text!=''):
                         mohr_2d.isAngle_stress = True
                         mohr_2d.reqAngle_stress_2d = float(angle_gen.text)
                     mohr_2d.stress_execute()
@@ -347,8 +385,8 @@ def gen3D_strain_input_window(screen, prev_win, windows):
             if enterButton.isOver(pos):
                 mohrCircle_input = []
                 try:
-                    mohr_3d = Strain_MohrCircle(𝜏xx= float(epsi_xx_gen.text), 𝜏yy= float(epsi_yy_gen.text),𝜏zz= float(epsi_zz_gen.text), 
-                                                𝜏xy= float(epsi_xy_gen.text), 𝜏yz= float(epsi_yz_gen.text),𝜏zx= float(epsi_zx_gen.text))
+                    mohr_3d = Strain_MohrCircle(εxx= float(epsi_xx_gen.text), εyy= float(epsi_yy_gen.text),εzz= float(epsi_zz_gen.text), 
+                                                εxy= float(epsi_xy_gen.text), εyz= float(epsi_yz_gen.text),εzx= float(epsi_zx_gen.text))
                     mohr_3d.ndims = 3
                     mohr_3d.isGraph = True
                     if(angle1_gen.text!='' and angle2_gen.text!= ''):
