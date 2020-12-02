@@ -35,21 +35,38 @@ class Strain_MohrCircle():
             radius1_3=abs(epsi3-center1_3)    
             radius2_3=abs(epsi2-center2_3)
             print("The Principal Straines are: \nε1: {0} \nε2: {1} \nε3: {2} \n".format(epsi1,epsi2,epsi3))
-            print("Maximum Shear Strain τ_max: " +str(round((epsi1-epsi3)/2, 3)))
+            print("Maximum Shear Strain epsi_max: " +str(round((epsi1-epsi3)/2, 3)))
             print("\nThe centers of the circle are: \nC1: {0} \nC2: {1} \nC3: {2} \n".format(center1_3,center1_2,center2_3))
         else:
             print("The Principal Straines are: \nε1: {0} \nε2: {1} \n".format(epsi1,epsi2))
-            print("Maximum Shear Strain τ_max: " +str(round((epsi1-epsi2)/2, 3))) 
+            print("Maximum Shear Strain epsi_max: " +str(round((epsi1-epsi2)/2, 3))) 
             print("\nThe center of the circle are: \nC1: {0}".format(center1_2))           
 
         
-
-        _, ax = plt.subplots()
+        new_x_1, new_x_2,new_y_1,new_y_2 = None, None, None, None
+        epsi_NN,epsi_NS = None, None
+        radius = []
+        ax = None
+        if self.isGraph:
+            _, ax = plt.subplots()
         if self.ndims == 3:
-            ax.set(xlim=(center1_3-(radius1_3+0.5), epsi1+0.5), ylim = (-(radius1_3+1), radius1_3+1))
+            radius = [radius1_2,radius2_3,radius1_3]
             mohr_center=[[center1_3,0],[center2_3,0],[center1_2,0]]
             mohr_epsi=[[epsi1,0],[epsi2,0],[epsi3,0]]
+            if(self.isAngle_strain):
+                l = self.reqAngle_normal_3d[0]
+                m = self.reqAngle_normal_3d[1]
+                n2 = 1 - l**2 - m**2
+                print(l,m,n2)
+                if(n2<0):
+                    print("Invalid Angle input!!!!!")
+                    raise ValueError('Bad input!')
+                # else:
+                n = np.sqrt(n2)
+                epsi_NN = (l**2)*epsi1 + (m**2)*epsi2 + (n**2)*epsi3
+                epsi_NS = np.sqrt((l**2)*epsi1**2 + (m**2)*epsi2**2 + (n**2)*epsi3**2 - epsi_NN**2)
             if(self.isGraph):
+                ax.set(xlim=(center1_3-(radius1_3+0.5), epsi1+0.5), ylim = (-(radius1_3+1), radius1_3+1))
                 ax.plot(*zip(*mohr_center), marker='o', color='r', ls='')
                 ax.plot(*zip(*mohr_epsi), marker='o', color='b', ls='')
                 for i in range(len(mohr_epsi)):
@@ -62,17 +79,6 @@ class Strain_MohrCircle():
                 Circle1_2 = plt.Circle((center1_2, 0),abs(radius1_2),fill=False, color="green")
                 print(self.isAngle_strain)
                 if(self.isAngle_strain):
-                    l = self.reqAngle_normal_3d[0]
-                    m = self.reqAngle_normal_3d[1]
-                    n2 = 1 - l**2 - m**2
-                    print(l,m,n2)
-                    if(n2<0):
-                        print("Invalid Angle input!!!!!")
-                        raise ValueError('Bad input!')
-                    # else:
-                    n = np.sqrt(n2)
-                    epsi_NN = (l**2)*epsi1 + (m**2)*epsi2 + (n**2)*epsi3
-                    epsi_NS = np.sqrt((l**2)*epsi1**2 + (m**2)*epsi2**2 + (n**2)*epsi3**2 - epsi_NN**2)
                     new_points = [[epsi_NN,epsi_NS]]
                     print(new_points)
                     ax.plot(*zip(*new_points),marker='o', color='purple', ls='')
@@ -82,10 +88,24 @@ class Strain_MohrCircle():
                 ax.add_artist(Circle2_3)
                 ax.minorticks_on()
         elif self.ndims ==2:
-            ax.set(xlim=(center1_2-(radius1_2+0.5), epsi1+0.5), ylim = (-(radius1_2+0.5), radius1_2+0.5))
+            radius = [radius1_2]
             mohr_center=[[center1_2,0]]
             mohr_epsi=[[epsi1,0],[epsi2,0]]
+            if(self.isAngle_strain):
+                try:
+                    curr_angle = np.arctan((Strain_tensor[0][1])/(Strain_tensor[0][0]-center1_2))
+                except:
+                    if(Strain_tensor[0][1]>=0):
+                        curr_angle = np.deg2rad(90)
+                    else:
+                        curr_angle = np.deg2rad(-90)
+                total_angle = curr_angle + np.deg2rad(self.reqAngle_strain_2d)
+                new_x_1 = radius1_2*np.cos(total_angle) + center1_2
+                new_y_1 = radius1_2*np.sin(total_angle)    
+                new_x_2 = radius1_2*np.cos(total_angle + np.deg2rad(180))+center1_2
+                new_y_2 = radius1_2*np.sin(total_angle + np.deg2rad(180))
             if(self.isGraph):
+                ax.set(xlim=(center1_2-(radius1_2+0.5), epsi1+0.5), ylim = (-(radius1_2+0.5), radius1_2+0.5))
                 ax.plot(*zip(*mohr_center), marker='o', color='r', ls='')
                 ax.plot(*zip(*mohr_epsi), marker='o', color='b', ls='')
                 points = [[Strain_tensor[0][0],-Strain_tensor[0][1]],[Strain_tensor[1][1],Strain_tensor[0][1]]]
@@ -93,41 +113,32 @@ class Strain_MohrCircle():
                 ax.plot([Strain_tensor[0][0],Strain_tensor[1][1]],[-Strain_tensor[0][1],Strain_tensor[0][1]])
                 ax.annotate("(εxx ,-γxy)",tuple([Strain_tensor[0][0], - Strain_tensor[0][1]]),fontsize = 12)
                 ax.annotate("(εyy , γxy)",tuple([Strain_tensor[1][1],   Strain_tensor[0][1]]),fontsize = 12)
-                
                 if(self.isAngle_strain):
-                    try:
-                        curr_angle = np.arctan((Strain_tensor[0][1])/(Strain_tensor[0][0]-center1_2))
-                    except:
-                        if(Strain_tensor[0][1]>=0):
-                            curr_angle = np.deg2rad(90)
-                        else:
-                            curr_angle = np.deg2rad(-90)
-                    total_angle = curr_angle + np.deg2rad(self.reqAngle_strain_2d)
-                    new_x_1 = radius1_2*np.cos(total_angle) + center1_2
-                    new_y_1 = radius1_2*np.sin(total_angle)    
-                    new_x_2 = radius1_2*np.cos(total_angle + np.deg2rad(180))+center1_2
-                    new_y_2 = radius1_2*np.sin(total_angle + np.deg2rad(180))
                     new_points = [[new_x_1,new_y_1],[new_x_2,new_y_2]]
                     ax.plot(*zip(*new_points),marker='o', color='black', ls='')
                     ax.plot([new_x_1,new_x_2],[new_y_1,new_y_2])
-                ax.plot()
+                # ax.plot()
+                for i in range(len(mohr_epsi)):
+                    ax.annotate("ε"+str(i+1),tuple(mohr_epsi[i]),fontsize=12)
+                for i in range(len(mohr_center)):
+                    ax.annotate("C"+str(i+1),tuple(mohr_center[i]),fontsize=12)
                 Circle1_2 = plt.Circle((center1_2, 0),abs(radius1_2),fill=False, color="green")
                 ax.add_artist(Circle1_2)
         if(self.isGraph):
-            for i in range(len(mohr_epsi)):
-                ax.annotate("ε"+str(i+1),tuple(mohr_epsi[i]),fontsize=12)
-            for i in range(len(mohr_center)):
-                ax.annotate("C"+str(i+1),tuple(mohr_center[i]),fontsize=12)
             ax.minorticks_on()
+            ax.set_aspect('equal', adjustable='box')
+
             ax.spines['bottom'].set_position('center')
             ax.xaxis.set_ticks_position('bottom')
             ax.yaxis.set_ticks_position('left')
-            ax.set_aspect('equal', adjustable='datalim')
-
             ax.grid(which='major', axis='both', linestyle ='--')
             plt.show()
+            plt.close('all')
 
-        return mohr_center
+        if(self.ndims == 2):
+            return mohr_center, mohr_epsi, radius ,(new_x_1, new_y_1), (new_x_2, new_y_2)
+        else:
+            return mohr_center, mohr_epsi, radius ,(sigma_NN, sigma_NS)
     def find_Principal_Strain(self):
         if self.ε_tensor.shape == (3,3):
             a=self.ε_tensor.copy()

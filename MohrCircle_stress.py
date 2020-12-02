@@ -50,7 +50,6 @@ class Stress_MohrCircle():
         if self.isGraph:
             _, ax = plt.subplots()
         if self.ndims == 3:
-            ax.set(xlim=(center1_3-(radius1_3+0.5), sigma1+0.5), ylim = (-(radius1_3+1), radius1_3+1))
             radius = [radius1_2,radius2_3,radius1_3]
             mohr_center=[[center1_3,0],[center2_3,0],[center1_2,0]]
             mohr_sigma=[[sigma1,0],[sigma2,0],[sigma3,0]]
@@ -67,6 +66,8 @@ class Stress_MohrCircle():
                 sigma_NN = (l**2)*sigma1 + (m**2)*sigma2 + (n**2)*sigma3
                 sigma_NS = np.sqrt((l**2)*sigma1**2 + (m**2)*sigma2**2 + (n**2)*sigma3**2 - sigma_NN**2)
             if(self.isGraph):
+                ax.set(xlim=(center1_3-(radius1_3+0.5), sigma1+0.5), ylim = (-(radius1_3+1), radius1_3+1))
+
                 ax.plot(*zip(*mohr_center), marker='o', color='r', ls='')
                 ax.plot(*zip(*mohr_sigma), marker='o', color='b', ls='')
                 for i in range(len(mohr_sigma)):
