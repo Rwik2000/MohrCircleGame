@@ -8,7 +8,7 @@ from MohrCircle_stress import Stress_MohrCircle
 from MohrCircle_strain import Strain_MohrCircle
 # from MohrCircle_strain import strain_execute
 is_new_input = False
-sigma1, sigma2, sigma3 = None, None,None
+sigma1, sigma2, sigma3, curr_angle = None, None,None,None
 epsi1, epsi2, epsi3 = None, None,None
 
 stress_strain_win_select = [0,0]
@@ -156,7 +156,7 @@ def gen_stress_strain_window(screen, prev_win, windows):
                 backButton.color = (180, 0, 0)
 
 def gen2D_stress_input_window(screen, prev_win, windows): 
-    global box_img, is_new_input, sigma1, sigma2
+    global box_img, is_new_input, sigma1, sigma2, curr_angle
     clock = pygame.time.Clock()
     input_boxes = {sigma_xx_gen:"sigma_xx", sigma_yy_gen:"sigma_yy", tau_xy_gen:"tau_xy", angle_gen:"angle"}
     Small_font = game_font(20)
@@ -183,18 +183,21 @@ def gen2D_stress_input_window(screen, prev_win, windows):
             if(angle_gen.text!=''):
                 mohr_2d.isAngle_stress = True
                 mohr_2d.reqAngle_stress_2d = float(angle_gen.text)
-            _,sig,_,_,_ = mohr_2d.stress_execute()
+            _,sig,_,_,_,curr_angle = mohr_2d.stress_execute()
             sigma1, sigma2 = sig[0][0], sig[1][0]
-            answer_txt = "sigma_1 : "+str(sigma1)+"  sigma_2 : "+str(sigma2)
+            
+            curr_angle = round(np.rad2deg(curr_angle),2)
+            answer_txt = "sigma_1 : "+str(sigma1)+", sigma_2 : "+str(sigma2) + ", phi : "+str(curr_angle)+" deg"
             answer_txt = Small_font.render(answer_txt,1,(0,0,0))
             screen.blit(answer_txt, (80, 540)) 
         else:
-            answer_txt = "sigma_1 : "+str(sigma1)+"  sigma_2 : "+str(sigma2)
+            # print(curr_angle)
+            answer_txt = "sigma_1 : "+str(sigma1)+", sigma_2 : "+str(sigma2) + ", phi : "+str(curr_angle) +" deg"
             answer_txt = Small_font.render(answer_txt,1,(0,0,0))
             screen.blit(answer_txt, (80, 540)) 
-    except:
+    except ValueError:
         # print(e)
-        answer_txt = "sigma_1 :   sigma_2 : "
+        answer_txt = "sigma_1 :   sigma_2 :   phi"
         answer_txt = Small_font.render(answer_txt,1,(0,0,0))
         screen.blit(answer_txt, (80, 540)) 
 
@@ -344,7 +347,7 @@ def gen3D_stress_input_window(screen, prev_win, windows):
     clock.tick(30)
 
 def gen2D_strain_input_window(screen, prev_win, windows): 
-    global epsi1, epsi2, is_new_input
+    global epsi1, epsi2, is_new_input, curr_angle
     clock = pygame.time.Clock()
     input_boxes = {epsi_xx_gen:"epsi_xx", epsi_yy_gen:"epsi_yy", epsi_xy_gen:"epsi_xy", angle_gen:"angle"}
     Small_font = game_font(20)
@@ -369,18 +372,19 @@ def gen2D_strain_input_window(screen, prev_win, windows):
             if(angle_gen.text!=''):
                 mohr_2d.isAngle_strain = True
                 mohr_2d.reqAngle_strain_2d = float(angle_gen.text)
-            _,sig,_,_,_ = mohr_2d.strain_execute()
+            _,sig,_,_,_,curr_angle = mohr_2d.strain_execute()
             epsi1, epsi2 = sig[0][0], sig[1][0]
-            answer_txt = "epsi_1 : "+str(epsi1)+"  epsi_2 : "+str(epsi2)
+            curr_angle = round(np.rad2deg(curr_angle),2)
+            answer_txt = "epsi_1 : "+str(epsi1)+"  epsi_2 : "+str(epsi2) + ", phi : "+str(curr_angle)+" deg"
             answer_txt = Small_font.render(answer_txt,1,(0,0,0))
             screen.blit(answer_txt, (80, 540)) 
         else:
-            answer_txt = "epsi_1 : "+str(epsi1)+"  epsi_2 : "+str(epsi2)
+            answer_txt = "epsi_1 : "+str(epsi1)+"  epsi_2 : "+str(epsi2)+ ", phi : "+str(curr_angle) +"deg"
             answer_txt = Small_font.render(answer_txt,1,(0,0,0))
             screen.blit(answer_txt, (80, 540))
     except:
         # print(e)
-        answer_txt = "epsi_1 :   epsi_2 : "
+        answer_txt = "epsi_1 :   epsi_2 :   phi : "
         answer_txt = Small_font.render(answer_txt,1,(0,0,0))
         screen.blit(answer_txt, (80, 540))
 

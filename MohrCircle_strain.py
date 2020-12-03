@@ -66,7 +66,7 @@ class Strain_MohrCircle():
 
         
         new_x_1, new_x_2,new_y_1,new_y_2 = None, None, None, None
-        epsi_NN,epsi_NS = None, None
+        epsi_NN,epsi_NS, princip_angle = None, None, None
         radius = []
         self.ax = None
         if self.isGraph:
@@ -113,15 +113,20 @@ class Strain_MohrCircle():
             radius = [radius1_2]
             mohr_center=[[center1_2,0]]
             mohr_epsi=[[epsi1,0],[epsi2,0]]
+            try:
+                curr_angle = np.arctan((Strain_tensor[0][1])/(Strain_tensor[0][0]-center1_2))
+                princip_angle = np.arctan(-(Strain_tensor[0][1])/(-Strain_tensor[0][0] +center1_2))/2
+            except:
+                if(Strain_tensor[0][1]>=0):
+                    curr_angle = np.deg2rad(90)
+                    princip_angle = np.arctan(-(Strain_tensor[0][1])/(Strain_tensor[0][0]-center1_2))/2
+
+                else:
+                    curr_angle = np.deg2rad(-90)
+                    princip_angle = np.arctan(-(Strain_tensor[0][1])/(Strain_tensor[0][0]-center1_2))/2
+
             if(self.isAngle_strain):
-                try:
-                    curr_angle = np.arctan((Strain_tensor[0][1])/(Strain_tensor[0][0]-center1_2))
-                except:
-                    if(Strain_tensor[0][1]>=0):
-                        curr_angle = np.deg2rad(90)
-                    else:
-                        curr_angle = np.deg2rad(-90)
-                print(curr_angle)
+                
                 total_angle = np.deg2rad(2*self.reqAngle_strain_2d)
                 # print(np.rad2deg(total_angle))
                 # new_x_1 = radius1_2*np.cos(total_angle) + center1_2
@@ -185,7 +190,7 @@ class Strain_MohrCircle():
             plt.close('all')
 
         if(self.ndims == 2):
-            return mohr_center, mohr_epsi, radius ,(new_x_1, new_y_1), (new_x_2, new_y_2)
+            return mohr_center, mohr_epsi, radius ,(new_x_1, new_y_1), (new_x_2, new_y_2), princip_angle
         else:
             return mohr_center, mohr_epsi, radius ,(epsi_NN, epsi_NS)
     def find_Principal_Strain(self):

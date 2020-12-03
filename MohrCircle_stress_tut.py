@@ -88,7 +88,7 @@ class tut_Stress_MohrCircle():
     def plot_cent(self):
         self.is_centre = True
         if(self.ndims == 2):
-            self.mohr_cent,_,_,_,_ = self._calc_mohr()
+            self.mohr_cent,_,_,_,_,_ = self._calc_mohr()
             self.figs,self.ax = plt.subplots()
             for i in range(len(self.mohr_cent)):
                 self.ax.annotate("C"+str(i+1),tuple(self.mohr_cent[i]),fontsize=12)
@@ -133,7 +133,7 @@ class tut_Stress_MohrCircle():
 
     def plot_circle(self):
         if(self.ndims==2):
-            self.mohr_cent,self.mohr_sigma,radius,_,_ = self._calc_mohr()
+            self.mohr_cent,self.mohr_sigma,radius,_,_,_ = self._calc_mohr()
             self.figs,self.ax = plt.subplots()
             self.ax.plot(*zip(*self.mohr_cent), marker='o', color='r', ls='')
             self.ax.plot(*zip(*self.mohr_sigma),marker='o', color='black', ls='')
@@ -153,7 +153,7 @@ class tut_Stress_MohrCircle():
             self._plot(self.ax)
     def plot_angle2d(self):
         if(self.ndims==2):
-            mohr_cent,mohr_sigma,radius,new1,new2 = self._calc_mohr()
+            mohr_cent,mohr_sigma,radius,new1,new2, curr_angle = self._calc_mohr()
             self.figs,self.ax = plt.subplots()
             fin_pts = [[new1[0],new1[1]],[new2[0],new2[1]]]
             self.ax.plot(*zip(*fin_pts), marker='o', color='orange', ls='')

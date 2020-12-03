@@ -19,7 +19,7 @@ class button():
         
         if self.text != '':
             font = game_font(15)
-            text = font.render(self.text, 1, (0,0,0))
+            text = font.render(self.text, 1, (255,255,255))
             win.blit(text, (self.x + 15 , self.y + int(self.height/5)))
 
     def isOver(self, pos):
@@ -47,7 +47,9 @@ stressButton = button((180,0,0), 360, 170, 80, 30, 'STRESS')
 strainButton = button((180,0,0), 360, 300, 80, 30, 'STRAIN')
 finishButton = button((180,0,0), 680, 550, 80, 30, 'FINISH')
 
-docuButton= button((180,0,0), 320, 500, 140, 30, 'DOCUMENTATION')
+docuButton= button((180,0,0), 50, 550, 140, 30, 'DOCUMENTATION')
+aboutButton = button((180,0,0), 680, 550, 80, 30, 'ABOUT')
+
 
 class inputtextbox():
     def __init__(self, color_inactive, color_active, x,y,width,height):

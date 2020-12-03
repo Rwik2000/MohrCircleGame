@@ -8,6 +8,7 @@ from MohrCircle_stress import Stress_MohrCircle
 from MohrCircle_stress_tut import tut_Stress_MohrCircle
 
 angle_check = 0
+sigma1, sigma2, curr_angle = None,None,None
 def tutorialwindow(screen, prev_win, windows):
     Small_font = game_font(40)
     extra_small_font = game_font(18)
@@ -167,8 +168,10 @@ def tut2D_step2_window(screen, prev_win, windows):
                 req_mohr.plot_cent()
 def tut2D_step3_window(screen, prev_win, windows):
     global angle_check
+    global sigma1, sigma2, curr_angle
     Big_font = game_font(60)
     Small_font = game_font(25)
+    extra_small_font = game_font(15)
     mid_font = game_font(40)
     # print(sigma_xx_tut.text, sigma_yy_tut.text, tau_xy_tut.text, angle_tut.text)
     head_text = Big_font.render("Tutorial 2-D Mode",1, (0,0,0))
@@ -192,6 +195,28 @@ def tut2D_step3_window(screen, prev_win, windows):
         xButton = finishButton
     xButton.draw(screen, (0,0,0))
     graphButton.draw(screen, (0,0,0))
+
+
+    try:
+        mohr_2d = Stress_MohrCircle(σxx= float(sigma_xx_tut.text), σyy= float(sigma_yy_tut.text),σzz= 0, 
+                                                σxy= float(tau_xy_tut.text), σyz=0, σzx=0)
+        mohr_2d.ndims = 2
+        mohr_2d.isGraph = False
+        if(angle_gen.text!=''):
+            mohr_2d.isAngle_stress = True
+            mohr_2d.reqAngle_stress_2d = float(angle_gen.text)
+        _,sig,_,_,_,curr_angle = mohr_2d.stress_execute()
+        sigma1, sigma2 = sig[0][0], sig[1][0]
+        
+        curr_angle = round(np.rad2deg(curr_angle),2)
+        answer_txt = "sigma_1 : "+str(sigma1)+", sigma_2 : "+str(sigma2) + ", phi : "+str(curr_angle)+" deg"
+        answer_txt = extra_small_font.render(answer_txt,1,(0,0,0))
+        screen.blit(answer_txt, (50, 480))  
+    except ValueError:
+        # print(e)
+        answer_txt = "sigma_1 :   sigma_2 :   phi"
+        answer_txt = extra_small_font.render(answer_txt,1,(0,0,0))
+        screen.blit(answer_txt, (50, 480))
     for event in pygame.event.get():
         pos = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:  
@@ -213,6 +238,7 @@ def tut2D_step3_window(screen, prev_win, windows):
                                                     float(sigma_yy_tut.text),float(tau_xy_tut.text))
                 req_mohr.ndims = 2
                 req_mohr.plot_circle()
+
 def tut2D_step4_window(screen, prev_win, windows):
     Big_font = game_font(60)
     Small_font = game_font(25)

@@ -8,6 +8,8 @@ from utilities.mohr_screen import *
 
 windows = {"startwindow" : [mohr_initial.startwindow,startwindow_check],
             "enterwindow" : [mohr_initial.enterwindow, enterWindow_check],
+            "aboutwindow" : [mohr_initial.aboutwindow, aboutwindow_check],
+
             "generalwindow" : [ mohr_general.generalwindow,generalwindow_check],
             "gen2D_stress_input_window" : [mohr_general.gen2D_stress_input_window, gen2D_stress_input_window_check],
             "gen3D_stress_input_window" :[mohr_general.gen3D_stress_input_window, gen3D_stress_input_window_check],

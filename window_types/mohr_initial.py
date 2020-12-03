@@ -56,7 +56,7 @@ def enterwindow(screen, prev_win, windows):
     quizButton.draw(screen, (0,0,0))
     backButton.draw(screen, (0,0,0))
     docuButton.draw(screen, (0,0,0))
-
+    aboutButton.draw(screen,(0,0,0))
     for event in pygame.event.get():
         pos = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
@@ -76,6 +76,9 @@ def enterwindow(screen, prev_win, windows):
                 enterWindow_check.endCurrent()
             if backButton.isOver(pos):
                 startwindow_check.makeCurrent()
+                enterWindow_check.endCurrent()
+            if aboutButton.isOver(pos):
+                aboutwindow_check.makeCurrent()
                 enterWindow_check.endCurrent()
             if docuButton.isOver(pos):
                 try:
@@ -103,3 +106,40 @@ def enterwindow(screen, prev_win, windows):
                 docuButton.color = (255, 0, 0)
             else:
                 docuButton.color = (180, 0, 0)
+
+def aboutwindow(screen, prev_win, windows):
+    Small_font = game_font(20)
+    Big_font = game_font(40)
+    text = Big_font.render ("ABOUT US",1, (0,0,0))
+    screen.blit(text, (330, 100))
+    texts = ["We are a group of 4 students from IITGn.",
+            "This is a term project for the course ",
+            "ME-321 Mechanics of Deformable Bodies.",
+            "The app is targeted towards students", 
+            "encountering the topicsof Stress, Strain",
+            "Mohr's Circle. This app helps user to learn,",
+            "to draw Mohr Circle and evaluate his/her",
+            "learnings using Quiz mode."]
+    count = 0
+    for text in texts:
+        text = Small_font.render(text,1,(0,0,0))
+        screen.blit(text,(150, 200+count))
+        count+=40
+    backButton.draw(screen, (0,0,0))
+    for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.QUIT:
+            global running
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if backButton.isOver(pos):
+                enterWindow_check.makeCurrent()
+                aboutwindow_check.endCurrent()
+
+        if event.type == pygame.MOUSEMOTION:
+
+            if backButton.isOver(pos):
+                backButton.color = (255, 0, 0)
+            else:
+                backButton.color = (180, 0, 0)
+

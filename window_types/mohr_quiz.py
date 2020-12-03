@@ -11,8 +11,8 @@ import random
 from utilities.mohr_screen import *
 import time
 # quiz_question_type = ['2-D', '2-D','3-D','3-D', 'concept']
-# quiz_question_type = ['2-D','2-D','3-D','3-D','concept','concept','concept','concept','concept','concept','concept','concept' ]
-quiz_question_type = ['concept']*10
+quiz_question_type = ['2-D','2-D','3-D','3-D','concept','concept','concept']
+# quiz_question_type = ['concept']*10
 quest_nos = [1,2,3,4,5,6,7,8,9,10]
 user_concept_answer = -1
 quest_index = -1

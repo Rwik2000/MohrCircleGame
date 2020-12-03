@@ -66,7 +66,7 @@ class Stress_MohrCircle():
 
         
         new_x_1, new_x_2,new_y_1,new_y_2 = None, None, None, None
-        sigma_NN,sigma_NS = None, None
+        sigma_NN,sigma_NS, princip_angle = None, None, None
         radius = []
         initial_pts = []
         self.ax = None
@@ -114,14 +114,21 @@ class Stress_MohrCircle():
             radius = [radius1_2]
             mohr_center=[[center1_2,0]]
             mohr_sigma=[[sigma1,0],[sigma2,0]]
+            try:
+                curr_angle = np.arctan((-Stress_tensor[0][1])/(Stress_tensor[0][0]-center1_2))
+                # princip_angle = np.arcsin(-Stress_tensor[0][1]/radius1_2)/2
+                princip_angle = np.arctan(-Stress_tensor[0][1]/(-Stress_tensor[0][0] +center1_2))/2
+            except:
+                if(Stress_tensor[0][1]>=0):
+                    curr_angle = np.deg2rad(90)
+                    princip_angle = np.arcsin(-Stress_tensor[0][1]/radius1_2)/2
+
+                else:
+                    curr_angle = np.deg2rad(-90)
+                    princip_angle = np.arcsin(-Stress_tensor[0][1]/radius1_2)/2
+
             if(self.isAngle_stress):
-                try:
-                    curr_angle = np.arctan((-Stress_tensor[0][1])/(Stress_tensor[0][0]-center1_2))
-                except:
-                    if(Stress_tensor[0][1]>=0):
-                        curr_angle = np.deg2rad(90)
-                    else:
-                        curr_angle = np.deg2rad(-90)
+
                 total_angle = curr_angle + np.deg2rad(2*self.reqAngle_stress_2d)
                 # print(np.rad2deg(total_angle))
                 new_x_1 = radius1_2*np.cos(total_angle) + center1_2
@@ -181,7 +188,7 @@ class Stress_MohrCircle():
             plt.show()
             plt.close('all')
         if(self.ndims == 2):
-            return mohr_center, mohr_sigma, radius ,(new_x_1, new_y_1), (new_x_2, new_y_2)
+            return mohr_center, mohr_sigma, radius ,(new_x_1, new_y_1), (new_x_2, new_y_2), princip_angle
         else:
             return mohr_center, mohr_sigma, radius ,(sigma_NN, sigma_NS)
     def find_Principal_Stress(self):
