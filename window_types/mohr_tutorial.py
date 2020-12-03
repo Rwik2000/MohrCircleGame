@@ -292,11 +292,15 @@ def tut2D_step5_window(screen, prev_win, windows):
                 tut2D_final_window_check.makeCurrent()
                 tut2D_step5_window_check.endCurrent()
             if graphButton.isOver(pos):
-                req_mohr = tut_Stress_MohrCircle(float(sigma_xx_tut.text), 
+                req_mohr = Stress_MohrCircle(float(sigma_xx_tut.text), 
                                                     float(sigma_yy_tut.text),float(tau_xy_tut.text))
-                req_mohr.angle = float(angle_tut.text)
+                # req_mohr.angle = float(angle_tut.text)
                 req_mohr.ndims = 2
-                req_mohr.plot_angle2d()
+                # req_mohr.plot_angle2d()
+                req_mohr.isAngle_stress = True
+                req_mohr.reqAngle_stress_2d = float(angle_tut.text)
+                req_mohr.isGraph = True
+                req_mohr.stress_execute()
 def tut2D_final_window(screen, prev_win, windows):
     Big_font = game_font(60)
     Small_font = game_font(25)
@@ -565,7 +569,6 @@ def tut3D_step4_window(screen, prev_win, windows):
         count+=40
     backButton.draw(screen, (0,0,0))
     nextButton.draw(screen, (0,0,0))
-    graphButton.draw(screen, (0,0,0))
     for event in pygame.event.get():
         pos = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:  
