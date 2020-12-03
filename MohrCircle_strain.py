@@ -121,11 +121,17 @@ class Strain_MohrCircle():
                         curr_angle = np.deg2rad(90)
                     else:
                         curr_angle = np.deg2rad(-90)
-                total_angle = curr_angle + np.deg2rad(self.reqAngle_strain_2d)
-                new_x_1 = radius1_2*np.cos(total_angle) + center1_2
-                new_y_1 = radius1_2*np.sin(total_angle)    
-                new_x_2 = radius1_2*np.cos(total_angle + np.deg2rad(180))+center1_2
-                new_y_2 = radius1_2*np.sin(total_angle + np.deg2rad(180))
+                print(curr_angle)
+                total_angle = np.deg2rad(2*self.reqAngle_strain_2d)
+                # print(np.rad2deg(total_angle))
+                # new_x_1 = radius1_2*np.cos(total_angle) + center1_2
+                # new_y_1 = radius1_2*np.sin(total_angle)    
+                # new_x_2 = radius1_2*np.cos(total_angle + np.deg2rad(180))+center1_2
+                # new_y_2 = radius1_2*np.sin(total_angle + np.deg2rad(180))
+                new_x_1 = (Strain_tensor[0][0] + Strain_tensor[1][1])/2 + np.cos(total_angle)*(Strain_tensor[0][0] - Strain_tensor[1][1])/2 + Strain_tensor[0][1] * np.sin(total_angle)
+                new_y_1 = -(-np.sin(total_angle)*(Strain_tensor[0][0] - Strain_tensor[1][1]) + 2*Strain_tensor[0][1] * np.cos(total_angle))/2
+                new_x_2 = (Strain_tensor[0][0] + Strain_tensor[1][1])/2 - np.cos(total_angle)*(Strain_tensor[0][0] - Strain_tensor[1][1])/2 - Strain_tensor[0][1] * np.sin(total_angle)
+                new_y_2 = -new_y_1
             if(self.isGraph):
                 self.ax.set(xlim=(center1_2-(radius1_2+0.5), epsi1+0.5), ylim = (-(radius1_2+0.5), radius1_2+0.5))
                 self.ax.plot(*zip(*mohr_center), marker='o', color='r', ls='')
@@ -174,7 +180,7 @@ class Strain_MohrCircle():
             self.ax.yaxis.set_ticks_position('left')
             self.ax.grid(which='major', axis='both', linestyle ='--')
             plt.xlabel("ε Normal")
-            plt.ylabel("ε Shear")
+            plt.ylabel("γ/2 Shear")
             plt.show()
             plt.close('all')
 
@@ -213,13 +219,13 @@ class Strain_MohrCircle():
         # print(ε_tensor.shape)
         return Strain_MohrCircle.find_Principal_Strain(self)
 
-# m = Strain_MohrCircle(εxx= 1, εyy= 2,εzz= 3, εxy= 4, εyz= 5, εzx= 6)
-# m.ndims = 3
+# m = Strain_MohrCircle(εxx= 0, εyy= 3,εzz= 3, εxy= 4, εyz= 5, εzx= 6)
+# m.ndims = 2
 # m.isGraph = True
 # m.isAngle_strain = True
-# m.reqAngle_normal_3d = [np.cos(0), round(np.cos(0),3), np.cos(90)]
-# print(m.reqAngle_normal_3d)
-# # m.isAngle_strain = True
-# # m.reqAngle_strain_2d = 45
+# # m.reqAngle_normal_3d = [np.cos(0), round(np.cos(0),3), np.cos(90)]
+# # print(m.reqAngle_normal_3d)
+# m.isAngle_strain = True
+# m.reqAngle_strain_2d = 0
 # m.strain_execute()
 

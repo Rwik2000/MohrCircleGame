@@ -140,8 +140,8 @@ class Stress_MohrCircle():
                 self.ax.plot([Stress_tensor[0][0],Stress_tensor[1][1]],[-Stress_tensor[0][1],Stress_tensor[0][1]])
                 if(self.isAngle_stress):
                     new_points = [[new_x_1,new_y_1],[new_x_2,new_y_2]]
-                    self.ax.annotate('(σ\'xx,-τ\'xy)',tuple(new_points[0]),fontsize = 12)
-                    self.ax.annotate('(σ\'yy,τ\'xy)',tuple(new_points[1]),fontsize = 12)
+                    self.ax.annotate('(σ\'yy, τ\'xy)',tuple(new_points[0]),fontsize = 12)
+                    self.ax.annotate('(σ\'xx,-τ\'xy)',tuple(new_points[1]),fontsize = 12)
                     self.ax.plot(*zip(*new_points),marker='o', color='black', ls='')
                     self.ax.plot([new_x_1,new_x_2],[new_y_1,new_y_2])
                 for i in range(len(mohr_sigma)):
