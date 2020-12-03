@@ -13,6 +13,8 @@ class Screen_check():
 
 startwindow_check = Screen_check()
 enterWindow_check = Screen_check()
+aboutwindow_check = Screen_check()
+
 
 generalwindow_check = Screen_check()
 gen2D_stress_input_window_check = Screen_check()
