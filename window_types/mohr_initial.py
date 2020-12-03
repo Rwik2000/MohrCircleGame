@@ -6,6 +6,7 @@ import random
 from utilities.mohr_fonts import game_font
 from utilities.mohr_user_input import *
 from utilities.mohr_screen import *
+import os
 
 iitgn_logo = pygame.image.load("Images/iitgn.png")
 iitgn_logo = pygame.transform.scale(iitgn_logo, (250, 250))
@@ -54,7 +55,7 @@ def enterwindow(screen, prev_win, windows):
     tutorialButton.draw(screen, (0,0,0))
     quizButton.draw(screen, (0,0,0))
     backButton.draw(screen, (0,0,0))
-
+    docuButton.draw(screen, (0,0,0))
 
     for event in pygame.event.get():
         pos = pygame.mouse.get_pos()
@@ -76,6 +77,11 @@ def enterwindow(screen, prev_win, windows):
             if backButton.isOver(pos):
                 startwindow_check.makeCurrent()
                 enterWindow_check.endCurrent()
+            if docuButton.isOver(pos):
+                try:
+                    os.system('Mohr_Circle_Documentation.pdf')
+                except:
+                    pass
         if event.type == pygame.MOUSEMOTION:
             if generalButton.isOver(pos):
                 generalButton.color = (255, 0, 0)
@@ -93,3 +99,7 @@ def enterwindow(screen, prev_win, windows):
                 backButton.color = (255, 0, 0)
             else:
                 backButton.color = (180, 0, 0)
+            if docuButton.isOver(pos):
+                docuButton.color = (255, 0, 0)
+            else:
+                docuButton.color = (180, 0, 0)

@@ -47,6 +47,8 @@ stressButton = button((180,0,0), 360, 170, 80, 30, 'STRESS')
 strainButton = button((180,0,0), 360, 300, 80, 30, 'STRAIN')
 finishButton = button((180,0,0), 680, 550, 80, 30, 'FINISH')
 
+docuButton= button((180,0,0), 320, 500, 140, 30, 'DOCUMENTATION')
+
 class inputtextbox():
     def __init__(self, color_inactive, color_active, x,y,width,height):
         self.color_active = color_active
